@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  game-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run game checks
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/game:/game" \
+            -w /game \
+            nixos/nix:latest \
+            sh -c "nix-shell -p gnumake --run 'make check'"
