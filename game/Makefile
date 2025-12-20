@@ -1,9 +1,11 @@
-.PHONY: format check build build-linux build-windows build-all clean
+.PHONY: format check build build-linux build-windows build-clean dev help
 
-BUILD_CMD := nix --extra-experimental-features 'nix-command flakes' develop -c godot --headless --export-release
+# Nix command with flakes enabled
+NIX := nix --extra-experimental-features 'nix-command flakes'
 
 help:
 	@echo "Available targets:"
+	@echo "  dev           - Enter development shell (interactive)"
 	@echo "  format        - Format all gdscript files"
 	@echo "  check         - Check formatting of all gdscript files"
 	@echo "  build         - Build game for all platforms"
@@ -11,21 +13,23 @@ help:
 	@echo "  build-windows - Build game for Windows"
 	@echo "  build-clean   - Remove build artifacts"
 
-format:
-	nix --extra-experimental-features 'nix-command flakes' develop -c gdformat .
+dev:
+	$(NIX) develop
 
-build: build-linux build-windows
+format:
+	$(NIX) run .#format
 
 check:
-	nix --extra-experimental-features 'nix-command flakes' develop -c gdformat . --check
+	$(NIX) run .#check
+
+build:
+	$(NIX) run .#build
 
 build-linux:
-	@mkdir -p build/linux
-	$(BUILD_CMD) "game-linux" ./build/linux/project-epic-footsies-2.x86_64
+	$(NIX) run .#build-linux
 
 build-windows:
-	@mkdir -p build/windows
-	$(BUILD_CMD) "game-windows" ./build/windows/project-epic-footsies-2.exe
+	$(NIX) run .#build-windows
 
 build-clean:
 	rm -rf build/

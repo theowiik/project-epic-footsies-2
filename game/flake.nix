@@ -9,8 +9,51 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+
+      # Common packages for building
+      godotEnv = {
+        buildInputs = [
+          pkgs.godot
+          pkgs.godot-export-templates-bin
+        ];
+        XDG_DATA_HOME = "${pkgs.godot-export-templates-bin}/share";
+      };
+
+      # Script to format gdscript files
+      formatScript = pkgs.writeShellScriptBin "format" ''
+        ${pkgs.gdtoolkit_4}/bin/gdformat .
+      '';
+
+      # Script to check gdscript formatting
+      checkScript = pkgs.writeShellScriptBin "check" ''
+        ${pkgs.gdtoolkit_4}/bin/gdformat . --check
+      '';
+
+      # Script to build for Linux
+      buildLinuxScript = pkgs.writeShellScriptBin "build-linux" ''
+        export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
+        mkdir -p build/linux
+        ${pkgs.godot}/bin/godot4 --headless --export-release "game-linux" ./build/linux/project-epic-footsies-2.x86_64
+      '';
+
+      # Script to build for Windows
+      buildWindowsScript = pkgs.writeShellScriptBin "build-windows" ''
+        export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
+        mkdir -p build/windows
+        ${pkgs.godot}/bin/godot4 --headless --export-release "game-windows" ./build/windows/project-epic-footsies-2.exe
+      '';
+
+      # Script to build all platforms
+      buildAllScript = pkgs.writeShellScriptBin "build" ''
+        export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
+        mkdir -p build/linux build/windows
+        ${pkgs.godot}/bin/godot4 --headless --export-release "game-linux" ./build/linux/project-epic-footsies-2.x86_64
+        ${pkgs.godot}/bin/godot4 --headless --export-release "game-windows" ./build/windows/project-epic-footsies-2.exe
+      '';
+
     in
     {
+      # Dev shell for interactive development
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = [
           pkgs.godot
@@ -20,6 +63,30 @@
         ];
 
         XDG_DATA_HOME = "${pkgs.godot-export-templates-bin}/share";
+      };
+
+      # Apps for running commands directly
+      apps.${system} = {
+        format = {
+          type = "app";
+          program = "${formatScript}/bin/format";
+        };
+        check = {
+          type = "app";
+          program = "${checkScript}/bin/check";
+        };
+        build-linux = {
+          type = "app";
+          program = "${buildLinuxScript}/bin/build-linux";
+        };
+        build-windows = {
+          type = "app";
+          program = "${buildWindowsScript}/bin/build-windows";
+        };
+        build = {
+          type = "app";
+          program = "${buildAllScript}/bin/build";
+        };
       };
     };
 }
