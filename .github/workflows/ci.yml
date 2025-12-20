@@ -20,22 +20,6 @@ jobs:
             nixos/nix:latest \
             sh -c "nix-shell -p gnumake --run 'make check'"
 
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build for Linux
-        run: |
-          docker run --rm -v "$(pwd):/app" -w /app barichello/godot-ci:4.3 \
-            godot --headless --export-release "game-linux" ./build/linux/project-epic-footsies-2.x86_64
-
-      - name: Upload Linux build
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-build
-          path: build/linux/
-
   build-windows:
     runs-on: ubuntu-latest
     steps:
@@ -43,11 +27,21 @@ jobs:
 
       - name: Build for Windows
         run: |
-          docker run --rm -v "$(pwd):/app" -w /app barichello/godot-ci:4.3 \
-            godot --headless --export-release "game-windows" ./build/windows/project-epic-footsies-2.exe
+          docker run --rm \
+            -v "${{ github.workspace }}/game:/game" \
+            -w /game \
+            nixos/nix:latest \
+            sh -c "nix-shell -p gnumake --run 'make build-windows'"
 
-      - name: Upload Windows build
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-build
-          path: build/windows/
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build for Linux
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/game:/game" \
+            -w /game \
+            nixos/nix:latest \
+            sh -c "nix-shell -p gnumake --run 'make build-linux'"
