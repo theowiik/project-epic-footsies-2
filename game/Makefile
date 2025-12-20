@@ -1,6 +1,6 @@
 .PHONY: format check build build-linux build-windows build-all clean
 
-BUILD_CMD := nix-shell -p godot --run "godot --headless --export-release
+BUILD_CMD := nix --extra-experimental-features 'nix-command flakes' develop -c godot --headless --export-release
 
 help:
 	@echo "Available targets:"
@@ -12,21 +12,20 @@ help:
 	@echo "  build-clean   - Remove build artifacts"
 
 format:
-	nix-shell -p gdtoolkit_4 --run "gdformat ."
+	nix --extra-experimental-features 'nix-command flakes' develop -c gdformat .
 
 build: build-linux build-windows
 
 check:
-	nix-shell -p gdtoolkit_4 --run "gdformat . --check"
+	nix --extra-experimental-features 'nix-command flakes' develop -c gdformat . --check
 
 build-linux:
 	@mkdir -p build/linux
-	$(BUILD_CMD) 'game-linux' ./build/linux/project-epic-footsies-2.x86_64"
+	$(BUILD_CMD) "game-linux" ./build/linux/project-epic-footsies-2.x86_64
 
 build-windows:
 	@mkdir -p build/windows
-	$(BUILD_CMD) 'game-windows' ./build/windows/project-epic-footsies-2.exe"
-
+	$(BUILD_CMD) "game-windows" ./build/windows/project-epic-footsies-2.exe
 
 build-clean:
 	rm -rf build/
