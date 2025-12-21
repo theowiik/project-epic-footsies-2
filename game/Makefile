@@ -1,11 +1,10 @@
 .PHONY: format check build build-linux build-windows build-clean dev help
 
-# Nix command with flakes enabled
 NIX := nix --extra-experimental-features 'nix-command flakes'
 
 help:
 	@echo "Available targets:"
-	@echo "  dev           - Enter development shell (interactive)"
+	@echo "  dev           - Enter development shell"
 	@echo "  format        - Format all gdscript files"
 	@echo "  check         - Check formatting of all gdscript files"
 	@echo "  build         - Build game for all platforms"
