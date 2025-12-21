@@ -9,6 +9,34 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+
+      formatScript = pkgs.writeShellScriptBin "format" ''
+        ${pkgs.gdtoolkit_4}/bin/gdformat .
+      '';
+
+      checkScript = pkgs.writeShellScriptBin "check" ''
+        ${pkgs.gdtoolkit_4}/bin/gdformat . --check
+      '';
+
+      buildLinuxScript = pkgs.writeShellScriptBin "build-linux" ''
+        export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
+        mkdir -p build/linux
+        ${pkgs.godot}/bin/godot4 --headless --export-release "game-linux" ./build/linux/project-epic-footsies-2.x86_64
+      '';
+
+      buildWindowsScript = pkgs.writeShellScriptBin "build-windows" ''
+        export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
+        mkdir -p build/windows
+        ${pkgs.godot}/bin/godot4 --headless --export-release "game-windows" ./build/windows/project-epic-footsies-2.exe
+      '';
+
+      buildAllScript = pkgs.writeShellScriptBin "build" ''
+        export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
+        mkdir -p build/linux build/windows
+        ${pkgs.godot}/bin/godot4 --headless --export-release "game-linux" ./build/linux/project-epic-footsies-2.x86_64
+        ${pkgs.godot}/bin/godot4 --headless --export-release "game-windows" ./build/windows/project-epic-footsies-2.exe
+      '';
+
     in
     {
       devShells.${system}.default = pkgs.mkShell {
@@ -20,6 +48,29 @@
         ];
 
         XDG_DATA_HOME = "${pkgs.godot-export-templates-bin}/share";
+      };
+
+      apps.${system} = {
+        format = {
+          type = "app";
+          program = "${formatScript}/bin/format";
+        };
+        check = {
+          type = "app";
+          program = "${checkScript}/bin/check";
+        };
+        build-linux = {
+          type = "app";
+          program = "${buildLinuxScript}/bin/build-linux";
+        };
+        build-windows = {
+          type = "app";
+          program = "${buildWindowsScript}/bin/build-windows";
+        };
+        build = {
+          type = "app";
+          program = "${buildAllScript}/bin/build";
+        };
       };
     };
 }

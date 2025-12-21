@@ -7,41 +7,51 @@ on:
 jobs:
   game-check:
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run game checks
-        run: |
-          docker run --rm \
-            -v "${{ github.workspace }}/game:/game" \
-            -w /game \
-            nixos/nix:latest \
-            sh -c "nix --extra-experimental-features 'nix-command flakes' develop -c make check"
-
-  build-windows:
-    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: game
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build for Windows
-        run: |
-          docker run --rm \
-            -v "${{ github.workspace }}/game:/game" \
-            -w /game \
-            nixos/nix:latest \
-            sh -c "nix --extra-experimental-features 'nix-command flakes' develop -c make build-windows"
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Check formatting
+        run: nix run .#check
 
   build-linux:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: game
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@main
+
       - name: Build for Linux
-        run: |
-          docker run --rm \
-            -v "${{ github.workspace }}/game:/game" \
-            -w /game \
-            nixos/nix:latest \
-            sh -c "nix --extra-experimental-features 'nix-command flakes' develop -c make build-linux"
+        run: nix run .#build-linux
+
+  build-windows:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: game
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Build for Windows
+        run: nix run .#build-windows
