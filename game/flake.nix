@@ -10,14 +10,6 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
-      godotEnv = {
-        buildInputs = [
-          pkgs.godot
-          pkgs.godot-export-templates-bin
-        ];
-        XDG_DATA_HOME = "${pkgs.godot-export-templates-bin}/share";
-      };
-
       formatScript = pkgs.writeShellScriptBin "format" ''
         ${pkgs.gdtoolkit_4}/bin/gdformat .
       '';
