@@ -12,7 +12,6 @@ func process_movement(input_vector: Vector2, delta: float) -> Vector2:
 	var velocity = Vector2.ZERO
 
 	velocity.x = input_vector.x * speed
-	# Gravity is now handled in the player for 3D platformer physics
 	velocity.y = 0
 
 	return velocity

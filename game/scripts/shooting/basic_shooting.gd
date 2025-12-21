@@ -1,12 +1,7 @@
 extends ShootingBehavior
 class_name BasicShooting
 
-var bullet_scene: PackedScene
-
-
-func _init():
-	bullet_scene = load("res://objects/bullet.tscn")
-
+var bullet_scene: PackedScene = load("res://objects/bullet.tscn")
 
 func shoot(from_position: Vector3, direction: Vector3, owner_node: Node3D) -> void:
 	spawn_bullet(from_position, direction, owner_node)
