@@ -1,6 +1,6 @@
-extends Node2D
+extends Node3D
 
-var velocity: Vector2 = Vector2.ZERO
+var velocity: Vector3 = Vector3.ZERO
 var speed: float = 500.0
 var lifetime: float = 3.0
 
@@ -14,5 +14,5 @@ func _process(delta):
 	position += velocity * speed * delta
 
 
-func set_direction(direction: Vector2):
+func set_direction(direction: Vector3):
 	velocity = direction.normalized()

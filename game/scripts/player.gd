@@ -1,4 +1,9 @@
-extends CharacterBody2D
+extends CharacterBody3D
+
+const JUMP_VELOCITY = 10.0
+const GRAVITY = 20.0
+
+var facing_direction: int = 1  # 1 for right, -1 for left
 
 var movement_behavior: MovementBehavior
 var base_movement: MovementBehavior
@@ -14,7 +19,7 @@ var l_was_pressed: bool = false
 
 
 func _ready():
-	base_movement = BasicMovement.new(300.0)
+	base_movement = BasicMovement.new(5.0)  # Reduced speed for 3D
 	movement_behavior = base_movement
 
 	base_shooting = BasicShooting.new()
@@ -45,10 +50,26 @@ func _physics_process(delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		shoot()
 
+	# Apply gravity
+	if not is_on_floor():
+		velocity.y -= GRAVITY * delta
+
+	# Handle jump
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Handle horizontal movement
 	var input_vector = get_input()
 	var movement = movement_behavior.process_movement(input_vector, delta)
 	velocity.x = movement.x
-	velocity.y += movement.y
+	velocity.z = 0  # Constrain to X/Y axis only (platformer style)
+
+	# Update facing direction based on movement
+	if input_vector.x > 0:
+		facing_direction = 1
+	elif input_vector.x < 0:
+		facing_direction = -1
+
 	move_and_slide()
 
 
@@ -63,8 +84,7 @@ func toggle_phast():
 
 
 func shoot():
-	var mouse_pos = get_global_mouse_position()
-	var direction = (mouse_pos - global_position).normalized()
+	var direction = Vector3.RIGHT * facing_direction  # Shoot in the direction we're facing
 	shooting_behavior.shoot(global_position, direction, self)
 
 

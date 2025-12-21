@@ -1,17 +1,33 @@
-[gd_scene load_steps=3 format=3 uid="uid://ovaec6nc7m42"]
+[gd_scene load_steps=4 format=3 uid="uid://ovaec6nc7m42"]
 
 [ext_resource type="PackedScene" uid="uid://wilclsh64myp" path="res://objects/player.tscn" id="1_o5qli"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_o5qli"]
-size = Vector2(544, 175)
+[sub_resource type="BoxShape3D" id="BoxShape3D_sgp6g"]
+size = Vector3(6.449463, 1, 1)
 
-[node name="Main" type="Node2D"]
+[sub_resource type="BoxMesh" id="BoxMesh_sgp6g"]
+size = Vector3(6.46, 1, 1)
+
+[node name="Main" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9567063, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_sgp6g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_sgp6g")
 
 [node name="Player" parent="." instance=ExtResource("1_o5qli")]
-position = Vector2(573, 314)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9574709, 0)
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.98995954, 0.14135048, 0, -0.14135048, 0.98995954, 0, 3.5611897, 13.818596)
+fov = 31.5
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(570, 509)
-shape = SubResource("RectangleShape2D_o5qli")
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(0.7745472, -0.6064626, 0.17966545, 0, 0.28404883, 0.9588098, -0.6325161, -0.7426435, 0.22000922, 1.946548, 3.4297528, 1.2746582)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.09971914, 0.9950156, 0, -0.9950156, -0.09971914, 0, 4.04049, 0)

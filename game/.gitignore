@@ -38,3 +38,9 @@ mono_crash.*.json
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/godot,visualstudiocode
+
+# Build outputs
+build/
+
+# Godot binaries
+.ignore/

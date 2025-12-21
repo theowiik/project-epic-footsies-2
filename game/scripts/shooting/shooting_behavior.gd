@@ -6,5 +6,5 @@ func get_bullet_speed() -> float:
 	return 500.0
 
 
-func shoot(from_position: Vector2, direction: Vector2, owner_node: Node2D) -> void:
+func shoot(from_position: Vector3, direction: Vector3, owner_node: Node3D) -> void:
 	pass

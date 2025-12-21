@@ -8,11 +8,11 @@ func _init():
 	bullet_scene = load("res://objects/bullet.tscn")
 
 
-func shoot(from_position: Vector2, direction: Vector2, owner_node: Node2D) -> void:
+func shoot(from_position: Vector3, direction: Vector3, owner_node: Node3D) -> void:
 	spawn_bullet(from_position, direction, owner_node)
 
 
-func spawn_bullet(from_position: Vector2, direction: Vector2, owner_node: Node2D) -> void:
+func spawn_bullet(from_position: Vector3, direction: Vector3, owner_node: Node3D) -> void:
 	var bullet = bullet_scene.instantiate()
 	bullet.position = from_position
 	bullet.speed = get_bullet_speed()
