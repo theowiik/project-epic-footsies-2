@@ -40,5 +40,5 @@ var movement_crystals: Array[String] = []
 var shooting_crystals: Array[String] = []
 ```
 
-Adding a crystal → append to list → rebuild behavior chain  
+Adding a crystal → append to list → rebuild behavior chain\
 Removing a crystal → erase from list → rebuild behavior chain
