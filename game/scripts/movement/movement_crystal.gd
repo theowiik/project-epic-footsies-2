@@ -10,4 +10,3 @@ func _init(movement: MovementBehavior):
 
 func process_movement(input_vector: Vector2, delta: float) -> Vector2:
 	return base_movement.process_movement(input_vector, delta)
-

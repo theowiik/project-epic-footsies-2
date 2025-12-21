@@ -15,4 +15,3 @@ func shoot(from_position: Vector3, direction: Vector3, owner_node: Node3D) -> vo
 	# Right bullet (rotate around Z axis)
 	var right_dir = direction.rotated(Vector3.FORWARD, -deg_to_rad(spread_angle))
 	base_shooting.shoot(from_position, right_dir, owner_node)
-
