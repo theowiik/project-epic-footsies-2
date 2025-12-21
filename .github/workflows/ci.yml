@@ -5,8 +5,11 @@ on:
     branches: [main]
 
 jobs:
-  check:
+  game-check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: game
     steps:
       - uses: actions/checkout@v4
 
@@ -17,10 +20,13 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@main
 
       - name: Check formatting
-        run: cd game && nix run .#check
+        run: nix run .#check
 
   build-linux:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: game
     steps:
       - uses: actions/checkout@v4
 
@@ -31,10 +37,13 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@main
 
       - name: Build for Linux
-        run: cd game && nix run .#build-linux
+        run: nix run .#build-linux
 
   build-windows:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: game
     steps:
       - uses: actions/checkout@v4
 
@@ -45,4 +54,4 @@ jobs:
         uses: DeterminateSystems/magic-nix-cache-action@main
 
       - name: Build for Windows
-        run: cd game && nix run .#build-windows
+        run: nix run .#build-windows
