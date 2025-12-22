@@ -14,3 +14,9 @@ config/name="project-epic-footsies-2"
 run/main_scene="uid://ovaec6nc7m42"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://assets/icon.svg"
+
+[global_group]
+
+players=""
+bullets=""
+bulbs=""

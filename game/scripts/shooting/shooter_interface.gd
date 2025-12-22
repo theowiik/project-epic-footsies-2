@@ -2,7 +2,7 @@ extends RefCounted
 class_name ShooterInterface
 
 
-func shoot(_from_position: Vector3, _direction: Vector3, _owner_node: Node3D) -> void:
+func shoot(_from_position: Vector3, _direction: Vector3, _team_color: Color, _parent: Node) -> void:
 	push_error("ShooterInterface.shoot() not implemented")
 
 
