@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  game-check:
+  game-lint:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -22,21 +22,7 @@ jobs:
       - name: Check formatting
         run: nix run .#check
 
-  markdown-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-
-      - name: Setup Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@main
-
-      - name: Check Markdown formatting
-        run: make check
-
-  build:
+  game-build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -52,3 +38,17 @@ jobs:
 
       - name: Build
         run: nix run .#build
+
+  markdown-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Check Markdown formatting
+        run: make check
