@@ -1,8 +1,5 @@
 extends CharacterBody3D
 
-const JUMP_VELOCITY = 10.0
-const GRAVITY = 20.0
-
 var facing_direction: int = 1
 
 # Movement
@@ -50,19 +47,14 @@ func _physics_process(delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		shoot()
 
-	# Apply gravity
-	if not is_on_floor():
-		velocity.y -= GRAVITY * delta
-
-	# Handle jump
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
-	# Handle horizontal movement
+	# Handle all movement through the mover
 	var input_vector = get_input()
-	var movement = mover.process_movement(input_vector, delta)
-	velocity.x = movement.x
-	velocity.z = 0
+	var context = {
+		"velocity_y": velocity.y,
+		"is_on_floor": is_on_floor(),
+		"jump_pressed": Input.is_action_just_pressed("ui_accept")
+	}
+	velocity = mover.process_movement(input_vector, delta, context)
 
 	# Update facing direction based on movement
 	if input_vector.x > 0:

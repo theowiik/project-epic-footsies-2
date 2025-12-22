@@ -7,7 +7,7 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ykyjo"]
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" groups=["players"]]
 script = ExtResource("2_ykyjo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
