@@ -14,3 +14,8 @@ func get_bullet_scene() -> PackedScene:
 func get_bullet_speed() -> float:
 	push_error("ShooterInterface.get_bullet_speed() not implemented")
 	return 0.0
+
+
+func get_shoot_delay() -> float:
+	push_error("ShooterInterface.get_shoot_delay() not implemented")
+	return 0.0
