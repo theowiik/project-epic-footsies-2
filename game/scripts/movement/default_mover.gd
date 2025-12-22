@@ -1,4 +1,4 @@
-extends Mover
+extends MoverInterface
 class_name DefaultMover
 
 var speed: float = 5.0
@@ -15,4 +15,3 @@ func process_movement(input_vector: Vector2, _delta: float) -> Vector2:
 	velocity.y = 0
 
 	return velocity
-

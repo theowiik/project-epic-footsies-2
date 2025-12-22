@@ -6,14 +6,14 @@ const GRAVITY = 20.0
 var facing_direction: int = 1
 
 # Movement
-var mover: Mover
-var base_mover: Mover
+var mover: MoverInterface
+var base_mover: MoverInterface
 var mover_decorators: Array[String] = []
 var k_was_pressed: bool = false
 
 # Shooting
-var shooter: Shooter
-var base_shooter: Shooter
+var shooter: ShooterInterface
+var base_shooter: ShooterInterface
 var shooter_decorators: Array[String] = []
 var j_was_pressed: bool = false
 var l_was_pressed: bool = false

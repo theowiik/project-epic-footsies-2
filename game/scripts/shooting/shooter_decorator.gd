@@ -1,14 +1,10 @@
-extends Shooter
+extends ShooterInterface
 class_name ShooterDecorator
 
-## Base decorator for shooters.
-## Wraps another Shooter and delegates by default.
-## Subclasses override specific methods to modify behavior.
-
-var base_shooter: Shooter
+var base_shooter: ShooterInterface
 
 
-func _init(shooter: Shooter):
+func _init(shooter: ShooterInterface):
 	base_shooter = shooter
 
 
@@ -22,4 +18,3 @@ func get_bullet_speed() -> float:
 
 func shoot(from_position: Vector3, direction: Vector3, owner_node: Node3D) -> void:
 	base_shooter.shoot(from_position, direction, owner_node)
-
