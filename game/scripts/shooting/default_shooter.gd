@@ -2,7 +2,7 @@ extends ShooterInterface
 class_name DefaultShooter
 
 var bullet_scene: PackedScene = load("res://objects/bullet.tscn")
-var bullet_speed: float = 10.0
+var bullet_speed: float = 100.0
 
 
 func get_bullet_scene() -> PackedScene:

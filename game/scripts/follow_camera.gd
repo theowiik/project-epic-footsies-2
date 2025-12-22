@@ -5,11 +5,13 @@ var follow: Array[Node3D] = []
 var offset: Vector3 = Vector3(0, 3, 18)
 @export var smoothing_speed: float = 5.0
 
+
 func _ready() -> void:
 	var players: Array[Node] = get_tree().get_nodes_in_group("players")
 
 	for player in players:
 		follow.append(player as Node3D)
+
 
 func _process(delta: float) -> void:
 	if follow.is_empty():

@@ -3,6 +3,7 @@ extends Node3D
 var velocity: Vector3 = Vector3.ZERO
 var speed: float = 500.0
 var lifetime: float = 3.0
+var gravity: float = 9.81
 
 
 func _ready():
@@ -12,6 +13,7 @@ func _ready():
 
 func _process(delta):
 	position += velocity * speed * delta
+	velocity.y -= gravity * delta
 
 
 func set_direction(direction: Vector3):
