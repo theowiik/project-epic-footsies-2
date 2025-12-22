@@ -3,26 +3,28 @@ extends CharacterBody3D
 const JUMP_VELOCITY = 10.0
 const GRAVITY = 20.0
 
-var facing_direction: int = 1  # 1 for right, -1 for left
+var facing_direction: int = 1
 
-var movement_behavior: MovementBehavior
-var base_movement: MovementBehavior
-var movement_crystals: Array[String] = []
+# Movement
+var mover: Mover
+var base_mover: Mover
+var mover_decorators: Array[String] = []
 var k_was_pressed: bool = false
 
-var shooting_behavior: ShootingBehavior
-var base_shooting: ShootingBehavior
-var shooting_crystals: Array[String] = []
+# Shooting
+var shooter: Shooter
+var base_shooter: Shooter
+var shooter_decorators: Array[String] = []
 var j_was_pressed: bool = false
 var l_was_pressed: bool = false
 
 
 func _ready():
-	base_movement = BasicMovement.new(5.0)
-	movement_behavior = base_movement
+	base_mover = DefaultMover.new(5.0)
+	mover = base_mover
 
-	base_shooting = BasicShooting.new()
-	shooting_behavior = base_shooting
+	base_shooter = DefaultShooter.new()
+	shooter = base_shooter
 
 	print("Player is ready")
 
@@ -31,17 +33,17 @@ func _physics_process(delta):
 	# Debug toggles
 	var k_pressed = Input.is_physical_key_pressed(KEY_K)
 	if k_pressed and not k_was_pressed:
-		toggle_movement_crystal("phast")
+		toggle_mover_decorator("phast")
 	k_was_pressed = k_pressed
 
 	var j_pressed = Input.is_physical_key_pressed(KEY_J)
 	if j_pressed and not j_was_pressed:
-		toggle_shooting_crystal("triple_shot")
+		toggle_shooter_decorator("triple_shot")
 	j_was_pressed = j_pressed
 
 	var l_pressed = Input.is_physical_key_pressed(KEY_L)
 	if l_pressed and not l_was_pressed:
-		toggle_shooting_crystal("fast_bullets")
+		toggle_shooter_decorator("fast_bullets")
 	l_was_pressed = l_pressed
 
 	# Shooting
@@ -58,7 +60,7 @@ func _physics_process(delta):
 
 	# Handle horizontal movement
 	var input_vector = get_input()
-	var movement = movement_behavior.process_movement(input_vector, delta)
+	var movement = mover.process_movement(input_vector, delta)
 	velocity.x = movement.x
 	velocity.z = 0
 
@@ -71,47 +73,47 @@ func _physics_process(delta):
 	move_and_slide()
 
 
-func toggle_movement_crystal(crystal_name: String):
-	if crystal_name in movement_crystals:
-		movement_crystals.erase(crystal_name)
-		print(crystal_name, " OFF")
+func toggle_mover_decorator(decorator_name: String):
+	if decorator_name in mover_decorators:
+		mover_decorators.erase(decorator_name)
+		print(decorator_name, " OFF")
 	else:
-		movement_crystals.append(crystal_name)
-		print(crystal_name, " ON")
-	rebuild_movement_behavior()
+		mover_decorators.append(decorator_name)
+		print(decorator_name, " ON")
+	rebuild_mover()
 
 
-func toggle_shooting_crystal(crystal_name: String):
-	if crystal_name in shooting_crystals:
-		shooting_crystals.erase(crystal_name)
-		print(crystal_name, " OFF")
+func toggle_shooter_decorator(decorator_name: String):
+	if decorator_name in shooter_decorators:
+		shooter_decorators.erase(decorator_name)
+		print(decorator_name, " OFF")
 	else:
-		shooting_crystals.append(crystal_name)
-		print(crystal_name, " ON")
-	rebuild_shooting_behavior()
+		shooter_decorators.append(decorator_name)
+		print(decorator_name, " ON")
+	rebuild_shooter()
 
 
-func rebuild_movement_behavior():
-	movement_behavior = base_movement
-	for crystal_name in movement_crystals:
-		match crystal_name:
+func rebuild_mover():
+	mover = base_mover
+	for decorator_name in mover_decorators:
+		match decorator_name:
 			"phast":
-				movement_behavior = PhastCrystal.new(movement_behavior)
+				mover = PhastDecorator.new(mover)
 
 
-func rebuild_shooting_behavior():
-	shooting_behavior = base_shooting
-	for crystal_name in shooting_crystals:
-		match crystal_name:
+func rebuild_shooter():
+	shooter = base_shooter
+	for decorator_name in shooter_decorators:
+		match decorator_name:
 			"triple_shot":
-				shooting_behavior = TripleShotCrystal.new(shooting_behavior)
+				shooter = TripleShotDecorator.new(shooter)
 			"fast_bullets":
-				shooting_behavior = FastBulletsCrystal.new(shooting_behavior)
+				shooter = FastBulletsDecorator.new(shooter)
 
 
 func shoot():
 	var direction = get_aim_direction()
-	shooting_behavior.shoot(global_position, direction, self)
+	shooter.shoot(global_position, direction, self)
 
 
 func get_aim_direction() -> Vector3:
