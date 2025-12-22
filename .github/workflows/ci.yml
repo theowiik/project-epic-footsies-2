@@ -3,6 +3,8 @@ name: CI
 on:
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
   game-lint:
@@ -18,6 +20,9 @@ jobs:
 
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@main
+        with:
+          # Only upload cache on main branch, PRs just download
+          upload-enabled: ${{ github.event_name == 'push' }}
 
       - name: Check formatting
         run: nix run .#check
@@ -35,6 +40,9 @@ jobs:
 
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@main
+        with:
+          # Only upload cache on main branch, PRs just download
+          upload-enabled: ${{ github.event_name == 'push' }}
 
       - name: Build
         run: nix run .#build
@@ -49,6 +57,9 @@ jobs:
 
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@main
+        with:
+          # Only upload cache on main branch, PRs just download
+          upload-enabled: ${{ github.event_name == 'push' }}
 
       - name: Check Markdown formatting
         run: make check
