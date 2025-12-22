@@ -21,7 +21,6 @@ jobs:
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@main
         with:
-          # Only upload cache on main branch, PRs just download
           upload-enabled: ${{ github.event_name == 'push' }}
 
       - name: Check formatting
@@ -41,7 +40,6 @@ jobs:
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@main
         with:
-          # Only upload cache on main branch, PRs just download
           upload-enabled: ${{ github.event_name == 'push' }}
 
       - name: Build
@@ -58,7 +56,6 @@ jobs:
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@main
         with:
-          # Only upload cache on main branch, PRs just download
           upload-enabled: ${{ github.event_name == 'push' }}
 
       - name: Check Markdown formatting
