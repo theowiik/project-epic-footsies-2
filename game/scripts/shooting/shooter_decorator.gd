@@ -16,5 +16,5 @@ func get_bullet_speed() -> float:
 	return base_shooter.get_bullet_speed()
 
 
-func shoot(from_position: Vector3, direction: Vector3, owner_node: Node3D) -> void:
-	base_shooter.shoot(from_position, direction, owner_node)
+func shoot(from_position: Vector3, direction: Vector3, team_color: Color, parent: Node) -> void:
+	base_shooter.shoot(from_position, direction, team_color, parent)

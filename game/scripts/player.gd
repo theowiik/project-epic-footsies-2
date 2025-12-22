@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+const team_color: Color = Color(1, 0.4, 0.2, 1)
+
 var facing_direction: int = 1
 
 # Movement
@@ -47,7 +49,7 @@ func _physics_process(delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		shoot()
 
-	# Handle all movement through the mover
+	# Handle movement
 	var input_vector = get_input()
 	var context = {
 		"velocity_y": velocity.y,
@@ -105,7 +107,7 @@ func rebuild_shooter():
 
 func shoot():
 	var direction = get_aim_direction()
-	shooter.shoot(global_position, direction, self)
+	shooter.shoot(global_position, direction, team_color, get_parent())
 
 
 func get_aim_direction() -> Vector3:
