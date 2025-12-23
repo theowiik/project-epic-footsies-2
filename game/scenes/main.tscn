@@ -63,3 +63,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.979772, 0, 0)
 
 [node name="Bulb2" parent="." instance=ExtResource("4_jyhfs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7318554, 0, 0)
+
+[node name="Player2" parent="." instance=ExtResource("1_o5qli")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7508955, 1.7889354, 0)
+device_id = 1
