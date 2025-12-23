@@ -5,7 +5,25 @@ on:
     branches: [ main ]
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      game: ${{ steps.filter.outputs.game }}
+      markdown: ${{ steps.filter.outputs.markdown }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            game:
+              - 'game/**'
+            markdown:
+              - '**/*.md'
+
   game-lint:
+    needs: changes
+    if: ${{ needs.changes.outputs.game == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,6 +38,8 @@ jobs:
         run: nix run .#check
 
   game-build:
+    needs: changes
+    if: ${{ needs.changes.outputs.game == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -34,6 +54,8 @@ jobs:
         run: nix run .#build
 
   markdown-lint:
+    needs: changes
+    if: ${{ needs.changes.outputs.markdown == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
