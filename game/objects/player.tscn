@@ -147,7 +147,7 @@ transform = Transform3D(0.65841365, 0, 0.7526563, 0, 1, 0, -0.7526563, 0, 0.6584
 transform = Transform3D(-0.080514126, 0.32112542, 0.9436079, 0.027301088, 0.9470367, -0.31996277, -0.9963795, 0, -0.0850169, -0.52420175, -0.70023215, 0.08545542)
 
 [node name="LeftFoot" parent="Body" instance=ExtResource("7_i825w")]
-transform = Transform3D(-0.043356154, 0.36305606, 0.93075794, 0.016893405, 0.9317672, -0.3626628, -0.99891657, 7.45058e-09, -0.046531107, -0.48053372, -0.72694933, 0)
+transform = Transform3D(-0.043356154, 0.36305606, 0.9307579, 0.016893404, 0.93176717, -0.36266276, -0.9989165, 7.4505797e-09, -0.046531104, -0.48053372, -0.72694933, 0)
 
 [node name="RightFoot" parent="Body" instance=ExtResource("8_3rfka")]
 transform = Transform3D(0.3814456, -0.46780652, 0.7972809, 0.20189686, 0.8838311, 0.42199597, -0.90207404, 1.4901163e-08, 0.43158203, 0.5934705, -0.58153754, 0.06384897)
@@ -158,5 +158,10 @@ libraries = {
 }
 autoplay = "walk"
 
-[node name="Node3D" parent="." instance=ExtResource("9_i8sra")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.2060235, 0, 0)
+[node name="AimPivot" type="Marker3D" parent="."]
+
+[node name="ShootPosition" type="Marker3D" parent="AimPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5244982, 0.332973, 0)
+
+[node name="Flashlight" parent="AimPivot" instance=ExtResource("9_i8sra")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.8124571, 0.332973, 0)

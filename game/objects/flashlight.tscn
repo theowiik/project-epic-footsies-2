@@ -14,7 +14,7 @@ top_radius = 0.2
 bottom_radius = 0.1
 height = 0.2
 
-[node name="Node3D" type="Node3D"]
+[node name="Flashlight" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
