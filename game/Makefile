@@ -12,6 +12,7 @@ help:
 	@echo "  build-windows - Build game for Windows"
 	@echo "  build-clean   - Remove build artifacts"
 
+
 dev:
 	$(NIX) develop
 
