@@ -19,3 +19,4 @@ func _on_area_entered(area: Area3D) -> void:
 			bulb_hit.emit(new_color)
 
 		area.queue_free()
+
