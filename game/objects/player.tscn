@@ -1,11 +1,175 @@
-[gd_scene load_steps=5 format=3 uid="uid://wilclsh64myp"]
+[gd_scene load_steps=16 format=3 uid="uid://wilclsh64myp"]
 
 [ext_resource type="Texture2D" uid="uid://co5yey2y7yboh" path="res://assets/icon.svg" id="1_eqqp1"]
 [ext_resource type="Script" uid="uid://cphs6p6g4lci0" path="res://scripts/player.gd" id="2_ykyjo"]
+[ext_resource type="Material" uid="uid://b1gx6182iwfew" path="res://materials/dark_material.tres" id="3_uxov2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ykyjo"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ykyjo"]
+height = 1.09
+
+[sub_resource type="SphereMesh" id="SphereMesh_ykyjo"]
+radius = 0.2
+height = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_uxov2"]
+material = ExtResource("3_uxov2")
+top_radius = 0.095
+bottom_radius = 0.13
+height = 0.64
+
+[sub_resource type="SphereMesh" id="SphereMesh_uxov2"]
+radius = 0.2
+height = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_ykyjo"]
+size = Vector3(0.29, 0.24, 0.745)
+
+[sub_resource type="BoxMesh" id="BoxMesh_uxov2"]
+size = Vector3(0.275, 0.195, 0.795)
+
+[sub_resource type="SphereMesh" id="SphereMesh_nmc1l"]
+radius = 0.28
+height = 0.455
+
+[sub_resource type="SphereMesh" id="SphereMesh_f46kd"]
+material = ExtResource("3_uxov2")
+radius = 0.055
+height = 0.115
+
+[sub_resource type="Animation" id="Animation_uxov2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body/RightFoot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.35047975, -0.59069777, 0.43012422)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Body/RightFoot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.3451962, 1.2871476, 0.098323055)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Body/LeftFoot:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.2922355, 1.6885409, 0.034065925)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Body/LeftFoot:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.313608, -0.6413959, -0.5819099)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Body/LeftHand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.72317815, -0.16298234, 0.6600223)]
+}
+
+[sub_resource type="Animation" id="Animation_ykyjo"]
+resource_name = "walk"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body/RightFoot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector3(0.35047975, -0.59069777, 0.43012422), Vector3(-0.44600657, -0.59069777, 0.43012422)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Body/RightFoot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector3(-0.3451962, 1.2871476, 0.098323055), Vector3(0.39395046, 1.281584, -0.113720536)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Body/LeftFoot:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector3(0.2922355, 1.6885409, 0.034065925), Vector3(-0.5252334, 1.7011831, -0.06565637)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Body/LeftFoot:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector3(-0.313608, -0.6413959, -0.5819099), Vector3(0.45340723, -0.6413959, -0.5819099)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Body/LeftHand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector3(-0.72317815, -0.16298234, 0.6600223), Vector3(-0.72317815, -0.3427176, 0.6600223)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uxov2"]
+_data = {
+&"RESET": SubResource("Animation_uxov2"),
+&"walk": SubResource("Animation_ykyjo")
+}
 
 [node name="Player" type="CharacterBody3D" groups=["players"]]
 script = ExtResource("2_ykyjo")
@@ -14,7 +178,57 @@ script = ExtResource("2_ykyjo")
 shape = SubResource("CapsuleShape3D_ykyjo")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
+visible = false
 texture = ExtResource("1_eqqp1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Torso" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0013725758, -0.082895994, 0)
 mesh = SubResource("CapsuleMesh_ykyjo")
+skeleton = NodePath("../..")
+
+[node name="RightHand" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0213413, 0.1944769, -0.7964369)
+mesh = SubResource("SphereMesh_ykyjo")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body/RightHand"]
+transform = Transform3D(0.026264226, 0.999655, 0, -0.999655, 0.026264226, 0, 0, 0, 1, 0.34517765, 0.13952577, 0)
+mesh = SubResource("CylinderMesh_uxov2")
+
+[node name="LeftHand" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72317815, -0.16298234, 0.6600223)
+mesh = SubResource("SphereMesh_uxov2")
+skeleton = NodePath("../..")
+
+[node name="RightFoot" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(0.24661896, -0.35076317, 0.9034068, 0.09237389, 0.9364641, 0.3383812, -0.96470016, -2.2351738e-08, 0.2633511, 0.35047975, -0.59069777, 0.43012422)
+mesh = SubResource("BoxMesh_ykyjo")
+skeleton = NodePath("../..")
+
+[node name="LeftFoot" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(-0.10766027, 0.28993398, 0.950972, 0.032615308, 0.9570467, -0.2880937, -0.99365294, 0, -0.11249217, -0.313608, -0.6413959, -0.5819099)
+mesh = SubResource("BoxMesh_uxov2")
+skeleton = NodePath("../..")
+
+[node name="Head" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(-0.6752684, 0, 0.73757225, 0, 1, 0, -0.73757225, 0, -0.6752684, 0, 0.7552933, 0)
+mesh = SubResource("SphereMesh_nmc1l")
+skeleton = NodePath("../..")
+
+[node name="Eye" type="MeshInstance3D" parent="Body/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24234378, 0.0309695, -0.13114929)
+mesh = SubResource("SphereMesh_f46kd")
+skeleton = NodePath("../..")
+
+[node name="Eye2" type="MeshInstance3D" parent="Body/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24234378, 0.0309695, 0.12656745)
+mesh = SubResource("SphereMesh_f46kd")
+skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_uxov2")
+}
+autoplay = "walk"
