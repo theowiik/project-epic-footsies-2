@@ -42,12 +42,14 @@ func _process_shooting(delta: float) -> void:
 		shoot_cooldown -= delta
 
 	var aim_input = input.get_aim_direction()
-	var angle = aim_input.angle()
-	aim_pivot.rotation.z = angle
+	if aim_input.length() > 0:
+		var angle = -atan2(aim_input.y, aim_input.x)
+		aim_pivot.rotation.z = angle
 
 	if input.is_shoot_pressed() and shoot_cooldown <= 0:
 		_shoot()
 		shoot_cooldown = shooter.get_shoot_delay()
+
 
 func _process_movement(delta: float) -> void:
 	var context = {

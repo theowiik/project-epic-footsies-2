@@ -161,7 +161,7 @@ autoplay = "walk"
 [node name="AimPivot" type="Marker3D" parent="."]
 
 [node name="ShootPosition" type="Marker3D" parent="AimPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5244982, 0.332973, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.524, 0, 0)
 
 [node name="Flashlight" parent="AimPivot" instance=ExtResource("9_i8sra")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.8124571, 0.332973, 0)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.812, 0, 0)
