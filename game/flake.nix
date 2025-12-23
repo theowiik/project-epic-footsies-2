@@ -12,29 +12,34 @@
       pkgs = nixpkgs.legacyPackages.${system};
 
       formatScript = pkgs.writeShellScriptBin "format" ''
+        set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat .
         ${pkgs.nixfmt-rfc-style}/bin/nixfmt .
       '';
 
       checkScript = pkgs.writeShellScriptBin "check" ''
+        set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat . --check
         ${pkgs.gdtoolkit_4}/bin/gdlint .
         ${pkgs.nixfmt-rfc-style}/bin/nixfmt . --check
       '';
 
       buildLinuxScript = pkgs.writeShellScriptBin "build-linux" ''
+        set -e
         export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
         mkdir -p build/linux
         ${pkgs.godot}/bin/godot4 --headless --export-release "game-linux" ./build/linux/project-epic-footsies-2.x86_64
       '';
 
       buildWindowsScript = pkgs.writeShellScriptBin "build-windows" ''
+        set -e
         export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
         mkdir -p build/windows
         ${pkgs.godot}/bin/godot4 --headless --export-release "game-windows" ./build/windows/project-epic-footsies-2.exe
       '';
 
       buildAllScript = pkgs.writeShellScriptBin "build" ''
+        set -e
         export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
         mkdir -p build/linux build/windows
         ${pkgs.godot}/bin/godot4 --headless --export-release "game-linux" ./build/linux/project-epic-footsies-2.x86_64
