@@ -19,7 +19,7 @@ var shoot_cooldown: float = 0.0
 
 func _ready():
 	input = GamepadInput.new(device_id)
-	
+
 	base_mover = DefaultMover.new(5.0)
 	mover = base_mover
 
@@ -99,8 +99,8 @@ func shoot():
 
 func get_aim_direction() -> Vector3:
 	var aim_2d = input.get_aim_direction()
-	
+
 	if aim_2d != Vector2.ZERO:
 		return Vector3(aim_2d.x, -aim_2d.y, 0).normalized()
-	
+
 	return Vector3.RIGHT * facing_direction

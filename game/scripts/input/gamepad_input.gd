@@ -21,21 +21,21 @@ func update() -> void:
 	var prev_shoot = _shoot_pressed
 	_shoot_pressed = _get_axis(JOY_AXIS_TRIGGER_RIGHT) > 0.5
 	_shoot_just_pressed = _shoot_pressed and not prev_shoot
-	
+
 	var prev_jump = _jump_pressed
 	_jump_pressed = _get_axis(JOY_AXIS_TRIGGER_LEFT) > 0.5
 	_jump_just_pressed = _jump_pressed and not prev_jump
-	
+
 	_movement = _compute_movement()
 	_aim_direction = _compute_aim_direction()
 
 
 func _compute_movement() -> Vector2:
 	var input_vector = Vector2.ZERO
-	
+
 	var stick_x = _get_axis(JOY_AXIS_LEFT_X)
 	var stick_y = _get_axis(JOY_AXIS_LEFT_Y)
-	
+
 	if abs(stick_x) > STICK_DEADZONE:
 		input_vector.x = stick_x
 	if abs(stick_y) > STICK_DEADZONE:
@@ -47,12 +47,12 @@ func _compute_movement() -> Vector2:
 func _compute_aim_direction() -> Vector2:
 	var aim_x = _get_axis(JOY_AXIS_RIGHT_X)
 	var aim_y = _get_axis(JOY_AXIS_RIGHT_Y)
-	
+
 	var aim_vector = Vector2(aim_x, aim_y)
-	
+
 	if aim_vector.length() < STICK_DEADZONE:
 		return Vector2.ZERO
-	
+
 	return aim_vector.normalized()
 
 

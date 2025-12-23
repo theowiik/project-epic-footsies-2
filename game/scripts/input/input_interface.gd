@@ -34,4 +34,3 @@ func is_shoot_pressed() -> bool:
 func is_jump_just_pressed() -> bool:
 	push_error("InputInterface.is_jump_just_pressed() not implemented")
 	return false
-
