@@ -1,5 +1,7 @@
-extends InputInterface
 class_name GamepadInput
+extends InputInterface
+
+const STICK_DEADZONE: float = 0.2
 
 var device_id: int
 
@@ -9,8 +11,6 @@ var _jump_pressed: bool = false
 var _jump_just_pressed: bool = false
 var _movement: Vector2 = Vector2.ZERO
 var _aim_direction: Vector2 = Vector2.ZERO
-
-const STICK_DEADZONE: float = 0.2
 
 
 func _init(p_device_id: int = 0):

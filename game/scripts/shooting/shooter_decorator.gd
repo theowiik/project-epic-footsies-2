@@ -1,5 +1,5 @@
-extends ShooterInterface
 class_name ShooterDecorator
+extends ShooterInterface
 
 var base_shooter: ShooterInterface
 

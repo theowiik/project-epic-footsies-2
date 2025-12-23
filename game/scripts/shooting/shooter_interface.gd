@@ -1,5 +1,5 @@
-extends RefCounted
 class_name ShooterInterface
+extends RefCounted
 
 
 func shoot(_from_position: Vector3, _direction: Vector3, _team_color: Color, _parent: Node) -> void:

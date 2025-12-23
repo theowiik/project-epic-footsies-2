@@ -1,5 +1,5 @@
-extends RefCounted
 class_name InputInterface
+extends RefCounted
 
 
 func update() -> void:

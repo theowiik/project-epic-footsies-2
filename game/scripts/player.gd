@@ -1,12 +1,10 @@
 extends CharacterBody3D
 
-@onready var aim_pivot: Node3D = $AimPivot
-@onready var shoot_position: Node3D = $AimPivot/ShootPosition
-
 const TEAM_COLOR: Color = Color(1, 0.4, 0.2, 1)
 
 # Controller
 @export var device_id: int = 0
+
 var input: InputInterface
 
 # Movement
@@ -19,6 +17,9 @@ var shooter: ShooterInterface
 var base_shooter: ShooterInterface
 var shooter_decorators: Array[String] = []
 var shoot_cooldown: float = 0.0
+
+@onready var aim_pivot: Node3D = $AimPivot
+@onready var shoot_position: Node3D = $AimPivot/ShootPosition
 
 
 func _ready():
