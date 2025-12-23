@@ -1,5 +1,5 @@
-extends MoverInterface
 class_name DefaultMover
+extends MoverInterface
 
 const JUMP_VELOCITY = 10.0
 const GRAVITY = 20.0

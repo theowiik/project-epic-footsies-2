@@ -1,5 +1,5 @@
-extends ShooterDecorator
 class_name RapidFireDecorator
+extends ShooterDecorator
 
 
 func get_shoot_delay() -> float:

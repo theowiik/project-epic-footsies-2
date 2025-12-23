@@ -1,5 +1,5 @@
-extends MoverInterface
 class_name MoverDecorator
+extends MoverInterface
 
 var base_mover: MoverInterface
 
