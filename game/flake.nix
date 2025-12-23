@@ -18,6 +18,7 @@
 
       checkScript = pkgs.writeShellScriptBin "check" ''
         ${pkgs.gdtoolkit_4}/bin/gdformat . --check
+        ${pkgs.gdtoolkit_4}/bin/gdlint .
         ${pkgs.nixfmt-rfc-style}/bin/nixfmt . --check
       '';
 
