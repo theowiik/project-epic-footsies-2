@@ -22,11 +22,11 @@ func update() -> void:
 	var prev_shoot = _shoot_pressed
 	_shoot_pressed = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 	_shoot_just_pressed = _shoot_pressed and not prev_shoot
-	
+
 	var prev_jump = _jump_pressed
 	_jump_pressed = Input.is_key_pressed(KEY_SPACE)
 	_jump_just_pressed = _jump_pressed and not prev_jump
-	
+
 	_movement = _compute_movement()
 	_aim_direction = _compute_aim_direction()
 
@@ -40,7 +40,7 @@ func _update_camera() -> void:
 
 func _compute_movement() -> Vector2:
 	var input_vector = Vector2.ZERO
-	
+
 	if Input.is_key_pressed(KEY_D):
 		input_vector.x += 1.0
 	if Input.is_key_pressed(KEY_A):
@@ -49,17 +49,17 @@ func _compute_movement() -> Vector2:
 		input_vector.y += 1.0
 	if Input.is_key_pressed(KEY_W):
 		input_vector.y -= 1.0
-	
+
 	if input_vector.length() > 1.0:
 		input_vector = input_vector.normalized()
-	
+
 	return input_vector
 
 
 func _compute_aim_direction() -> Vector2:
 	if camera == null or player_node == null:
 		return Vector2.ZERO
-	
+
 	var player_screen_pos = camera.unproject_position(player_node.global_position)
 	var mouse_pos = player_node.get_viewport().get_mouse_position()
 	var direction = (mouse_pos - player_screen_pos).normalized()
@@ -89,4 +89,3 @@ func is_shoot_pressed() -> bool:
 
 func is_jump_just_pressed() -> bool:
 	return _jump_just_pressed
-
