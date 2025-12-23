@@ -1,5 +1,5 @@
-extends ShooterDecorator
 class_name TripleShotDecorator
+extends ShooterDecorator
 
 var spread_angle: float = 15.0
 

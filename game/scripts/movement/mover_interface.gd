@@ -1,5 +1,5 @@
-extends RefCounted
 class_name MoverInterface
+extends RefCounted
 
 
 func process_movement(_input_vector: Vector2, _delta: float, _context: Dictionary) -> Vector3:

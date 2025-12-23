@@ -1,12 +1,10 @@
 extends CharacterBody3D
 
-@onready var aim_pivot: Node3D = $AimPivot
-@onready var shoot_position: Node3D = $AimPivot/ShootPosition
-
-const team_color: Color = Color(1, 0.4, 0.2, 1)
+const TEAM_COLOR: Color = Color(1, 0.4, 0.2, 1)
 
 # Controller
 @export var device_id: int = 0
+
 var input: InputInterface
 
 # Movement
@@ -19,6 +17,9 @@ var shooter: ShooterInterface
 var base_shooter: ShooterInterface
 var shooter_decorators: Array[String] = []
 var shoot_cooldown: float = 0.0
+
+@onready var aim_pivot: Node3D = $AimPivot
+@onready var shoot_position: Node3D = $AimPivot/ShootPosition
 
 
 func _ready():
@@ -63,4 +64,4 @@ func _process_movement(delta: float) -> void:
 
 func _shoot():
 	var direction = (shoot_position.global_position - global_position).normalized()
-	shooter.shoot(shoot_position.global_position, direction, team_color, get_parent())
+	shooter.shoot(shoot_position.global_position, direction, TEAM_COLOR, get_parent())

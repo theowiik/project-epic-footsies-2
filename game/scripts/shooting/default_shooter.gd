@@ -1,5 +1,5 @@
-extends ShooterInterface
 class_name DefaultShooter
+extends ShooterInterface
 
 var bullet_scene: PackedScene = load("res://objects/bullet.tscn")
 var bullet_speed: float = 30.0

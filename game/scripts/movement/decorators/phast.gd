@@ -1,5 +1,5 @@
-extends MoverDecorator
 class_name PhastDecorator
+extends MoverDecorator
 
 var speed_multiplier: float = 1.6
 
