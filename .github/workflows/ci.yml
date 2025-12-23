@@ -10,15 +10,11 @@ permissions:
   pull-requests: read
 
 jobs:
-  changes:
+  ci:
     if: >
       github.event_name == 'workflow_dispatch' ||
-      (github.event.issue.pull_request && contains(github.event.comment.body, '/check'))
+      (github.event.issue.pull_request && contains(github.event.comment.body, 'ci'))
     runs-on: ubuntu-latest
-    outputs:
-      game: ${{ steps.filter.outputs.game }}
-      markdown: ${{ steps.filter.outputs.markdown }}
-      ref: ${{ steps.pr.outputs.ref }}
     steps:
       - name: Get PR ref
         id: pr
@@ -40,63 +36,14 @@ jobs:
         with:
           ref: ${{ steps.pr.outputs.ref }}
 
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          base: main
-          filters: |
-            game:
-              - 'game/**'
-            markdown:
-              - '**/*.md'
-
-  game-lint:
-    needs: changes
-    if: ${{ needs.changes.outputs.game == 'true' }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: game
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.changes.outputs.ref }}
-
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
 
-      - name: Check formatting
-        run: nix run .#check
+      - name: Check game formatting
+        run: nix run ./game#check
 
-  game-build:
-    needs: changes
-    if: ${{ needs.changes.outputs.game == 'true' }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: game
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.changes.outputs.ref }}
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-
-      - name: Build
-        run: nix run .#build
-
-  markdown-lint:
-    needs: changes
-    if: ${{ needs.changes.outputs.markdown == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.changes.outputs.ref }}
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+      - name: Build game
+        run: nix run ./game#build
 
       - name: Check Markdown formatting
         run: make check
