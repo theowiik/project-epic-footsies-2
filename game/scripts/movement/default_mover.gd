@@ -11,21 +11,23 @@ func _init(movement_speed: float = 5.0):
 	speed = movement_speed
 
 
-func process_movement(input_vector: Vector2, delta: float, context: Dictionary) -> Vector3:
+func process_movement(input_vector: Vector2, delta: float, context: MovementContext) -> Vector3:
 	var velocity = Vector3.ZERO
-	var current_velocity_y: float = context.get("velocity_y", 0.0)
-	var is_on_floor: bool = context.get("is_on_floor", false)
-	var jump_pressed: bool = context.get("jump_pressed", false)
 
-	# Horizontal movement
 	velocity.x = input_vector.x * speed
 	velocity.z = 0
+	velocity.y = context.velocity_y
 
-	# Vertical movement (gravity and jumping)
-	velocity.y = current_velocity_y
-	if not is_on_floor:
+	if context.is_on_floor:
+		context.jump_count = 0
+		if context.jump_pressed:
+			context.jump_requested = true
+	else:
 		velocity.y -= GRAVITY * delta
-	if jump_pressed and is_on_floor:
+
+	if context.jump_requested:
 		velocity.y = JUMP_VELOCITY
+		context.jump_count += 1
+		context.jump_requested = false
 
 	return velocity

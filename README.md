@@ -1,6 +1,8 @@
 # project-epic-footsies-2
 
-Intro text.
+- [Getting Godot Engine](#getting-godot-engine)
+- [Credits](#credits)
+  - [Fonts](#fonts)
 
 ## Getting Godot Engine
 
@@ -17,3 +19,9 @@ nix-shell -p wget unzip bash --run "bash -c '
   rm godot/godot.zip
 '"
 ```
+
+## Credits
+
+### Fonts
+
+https://fonts.google.com/specimen/Cascadia+Mono?categoryFilters=Appearance:%2FMonospace%2FMonospace
