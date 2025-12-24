@@ -53,8 +53,10 @@ mesh = SubResource("BoxMesh_sgp6g")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9574709, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.9990978, 0.04246854, 0, -0.04246854, 0.9990978, 0, 4.0208797, 7.088256)
-fov = 33.5
+transform = Transform3D(0.9925377, -0.027170938, 0.1188729, 6.107246e-10, 0.9748585, 0.2228247, -0.12193863, -0.2211619, 0.9675838, 22.825825, 40.753616, 165.832)
+projection = 1
+fov = 22.5
+size = 10.69
 script = ExtResource("2_0wfyh")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="."]

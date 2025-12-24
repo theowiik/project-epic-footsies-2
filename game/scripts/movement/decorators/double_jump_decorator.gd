@@ -1,0 +1,2 @@
+class_name DoubleJumpDecorator
+extends MoverDecorator

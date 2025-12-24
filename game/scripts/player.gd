@@ -54,11 +54,7 @@ func _process_shooting(delta: float) -> void:
 
 
 func _process_movement(delta: float) -> void:
-	var context = {
-		"velocity_y": velocity.y,
-		"is_on_floor": is_on_floor(),
-		"jump_pressed": input.is_jump_just_pressed()
-	}
+	var context = MovementContext.new(velocity.y, is_on_floor(), input.is_jump_just_pressed())
 	velocity = mover.process_movement(input.get_movement(), delta, context)
 	move_and_slide()
 
