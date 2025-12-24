@@ -57,7 +57,9 @@ func _process_shooting(delta: float) -> void:
 
 
 func _process_movement(delta: float) -> void:
-	var context = MovementContext.new(velocity.y, is_on_floor(), input.is_jump_just_pressed(), jump_count)
+	var context = MovementContext.new(
+		velocity.y, is_on_floor(), input.is_jump_just_pressed(), jump_count
+	)
 	velocity = mover.process_movement(input.get_movement(), delta, context)
 	jump_count = context.jump_count
 	move_and_slide()
@@ -65,7 +67,9 @@ func _process_movement(delta: float) -> void:
 
 func _shoot():
 	var direction = (shoot_position.global_position - global_position).normalized()
-	var context = ShootingContext.new(shoot_position.global_position, direction, TEAM_COLOR, get_parent())
+	var context = ShootingContext.new(
+		shoot_position.global_position, direction, TEAM_COLOR, get_parent()
+	)
 	shooter.shoot(context)
 
 

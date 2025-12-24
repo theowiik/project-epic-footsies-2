@@ -1,10 +1,10 @@
 extends Control
 
+var console: Console
+
 @onready var score_label: Label = $ScoreLabel
 @onready var console_input: LineEdit = $ConsoleLineEdit
 @onready var console_output: RichTextLabel = $ConsoleLabel
-
-var console: Console
 
 
 func _ready() -> void:

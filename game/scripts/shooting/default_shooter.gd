@@ -17,7 +17,9 @@ func shoot(context: ShootingContext) -> void:
 	if context.bullet_speed == 0:
 		context.bullet_speed = bullet_speed * context.speed_multiplier
 
-	spawn_bullet(context.from_position, context.direction, context.team_color, context.parent, context)
+	spawn_bullet(
+		context.from_position, context.direction, context.team_color, context.parent, context
+	)
 
 	for extra in context.extra_shots:
 		var extra_dir = extra.get("direction", context.direction)
@@ -25,7 +27,11 @@ func shoot(context: ShootingContext) -> void:
 
 
 func spawn_bullet(
-	from_position: Vector3, direction: Vector3, team_color: Color, parent: Node, context: ShootingContext
+	from_position: Vector3,
+	direction: Vector3,
+	team_color: Color,
+	parent: Node,
+	context: ShootingContext
 ) -> void:
 	var bullet = context.bullet_scene.instantiate()
 	bullet.position = from_position

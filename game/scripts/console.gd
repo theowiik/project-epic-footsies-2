@@ -60,7 +60,7 @@ func _cmd_apply(args: Array):
 		write("Failed to apply '%s' (already active or invalid)" % powerup_name)
 
 
-func _cmd_list(args: Array):
+func _cmd_list(_args: Array):
 	var registry = PowerUpRegistry.new()
 	var powerups = registry.get_all_powerups()
 	write("Available powerups:")
@@ -68,7 +68,7 @@ func _cmd_list(args: Array):
 		write("  - " + powerup)
 
 
-func _cmd_help(args: Array):
+func _cmd_help(_args: Array):
 	write("Available commands:")
 	write("  /apply <powerup_name> - Apply powerup to all players")
 	write("  /list - List all available powerups")

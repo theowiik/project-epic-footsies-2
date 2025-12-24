@@ -4,7 +4,6 @@
 - [Credits](#credits)
   - [Fonts](#fonts)
 
-
 ## Getting Godot Engine
 
 Download Godot 4.5.1: https://godotengine.org/download/archive/4.5.1-stable/
