@@ -10,6 +10,7 @@ var shooting_powerups = {
 	"rapid_fire": RapidFireDecorator,
 	"triple_shot": TripleShotDecorator,
 	"fast_bullets": FastBulletsDecorator,
+	"recoil": RecoilDecorator,
 }
 
 
@@ -28,13 +29,18 @@ func is_shooting_powerup(name: String) -> bool:
 	return shooting_powerups.has(name)
 
 
-func create_movement_decorator(name: String) -> MovementDecorator:
+func create_movement_decorator(name: String, base: Mover) -> Mover:
 	if not movement_powerups.has(name):
 		return null
-	return movement_powerups[name].new()
+	return movement_powerups[name].new(base)
 
 
-func create_shooting_decorator(name: String) -> ShootingDecorator:
+func create_shooting_decorator(name: String, base: Shooter, player: CharacterBody3D = null) -> Shooter:
 	if not shooting_powerups.has(name):
 		return null
-	return shooting_powerups[name].new()
+
+	# Special case: RecoilDecorator needs player reference
+	if name == "recoil" and player:
+		return shooting_powerups[name].new(base, player)
+
+	return shooting_powerups[name].new(base)

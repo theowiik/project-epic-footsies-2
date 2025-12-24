@@ -1,12 +1,14 @@
 class_name FastBulletsDecorator
-extends ShootingDecorator
+extends ShooterDecorator
 
 var speed_multiplier: float = 2.0
 
 
-func _init(multiplier: float = 2.0):
+func _init(shooter: Shooter, multiplier: float = 2.0):
+	super(shooter)
 	speed_multiplier = multiplier
 
 
-func modify(context: ShootingContext) -> void:
+func shoot(context: ShootingContext) -> void:
 	context.speed_multiplier *= speed_multiplier
+	wrapped_shooter.shoot(context)

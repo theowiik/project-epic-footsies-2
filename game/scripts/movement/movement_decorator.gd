@@ -1,6 +1,12 @@
-class_name MovementDecorator
-extends RefCounted
+class_name MoverDecorator
+extends Mover
+
+var wrapped_mover: Mover
 
 
-func modify(context: MovementContext) -> void:
-	push_error("MovementDecorator.modify() not implemented")
+func _init(mover: Mover):
+	wrapped_mover = mover
+
+
+func process_movement(input_vector: Vector2, delta: float, context: MovementContext) -> Vector3:
+	return wrapped_mover.process_movement(input_vector, delta, context)

@@ -9,12 +9,14 @@ var input: InputInterface
 
 # Movement
 var mover: Mover
-var movement_decorators: Array[MovementDecorator] = []
+var base_mover: Mover
+var mover_decorator_names: Array[String] = []
 var jump_count: int = 0
 
 # Shooting
 var shooter: Shooter
-var shooting_decorators: Array[ShootingDecorator] = []
+var base_shooter: Shooter
+var shooter_decorator_names: Array[String] = []
 var shoot_cooldown: float = 0.0
 
 @onready var aim_pivot: Node3D = $AimPivot
@@ -27,8 +29,11 @@ func _ready():
 	# input = GamepadInput.new(device_id)
 	input = KeyboardMouseInput.new(self)
 
-	mover = Mover.new(5.0)
-	shooter = Shooter.new()
+	base_mover = PhysicsMover.new(5.0)
+	mover = base_mover
+
+	base_shooter = BulletShooter.new()
+	shooter = base_shooter
 
 
 func _physics_process(delta):
@@ -52,13 +57,8 @@ func _process_shooting(delta: float) -> void:
 			shoot_position.global_position, direction, TEAM_COLOR, get_parent()
 		)
 
-		# Apply all decorators
-		for decorator in shooting_decorators:
-			decorator.modify(context)
-
-		# Shoot with modified context
 		shooter.shoot(context)
-		shoot_cooldown = shooter.shoot_delay * context.delay_multiplier
+		shoot_cooldown = shooter.get_shoot_delay()
 
 
 func _process_movement(delta: float) -> void:
@@ -66,11 +66,6 @@ func _process_movement(delta: float) -> void:
 		velocity.y, is_on_floor(), input.is_jump_just_pressed(), jump_count
 	)
 
-	# Apply all decorators
-	for decorator in movement_decorators:
-		decorator.modify(context)
-
-	# Process movement with modified context
 	velocity = mover.process_movement(input.get_movement(), delta, context)
 	jump_count = context.jump_count
 	move_and_slide()
@@ -80,14 +75,28 @@ func apply_powerup(powerup_name: String) -> bool:
 	var registry = PowerUpRegistry.new()
 
 	if registry.is_movement_powerup(powerup_name):
-		var decorator = registry.create_movement_decorator(powerup_name)
-		if decorator:
-			movement_decorators.append(decorator)
+		if not mover_decorator_names.has(powerup_name):
+			mover_decorator_names.append(powerup_name)
+			_rebuild_movement_chain()
 			return true
 	elif registry.is_shooting_powerup(powerup_name):
-		var decorator = registry.create_shooting_decorator(powerup_name)
-		if decorator:
-			shooting_decorators.append(decorator)
+		if not shooter_decorator_names.has(powerup_name):
+			shooter_decorator_names.append(powerup_name)
+			_rebuild_shooting_chain()
 			return true
 
 	return false
+
+
+func _rebuild_movement_chain():
+	var registry = PowerUpRegistry.new()
+	mover = base_mover
+	for powerup_name in mover_decorator_names:
+		mover = registry.create_movement_decorator(powerup_name, mover)
+
+
+func _rebuild_shooting_chain():
+	var registry = PowerUpRegistry.new()
+	shooter = base_shooter
+	for powerup_name in shooter_decorator_names:
+		shooter = registry.create_shooting_decorator(powerup_name, shooter, self)

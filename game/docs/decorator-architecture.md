@@ -1,32 +1,53 @@
 # Decorator Pattern Architecture
 
 ## Overview
-This document describes the decorator pattern implementation for the movement and shooting systems in Epic Footsies 2. This architecture separates **modification logic** (what decorators do) from **execution logic** (what the core systems do), providing clear semantic separation.
+This document describes the classic decorator pattern implementation for the movement and shooting systems in Epic Footsies 2. This architecture uses the traditional **wrapping pattern** where decorators wrap and enhance base functionality while implementing the same interface.
+
+## Key Design Decisions
+
+### Naming for Semantic Clarity
+
+The primary semantic issue with decorator patterns is that decorators and concrete implementations both implement the same interface, but serve different purposes. We address this through clear, descriptive naming:
+
+| Component | Name | Role | Why This Name |
+|-----------|------|------|---------------|
+| **Base Interface** | `Mover` / `Shooter` | Abstract capability | Represents the capability itself |
+| **Concrete Implementation** | `PhysicsMover` / `BulletShooter` | Actually performs the action | Descriptive of what it does, not "Default" |
+| **Abstract Wrapper** | `MoverDecorator` / `ShooterDecorator` | Wraps another Mover/Shooter | Explicitly labeled as decorator |
+| **Concrete Decorators** | `PhastDecorator`, `TripleShotDecorator`, etc. | Wraps and enhances | Clear they're decorators |
+
+**Key principle:** No "Default" prefix. `PhysicsMover` and `BulletShooter` are not placeholders—they're the core implementations.
 
 ## Movement System
 
 ```mermaid
 classDiagram
     class Mover {
+        <<abstract>>
+        +process_movement(input_vector, delta, context) Vector3
+    }
+
+    class PhysicsMover {
         -JUMP_VELOCITY: float
         -GRAVITY: float
         -speed: float
         +process_movement(input_vector, delta, context) Vector3
     }
 
-    class MovementDecorator {
+    class MoverDecorator {
         <<abstract>>
-        +modify(context) void
+        -wrapped_mover: Mover
+        +process_movement(input_vector, delta, context) Vector3
     }
 
     class DoubleJumpDecorator {
         -max_jumps: int
-        +modify(context) void
+        +process_movement(input_vector, delta, context) Vector3
     }
 
     class PhastDecorator {
         -speed_multiplier: float
-        +modify(context) void
+        +process_movement(input_vector, delta, context) Vector3
     }
 
     class MovementContext {
@@ -35,12 +56,13 @@ classDiagram
         +jump_pressed: bool
         +jump_count: int
         +jump_requested: bool
-        +speed_multiplier: float
     }
 
-    MovementDecorator <|-- DoubleJumpDecorator
-    MovementDecorator <|-- PhastDecorator
-    MovementDecorator ..> MovementContext : modifies
+    Mover <|-- PhysicsMover
+    Mover <|-- MoverDecorator
+    MoverDecorator <|-- DoubleJumpDecorator
+    MoverDecorator <|-- PhastDecorator
+    MoverDecorator o-- Mover : wraps
     Mover ..> MovementContext : uses
 ```
 
@@ -49,31 +71,40 @@ classDiagram
 ```mermaid
 classDiagram
     class Shooter {
+        <<abstract>>
+        +shoot(context) void
+        +get_shoot_delay() float
+    }
+
+    class BulletShooter {
         -bullet_scene: PackedScene
         -bullet_speed: float
-        +shoot_delay: float
+        -shoot_delay: float
         +shoot(context) void
+        +get_shoot_delay() float
         -spawn_bullet(...) void
     }
 
-    class ShootingDecorator {
+    class ShooterDecorator {
         <<abstract>>
-        +modify(context) void
+        -wrapped_shooter: Shooter
+        +shoot(context) void
+        +get_shoot_delay() float
     }
 
     class FastBulletsDecorator {
         -speed_multiplier: float
-        +modify(context) void
+        +shoot(context) void
     }
 
     class RapidFireDecorator {
         -delay_multiplier: float
-        +modify(context) void
+        +get_shoot_delay() float
     }
 
     class TripleShotDecorator {
         -spread_angle: float
-        +modify(context) void
+        +shoot(context) void
     }
 
     class ShootingContext {
@@ -84,190 +115,357 @@ classDiagram
         +bullet_speed: float
         +bullet_scene: PackedScene
         +speed_multiplier: float
-        +delay_multiplier: float
         +extra_shots: Array~Dictionary~
     }
 
-    ShootingDecorator <|-- FastBulletsDecorator
-    ShootingDecorator <|-- RapidFireDecorator
-    ShootingDecorator <|-- TripleShotDecorator
-    ShootingDecorator ..> ShootingContext : modifies
+    Shooter <|-- BulletShooter
+    Shooter <|-- ShooterDecorator
+    ShooterDecorator <|-- FastBulletsDecorator
+    ShooterDecorator <|-- RapidFireDecorator
+    ShooterDecorator <|-- TripleShotDecorator
+    ShooterDecorator o-- Shooter : wraps
     Shooter ..> ShootingContext : uses
 ```
 
-## Player Orchestration
+## The Decorator Pattern
 
-```mermaid
-sequenceDiagram
-    participant Player
-    participant Decorators
-    participant Context
-    participant Executor
+### Classic Structure
 
-    Note over Player: Movement/Shooting triggered
-    Player->>Context: Create context with base state
-    Player->>Decorators: for each decorator
-    Decorators->>Context: modify(context)
-    Player->>Executor: execute with modified context
-    Executor->>Player: return result
+```gdscript
+# Base interface
+class Mover:
+    func process_movement(...) -> Vector3
+
+# Concrete implementation
+class PhysicsMover extends Mover:
+    func process_movement(...) -> Vector3:
+        # Actually applies physics
+
+# Abstract decorator
+class MoverDecorator extends Mover:
+    var wrapped_mover: Mover
+    func process_movement(...) -> Vector3:
+        return wrapped_mover.process_movement(...)
+
+# Concrete decorator
+class PhastDecorator extends MoverDecorator:
+    func process_movement(...) -> Vector3:
+        var velocity = wrapped_mover.process_movement(...)
+        velocity.x *= speed_multiplier  # Enhance!
+        return velocity
 ```
 
-## Semantic Analysis
+### Wrapping Chain
 
-### Why This Architecture?
+Decorators wrap each other in layers:
 
-The previous decorator pattern had a semantic issue: both decorators and implementations had the same interface (`shoot()`, `process_movement()`), but they did fundamentally different things:
-- **Implementations** actually performed actions (spawned bullets, applied physics)
-- **Decorators** just modified context and passed through
+```gdscript
+# Build the chain
+var mover = PhysicsMover.new()
+mover = DoubleJumpDecorator.new(mover)
+mover = PhastDecorator.new(mover)
 
-This created confusion: "If TripleShotDecorator is a Shooter, why doesn't it shoot?"
+# Results in: PhastDecorator -> DoubleJumpDecorator -> PhysicsMover
+# Call flows through all layers
+mover.process_movement(...)
+```
 
-### The Solution: Separate Interfaces
+## Processing Capabilities
 
-**Decorators** and **Executors** now implement different interfaces:
+The decorator pattern supports multiple processing strategies:
 
-| Component | Interface | Purpose | Semantic Clarity |
-|-----------|-----------|---------|------------------|
-| **Mover** | `process_movement()` | Actually processes movement with physics | ✅ Clear - it moves things |
-| **MovementDecorator** | `modify(context)` | Modifies movement parameters | ✅ Clear - it modifies |
-| **Shooter** | `shoot(context)` | Actually spawns bullets | ✅ Clear - it shoots |
-| **ShootingDecorator** | `modify(context)` | Modifies shooting parameters | ✅ Clear - it modifies |
+### 1. Pre-Processing (Before Delegation)
+```gdscript
+func process_movement(input, delta, context) -> Vector3:
+    context.jump_requested = true  # Modify context
+    return wrapped_mover.process_movement(input, delta, context)  # Then delegate
+```
+**Example:** `DoubleJumpDecorator` sets jump_requested before calling the wrapped mover.
 
-### Naming Conventions
+### 2. Post-Processing (After Delegation)
+```gdscript
+func process_movement(input, delta, context) -> Vector3:
+    var velocity = wrapped_mover.process_movement(input, delta, context)  # Delegate first
+    velocity.x *= speed_multiplier  # Modify result
+    return velocity
+```
+**Example:** `PhastDecorator` multiplies the returned velocity.
 
-| Old Name | New Name | Rationale |
-|----------|----------|-----------|
-| `DefaultMover` | `Mover` | Removed "Default" - it's not a fallback, it's the core implementation |
-| `DefaultShooter` | `Shooter` | Removed "Default" - it's the only implementation |
-| `MoverDecorator` | `MovementDecorator` | Renamed to reflect what it does: modifies movement |
-| `ShooterDecorator` | `ShootingDecorator` | Renamed to reflect what it does: modifies shooting |
-| `*Decorator` | `*Decorator` | All powerup decorators renamed to decorators |
+### 3. Conditional Prevention
+```gdscript
+func shoot(context) -> void:
+    if ammo <= 0:
+        return  # Don't delegate!
+    wrapped_shooter.shoot(context)
+```
+**Use case:** Ammo systems, cooldowns, condition checks.
+
+### 4. Side Effects
+```gdscript
+func shoot(context) -> void:
+    wrapped_shooter.shoot(context)
+    play_sound_effect()  # Do something after
+    apply_knockback()
+```
+**Use case:** Audio, particles, knockback, screen shake.
+
+### 5. Multiple Calls
+```gdscript
+func shoot(context) -> void:
+    for i in range(3):
+        wrapped_shooter.shoot(context)  # Call wrapped multiple times
+```
+**Use case:** Burst fire, scatter shots.
+
+### 6. Result Inspection
+```gdscript
+func get_shoot_delay() -> float:
+    return wrapped_shooter.get_shoot_delay() * delay_multiplier  # Modify return value
+```
+**Example:** `RapidFireDecorator` reduces the delay.
+
+## Current Decorator Implementations
 
 ### Movement Decorators
 
-| Decorator | Purpose | Semantic Accuracy |
-|-----------|---------|-------------------|
-| **DoubleJumpDecorator** | Enables multiple jumps by setting `jump_requested` flag | ✅ Modifies jump behavior |
-| **PhastDecorator** | Increases speed by multiplying `speed_multiplier` | ✅ Modifies speed |
+**DoubleJumpDecorator** (Pre-processing)
+- Sets `context.jump_requested = true` when mid-air jump is valid
+- Delegates to wrapped mover
+- The wrapped mover reads the modified context
+
+**PhastDecorator** (Post-processing)
+- Delegates to wrapped mover first
+- Multiplies `velocity.x` by `speed_multiplier`
+- Returns modified velocity
 
 ### Shooting Decorators
 
-| Decorator | Purpose | Semantic Accuracy |
-|-----------|---------|-------------------|
-| **FastBulletsDecorator** | Increases bullet speed via `speed_multiplier` | ✅ Modifies bullet speed |
-| **RapidFireDecorator** | Reduces delay via `delay_multiplier` | ✅ Modifies fire rate |
-| **TripleShotDecorator** | Adds extra shots to `extra_shots` array | ✅ Modifies shot pattern |
+**TripleShotDecorator** (Pre-processing)
+- Adds left and right directions to `context.extra_shots`
+- Delegates to wrapped shooter
+- Wrapped shooter reads extra_shots and spawns them
 
-## Design Pattern: Decorator Pattern
+**FastBulletsDecorator** (Pre-processing)
+- Multiplies `context.speed_multiplier`
+- Delegates to wrapped shooter
+- Wrapped shooter uses the multiplier
 
-This is NOT the classic Decorator pattern. It's a **Decorator pattern** with these characteristics:
+**RapidFireDecorator** (Post-processing of method call)
+- Overrides `get_shoot_delay()`
+- Returns `wrapped_shooter.get_shoot_delay() * delay_multiplier`
+- Doesn't modify `shoot()` at all
 
-1. **Separate Interfaces**: Decorators and executors implement different interfaces
-2. **Context Object**: Shared state container for modifications
-3. **Orchestrated Execution**: Player coordinates: modify → execute
-4. **No Wrapping**: Decorators don't wrap executors; they're separate objects
+## Player Integration
 
-### Pattern Structure
+The Player builds and manages decorator chains:
 
 ```gdscript
-# In Player
-var mover: Mover                              # The executor
-var movement_decorators: Array[MovementDecorator]  # The decorators
+# Initial setup
+base_mover = PhysicsMover.new()
+mover = base_mover
 
-func _process_movement(delta):
-    # 1. Create context
-    var context = MovementContext.new(...)
+base_shooter = BulletShooter.new()
+shooter = base_shooter
 
-    # 2. Apply all decorators
-    for decorator in movement_decorators:
-        decorator.modify(context)
+# When powerup is applied
+func apply_powerup(name):
+    mover_decorator_names.append(name)
+    _rebuild_movement_chain()
 
-    # 3. Execute with modified context
-    velocity = mover.process_movement(input, delta, context)
+# Rebuild chain
+func _rebuild_movement_chain():
+    mover = base_mover
+    for name in mover_decorator_names:
+        mover = registry.create_movement_decorator(name, mover)
+    # Result: mover = Decorator3(Decorator2(Decorator1(PhysicsMover)))
+```
+
+### Usage
+
+```gdscript
+# Player just calls the outermost decorator
+velocity = mover.process_movement(input, delta, context)
+
+# Which flows through:
+# PhastDecorator.process_movement()
+#   -> DoubleJumpDecorator.process_movement()
+#     -> PhysicsMover.process_movement()
+#   <- returns velocity
+# <- multiplies velocity.x
 ```
 
 ## Context Objects
 
+Contexts are data transfer objects that pass state through the decorator chain.
+
 ### MovementContext
-Acts as a data transfer object that:
-- Carries state from Player to Mover (velocity_y, is_on_floor, jump_pressed, jump_count)
-- Allows decorators to set flags (jump_requested) and multipliers (speed_multiplier)
-- Returns updated state to Player (jump_count)
+- **Input state:** `velocity_y`, `is_on_floor`, `jump_pressed`, `jump_count`
+- **Decorator communication:** `jump_requested` (set by decorators, read by PhysicsMover)
+- **Output state:** `jump_count` (modified during processing, read by Player)
 
 ### ShootingContext
-Acts as a data transfer object that:
-- Carries shooting parameters (position, direction, team_color)
-- Accumulates modifications (speed_multiplier, delay_multiplier, extra_shots)
-- Provides configuration to Shooter for bullet spawning
+- **Input state:** `from_position`, `direction`, `team_color`, `parent`
+- **Decorator communication:** `speed_multiplier`, `extra_shots` (accumulated by decorators)
+- **Configuration:** `bullet_scene`, `bullet_speed` (set by BulletShooter if needed)
 
-## Implementation Flow
+## Design Patterns
 
-### Movement System
-1. **Player** creates `MovementContext` with current state
-2. **Each MovementDecorator** modifies the context:
-   - `DoubleJumpDecorator`: May set `jump_requested = true`
-   - `PhastDecorator`: Multiplies `speed_multiplier`
-3. **Mover** processes movement using modified context
-4. **Player** receives updated velocity and state
+This architecture combines:
 
-### Shooting System
-1. **Player** creates `ShootingContext` with position/direction
-2. **Each ShootingDecorator** modifies the context:
-   - `TripleShotDecorator`: Adds entries to `extra_shots`
-   - `FastBulletsDecorator`: Multiplies `speed_multiplier`
-   - `RapidFireDecorator`: Multiplies `delay_multiplier`
-3. **Shooter** spawns all bullets based on modified context
-4. **Player** sets cooldown using `shooter.shoot_delay * context.delay_multiplier`
+1. **Decorator Pattern**: Wrapping to add functionality dynamically
+2. **Context Object Pattern**: Pass state without parameter proliferation
+3. **Chain of Responsibility**: Request flows through decorator chain
 
-## Order Independence
+## Benefits
 
-Unlike the decorator pattern, decorator order is **mostly independent**:
+### 1. Flexibility
+- Pre-processing, post-processing, conditional logic all possible
+- Can intercept at any point in the call
+- Can prevent execution entirely
+- Can run code after execution
 
-### Movement Decorators
-- Decorators set independent context fields
-- Multiple speed multipliers compound multiplicatively (commutative)
-- Jump decorators set boolean flags (order doesn't matter)
+### 2. Composability
+- Stack multiple decorators
+- Order matters for post-processing (outer decorators process after inner)
+- Order less important for pre-processing context modifications
 
-### Shooting Decorators
-- Each modifies orthogonal context fields
-- Speed multipliers compound multiplicatively (commutative)
-- Extra shots accumulate in array (order only affects array order, not behavior)
-- Delay multipliers compound multiplicatively (commutative)
+### 3. Semantic Clarity (Through Naming)
+- `PhysicsMover` - clearly does physics, not a "default"
+- `BulletShooter` - clearly shoots bullets
+- `MoverDecorator` - explicitly a wrapper
+- No ambiguity about roles
+
+### 4. Extensibility
+- Add new decorators without modifying existing code
+- Each decorator is independent
+- Easy to enable/disable specific behaviors
+
+## Order Dependence
+
+Decorator order matters for post-processing:
+
+```gdscript
+# Order 1
+var m = PhysicsMover.new()  # speed = 5.0
+m = PhastDecorator.new(m)   # velocity.x *= 1.6 -> becomes 8.0
+m = PhastDecorator.new(m)   # velocity.x *= 1.6 -> becomes 12.8
+
+# Order 2
+var m = PhysicsMover.new()
+m = PhastDecorator.new(m)
+m = PhastDecorator.new(m)
+# Same result! Multiplication is commutative
+
+# But for non-commutative operations:
+var m = PhysicsMover.new()
+m = IceDecorator.new(m)      # Interpolates with previous velocity
+m = PhastDecorator.new(m)    # Multiplies speed
+# vs
+m = PhastDecorator.new(m)    # Multiplies first
+m = IceDecorator.new(m)      # Then interpolates
+# Different results!
+```
 
 ## Adding New Decorators
 
-### Create a Movement Decorator
-```gdscript
-class_name MyMovementDecorator
-extends MovementDecorator
+### Movement Decorator Example
 
-func modify(context: MovementContext) -> void:
-    # Modify context fields as needed
-    context.speed_multiplier *= 2.0
+```gdscript
+class_name WallRunDecorator
+extends MoverDecorator
+
+func process_movement(input, delta, context) -> Vector3:
+    var velocity = wrapped_mover.process_movement(input, delta, context)
+
+    # Post-process: slow fall if on wall
+    if player.is_on_wall() and not context.is_on_floor:
+        velocity.y = max(velocity.y, -2.0)
+
+    return velocity
 ```
 
-### Create a Shooting Decorator
-```gdscript
-class_name MyShootingDecorator
-extends ShootingDecorator
+### Shooting Decorator Example
 
-func modify(context: ShootingContext) -> void:
-    # Modify context fields as needed
-    context.speed_multiplier *= 1.5
+```gdscript
+class_name RecoilDecorator
+extends ShooterDecorator
+
+func shoot(context) -> void:
+    wrapped_shooter.shoot(context)
+    # Side effect after shooting
+    player.apply_knockback(-context.direction * 5.0)
 ```
 
-### Register in PowerUpRegistry
+### Conditional Execution Example
+
 ```gdscript
-var movement_powerups = {
-    "my_powerup": MyMovementDecorator,
-}
+class_name AmmoDecorator
+extends ShooterDecorator
+
+var ammo: int = 10
+
+func shoot(context) -> void:
+    if ammo <= 0:
+        play_empty_sound()
+        return  # Prevent shooting!
+
+    ammo -= 1
+    wrapped_shooter.shoot(context)
 ```
 
-## Benefits Over Decorator Pattern
+## Comparison: Why Not the Modify-Then-Execute Pattern?
 
-1. **Semantic Clarity**: Decorators modify, executors execute - no ambiguity
-2. **Simpler Construction**: No nested wrapping chains to manage
-3. **Easy to Inspect**: Array of decorators is easier to debug than nested wrappers
-4. **Order Independence**: Most decorators can be applied in any order
-5. **Single Responsibility**: Each component has one clear purpose
-6. **Explicit Flow**: Player orchestration makes the pipeline obvious
+We previously tried a simpler pattern where:
+- Decorators only had `modify(context)` method
+- Player manually applied all modifiers, then called executor
+
+**That pattern was simpler but less flexible:**
+- ❌ Can't post-process return values
+- ❌ Can't run code after execution
+- ❌ Can't conditionally prevent execution
+- ❌ Can't wrap/intercept behavior
+- ✅ Easier to understand
+- ✅ More explicit flow
+
+**Classic decorator pattern (current):**
+- ✅ Full control of call chain
+- ✅ Pre and post-processing
+- ✅ Conditional execution
+- ✅ Side effects at any point
+- ❌ More complex
+- ❌ Nested chain harder to debug
+
+**Verdict:** Classic decorator pattern provides the flexibility needed for complex powerups (ammo, recoil, wall-run, etc.) at the cost of some complexity.
+
+## File Structure
+
+```
+scripts/
+├── movement/
+│   ├── mover.gd                      # Abstract base class
+│   ├── physics_mover.gd              # Concrete implementation
+│   ├── movement_decorator.gd         # Abstract decorator
+│   ├── movement_context.gd           # Context object
+│   └── decorators/
+│       ├── double_jump_decorator.gd
+│       └── phast_decorator.gd
+└── shooting/
+    ├── shooter.gd                    # Abstract base class
+    ├── bullet_shooter.gd             # Concrete implementation
+    ├── shooter_decorator.gd          # Abstract decorator
+    ├── shooting_context.gd           # Context object
+    └── decorators/
+        ├── fast_bullets_decorator.gd
+        ├── rapid_fire_decorator.gd
+        └── triple_shot_decorator.gd
+```
+
+## Summary
+
+This architecture uses the classic Decorator pattern with:
+- **Clear naming** to eliminate semantic confusion
+- **Wrapping** to enable maximum flexibility
+- **Context objects** for communication through the chain
+- **Player orchestration** to build and manage decorator chains
+
+The naming convention (`PhysicsMover`, `BulletShooter` instead of `DefaultMover`, `DefaultShooter`) makes clear that these are not placeholders but the core implementations, addressing the semantic concerns while retaining the decorator pattern's power.

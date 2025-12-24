@@ -1,12 +1,15 @@
 class_name PhastDecorator
-extends MovementDecorator
+extends MoverDecorator
 
 var speed_multiplier: float = 1.6
 
 
-func _init(multiplier: float = 1.6):
+func _init(mover: Mover, multiplier: float = 1.6):
+	super(mover)
 	speed_multiplier = multiplier
 
 
-func modify(context: MovementContext) -> void:
-	context.speed_multiplier *= speed_multiplier
+func process_movement(input_vector: Vector2, delta: float, context: MovementContext) -> Vector3:
+	var velocity = wrapped_mover.process_movement(input_vector, delta, context)
+	velocity.x *= speed_multiplier
+	return velocity

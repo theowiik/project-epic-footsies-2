@@ -1,12 +1,13 @@
 class_name RapidFireDecorator
-extends ShootingDecorator
+extends ShooterDecorator
 
 var delay_multiplier: float = 0.5
 
 
-func _init(multiplier: float = 0.5):
+func _init(shooter: Shooter, multiplier: float = 0.5):
+	super(shooter)
 	delay_multiplier = multiplier
 
 
-func modify(context: ShootingContext) -> void:
-	context.delay_multiplier *= delay_multiplier
+func get_shoot_delay() -> float:
+	return wrapped_shooter.get_shoot_delay() * delay_multiplier
