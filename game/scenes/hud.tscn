@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dacw2gn4smkwj"]
+[gd_scene load_steps=3 format=3 uid="uid://dacw2gn4smkwj"]
 
 [ext_resource type="Script" uid="uid://fspuivr1mf8v" path="res://scripts/hud.gd" id="1_ahhtf"]
+[ext_resource type="FontFile" uid="uid://b0he2rrpenx1d" path="res://assets/fonts/cascadia_mono.ttf" id="2_oo0fn"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -13,6 +14,29 @@ script = ExtResource("1_ahhtf")
 
 [node name="ScoreLabel" type="Label" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "hello world"
+offset_left = 19.0
+offset_top = 10.0
+offset_right = 66.0
+offset_bottom = 33.0
+theme_override_fonts/font = ExtResource("2_oo0fn")
+text = "score"
+
+[node name="ConsoleLineEdit" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 586.0
+offset_right = 337.0
+offset_bottom = 629.0
+theme_override_fonts/font = ExtResource("2_oo0fn")
+placeholder_text = "/help"
+
+[node name="ConsoleLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 356.0
+offset_right = 608.0
+offset_bottom = 565.0
+theme_override_fonts/normal_font = ExtResource("2_oo0fn")
+theme_override_font_sizes/normal_font_size = 13
+
+[connection signal="text_submitted" from="ConsoleLineEdit" to="." method="_on_console_line_edit_text_submitted"]

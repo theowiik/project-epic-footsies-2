@@ -14,15 +14,20 @@ func _init(movement_speed: float = 5.0):
 func process_movement(input_vector: Vector2, delta: float, context: MovementContext) -> Vector3:
 	var velocity = Vector3.ZERO
 
-	# Horizontal movement
 	velocity.x = input_vector.x * speed
 	velocity.z = 0
-
-	# Vertical movement (gravity and jumping)
 	velocity.y = context.velocity_y
-	if not context.is_on_floor:
+
+	if context.is_on_floor:
+		context.jump_count = 0
+		if context.jump_pressed:
+			context.jump_requested = true
+	else:
 		velocity.y -= GRAVITY * delta
-	if context.jump_pressed and context.is_on_floor:
+
+	if context.jump_requested:
 		velocity.y = JUMP_VELOCITY
+		context.jump_count += 1
+		context.jump_requested = false
 
 	return velocity

@@ -4,5 +4,11 @@ extends ShooterDecorator
 var speed_multiplier: float = 2.0
 
 
-func get_bullet_speed() -> float:
-	return base_shooter.get_bullet_speed() * speed_multiplier
+func _init(shooter: ShooterInterface, multiplier: float = 2.0):
+	super(shooter)
+	speed_multiplier = multiplier
+
+
+func shoot(context: ShootingContext) -> void:
+	context.speed_multiplier *= speed_multiplier
+	base_shooter.shoot(context)
