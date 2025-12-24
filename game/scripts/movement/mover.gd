@@ -1,5 +1,5 @@
-class_name DefaultMover
-extends MoverInterface
+class_name Mover
+extends RefCounted
 
 const JUMP_VELOCITY = 10.0
 const GRAVITY = 20.0
@@ -14,7 +14,7 @@ func _init(movement_speed: float = 5.0):
 func process_movement(input_vector: Vector2, delta: float, context: MovementContext) -> Vector3:
 	var velocity = Vector3.ZERO
 
-	velocity.x = input_vector.x * speed
+	velocity.x = input_vector.x * speed * context.speed_multiplier
 	velocity.z = 0
 	velocity.y = context.velocity_y
 

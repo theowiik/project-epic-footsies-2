@@ -1,13 +1,9 @@
-class_name DefaultShooter
-extends ShooterInterface
+class_name Shooter
+extends RefCounted
 
 var bullet_scene: PackedScene = load("res://objects/bullet.tscn")
 var bullet_speed: float = 30.0
 var shoot_delay: float = 0.3
-
-
-func get_shoot_delay() -> float:
-	return shoot_delay
 
 
 func shoot(context: ShootingContext) -> void:

@@ -2,14 +2,14 @@ class_name PowerUpRegistry
 extends RefCounted
 
 var movement_powerups = {
-	"phast": PhastDecorator,
-	"double_jump": DoubleJumpDecorator,
+	"phast": PhastModifier,
+	"double_jump": DoubleJumpModifier,
 }
 
 var shooting_powerups = {
-	"rapid_fire": RapidFireDecorator,
-	"triple_shot": TripleShotDecorator,
-	"fast_bullets": FastBulletsDecorator,
+	"rapid_fire": RapidFireModifier,
+	"triple_shot": TripleShotModifier,
+	"fast_bullets": FastBulletsModifier,
 }
 
 
@@ -28,13 +28,13 @@ func is_shooting_powerup(name: String) -> bool:
 	return shooting_powerups.has(name)
 
 
-func create_movement_decorator(name: String, base: MoverInterface) -> MoverInterface:
+func create_movement_modifier(name: String) -> MovementModifier:
 	if not movement_powerups.has(name):
 		return null
-	return movement_powerups[name].new(base)
+	return movement_powerups[name].new()
 
 
-func create_shooting_decorator(name: String, base: ShooterInterface) -> ShooterInterface:
+func create_shooting_modifier(name: String) -> ShootingModifier:
 	if not shooting_powerups.has(name):
 		return null
-	return shooting_powerups[name].new(base)
+	return shooting_powerups[name].new()

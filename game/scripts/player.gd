@@ -8,15 +8,13 @@ const TEAM_COLOR: Color = Color(1, 0.4, 0.2, 1)
 var input: InputInterface
 
 # Movement
-var mover: MoverInterface
-var base_mover: MoverInterface
-var mover_decorators: Array[String] = []
+var mover: Mover
+var movement_modifiers: Array[MovementModifier] = []
 var jump_count: int = 0
 
 # Shooting
-var shooter: ShooterInterface
-var base_shooter: ShooterInterface
-var shooter_decorators: Array[String] = []
+var shooter: Shooter
+var shooting_modifiers: Array[ShootingModifier] = []
 var shoot_cooldown: float = 0.0
 
 @onready var aim_pivot: Node3D = $AimPivot
@@ -29,11 +27,8 @@ func _ready():
 	# input = GamepadInput.new(device_id)
 	input = KeyboardMouseInput.new(self)
 
-	base_mover = DefaultMover.new(5.0)
-	mover = base_mover
-
-	base_shooter = DefaultShooter.new()
-	shooter = base_shooter
+	mover = Mover.new(5.0)
+	shooter = Shooter.new()
 
 
 func _physics_process(delta):
@@ -52,53 +47,47 @@ func _process_shooting(delta: float) -> void:
 		aim_pivot.rotation.z = angle
 
 	if input.is_shoot_pressed() and shoot_cooldown <= 0:
-		_shoot()
-		shoot_cooldown = shooter.get_shoot_delay()
+		var direction = (shoot_position.global_position - global_position).normalized()
+		var context = ShootingContext.new(
+			shoot_position.global_position, direction, TEAM_COLOR, get_parent()
+		)
+
+		# Apply all modifiers
+		for modifier in shooting_modifiers:
+			modifier.modify(context)
+
+		# Shoot with modified context
+		shooter.shoot(context)
+		shoot_cooldown = shooter.shoot_delay * context.delay_multiplier
 
 
 func _process_movement(delta: float) -> void:
 	var context = MovementContext.new(
 		velocity.y, is_on_floor(), input.is_jump_just_pressed(), jump_count
 	)
+
+	# Apply all modifiers
+	for modifier in movement_modifiers:
+		modifier.modify(context)
+
+	# Process movement with modified context
 	velocity = mover.process_movement(input.get_movement(), delta, context)
 	jump_count = context.jump_count
 	move_and_slide()
-
-
-func _shoot():
-	var direction = (shoot_position.global_position - global_position).normalized()
-	var context = ShootingContext.new(
-		shoot_position.global_position, direction, TEAM_COLOR, get_parent()
-	)
-	shooter.shoot(context)
 
 
 func apply_powerup(powerup_name: String) -> bool:
 	var registry = PowerUpRegistry.new()
 
 	if registry.is_movement_powerup(powerup_name):
-		if not mover_decorators.has(powerup_name):
-			mover_decorators.append(powerup_name)
-			_rebuild_movement_chain()
+		var modifier = registry.create_movement_modifier(powerup_name)
+		if modifier:
+			movement_modifiers.append(modifier)
 			return true
 	elif registry.is_shooting_powerup(powerup_name):
-		if not shooter_decorators.has(powerup_name):
-			shooter_decorators.append(powerup_name)
-			_rebuild_shooting_chain()
+		var modifier = registry.create_shooting_modifier(powerup_name)
+		if modifier:
+			shooting_modifiers.append(modifier)
 			return true
 
 	return false
-
-
-func _rebuild_movement_chain():
-	var registry = PowerUpRegistry.new()
-	mover = base_mover
-	for powerup_name in mover_decorators:
-		mover = registry.create_movement_decorator(powerup_name, mover)
-
-
-func _rebuild_shooting_chain():
-	var registry = PowerUpRegistry.new()
-	shooter = base_shooter
-	for powerup_name in shooter_decorators:
-		shooter = registry.create_shooting_decorator(powerup_name, shooter)
