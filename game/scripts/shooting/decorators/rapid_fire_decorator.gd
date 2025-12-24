@@ -1,5 +1,5 @@
-class_name RapidFireModifier
-extends ShootingModifier
+class_name RapidFireDecorator
+extends ShootingDecorator
 
 var delay_multiplier: float = 0.5
 

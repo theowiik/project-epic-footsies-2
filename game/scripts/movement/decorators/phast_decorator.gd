@@ -1,5 +1,5 @@
-class_name PhastModifier
-extends MovementModifier
+class_name PhastDecorator
+extends MovementDecorator
 
 var speed_multiplier: float = 1.6
 

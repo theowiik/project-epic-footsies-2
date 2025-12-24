@@ -1,7 +1,7 @@
-# Modifier Pattern Architecture
+# Decorator Pattern Architecture
 
 ## Overview
-This document describes the modifier pattern implementation for the movement and shooting systems in Epic Footsies 2. This architecture separates **modification logic** (what modifiers do) from **execution logic** (what the core systems do), providing clear semantic separation.
+This document describes the decorator pattern implementation for the movement and shooting systems in Epic Footsies 2. This architecture separates **modification logic** (what decorators do) from **execution logic** (what the core systems do), providing clear semantic separation.
 
 ## Movement System
 
@@ -14,17 +14,17 @@ classDiagram
         +process_movement(input_vector, delta, context) Vector3
     }
 
-    class MovementModifier {
+    class MovementDecorator {
         <<abstract>>
         +modify(context) void
     }
 
-    class DoubleJumpModifier {
+    class DoubleJumpDecorator {
         -max_jumps: int
         +modify(context) void
     }
 
-    class PhastModifier {
+    class PhastDecorator {
         -speed_multiplier: float
         +modify(context) void
     }
@@ -38,9 +38,9 @@ classDiagram
         +speed_multiplier: float
     }
 
-    MovementModifier <|-- DoubleJumpModifier
-    MovementModifier <|-- PhastModifier
-    MovementModifier ..> MovementContext : modifies
+    MovementDecorator <|-- DoubleJumpDecorator
+    MovementDecorator <|-- PhastDecorator
+    MovementDecorator ..> MovementContext : modifies
     Mover ..> MovementContext : uses
 ```
 
@@ -56,22 +56,22 @@ classDiagram
         -spawn_bullet(...) void
     }
 
-    class ShootingModifier {
+    class ShootingDecorator {
         <<abstract>>
         +modify(context) void
     }
 
-    class FastBulletsModifier {
+    class FastBulletsDecorator {
         -speed_multiplier: float
         +modify(context) void
     }
 
-    class RapidFireModifier {
+    class RapidFireDecorator {
         -delay_multiplier: float
         +modify(context) void
     }
 
-    class TripleShotModifier {
+    class TripleShotDecorator {
         -spread_angle: float
         +modify(context) void
     }
@@ -88,10 +88,10 @@ classDiagram
         +extra_shots: Array~Dictionary~
     }
 
-    ShootingModifier <|-- FastBulletsModifier
-    ShootingModifier <|-- RapidFireModifier
-    ShootingModifier <|-- TripleShotModifier
-    ShootingModifier ..> ShootingContext : modifies
+    ShootingDecorator <|-- FastBulletsDecorator
+    ShootingDecorator <|-- RapidFireDecorator
+    ShootingDecorator <|-- TripleShotDecorator
+    ShootingDecorator ..> ShootingContext : modifies
     Shooter ..> ShootingContext : uses
 ```
 
@@ -100,14 +100,14 @@ classDiagram
 ```mermaid
 sequenceDiagram
     participant Player
-    participant Modifiers
+    participant Decorators
     participant Context
     participant Executor
 
     Note over Player: Movement/Shooting triggered
     Player->>Context: Create context with base state
-    Player->>Modifiers: for each modifier
-    Modifiers->>Context: modify(context)
+    Player->>Decorators: for each decorator
+    Decorators->>Context: modify(context)
     Player->>Executor: execute with modified context
     Executor->>Player: return result
 ```
@@ -124,14 +124,14 @@ This created confusion: "If TripleShotDecorator is a Shooter, why doesn't it sho
 
 ### The Solution: Separate Interfaces
 
-**Modifiers** and **Executors** now implement different interfaces:
+**Decorators** and **Executors** now implement different interfaces:
 
 | Component | Interface | Purpose | Semantic Clarity |
 |-----------|-----------|---------|------------------|
 | **Mover** | `process_movement()` | Actually processes movement with physics | ✅ Clear - it moves things |
-| **MovementModifier** | `modify(context)` | Modifies movement parameters | ✅ Clear - it modifies |
+| **MovementDecorator** | `modify(context)` | Modifies movement parameters | ✅ Clear - it modifies |
 | **Shooter** | `shoot(context)` | Actually spawns bullets | ✅ Clear - it shoots |
-| **ShootingModifier** | `modify(context)` | Modifies shooting parameters | ✅ Clear - it modifies |
+| **ShootingDecorator** | `modify(context)` | Modifies shooting parameters | ✅ Clear - it modifies |
 
 ### Naming Conventions
 
@@ -139,48 +139,48 @@ This created confusion: "If TripleShotDecorator is a Shooter, why doesn't it sho
 |----------|----------|-----------|
 | `DefaultMover` | `Mover` | Removed "Default" - it's not a fallback, it's the core implementation |
 | `DefaultShooter` | `Shooter` | Removed "Default" - it's the only implementation |
-| `MoverDecorator` | `MovementModifier` | Renamed to reflect what it does: modifies movement |
-| `ShooterDecorator` | `ShootingModifier` | Renamed to reflect what it does: modifies shooting |
-| `*Decorator` | `*Modifier` | All powerup decorators renamed to modifiers |
+| `MoverDecorator` | `MovementDecorator` | Renamed to reflect what it does: modifies movement |
+| `ShooterDecorator` | `ShootingDecorator` | Renamed to reflect what it does: modifies shooting |
+| `*Decorator` | `*Decorator` | All powerup decorators renamed to decorators |
 
-### Movement Modifiers
+### Movement Decorators
 
-| Modifier | Purpose | Semantic Accuracy |
+| Decorator | Purpose | Semantic Accuracy |
 |-----------|---------|-------------------|
-| **DoubleJumpModifier** | Enables multiple jumps by setting `jump_requested` flag | ✅ Modifies jump behavior |
-| **PhastModifier** | Increases speed by multiplying `speed_multiplier` | ✅ Modifies speed |
+| **DoubleJumpDecorator** | Enables multiple jumps by setting `jump_requested` flag | ✅ Modifies jump behavior |
+| **PhastDecorator** | Increases speed by multiplying `speed_multiplier` | ✅ Modifies speed |
 
-### Shooting Modifiers
+### Shooting Decorators
 
-| Modifier | Purpose | Semantic Accuracy |
+| Decorator | Purpose | Semantic Accuracy |
 |-----------|---------|-------------------|
-| **FastBulletsModifier** | Increases bullet speed via `speed_multiplier` | ✅ Modifies bullet speed |
-| **RapidFireModifier** | Reduces delay via `delay_multiplier` | ✅ Modifies fire rate |
-| **TripleShotModifier** | Adds extra shots to `extra_shots` array | ✅ Modifies shot pattern |
+| **FastBulletsDecorator** | Increases bullet speed via `speed_multiplier` | ✅ Modifies bullet speed |
+| **RapidFireDecorator** | Reduces delay via `delay_multiplier` | ✅ Modifies fire rate |
+| **TripleShotDecorator** | Adds extra shots to `extra_shots` array | ✅ Modifies shot pattern |
 
-## Design Pattern: Modifier Pattern
+## Design Pattern: Decorator Pattern
 
-This is NOT the classic Decorator pattern. It's a **Modifier pattern** with these characteristics:
+This is NOT the classic Decorator pattern. It's a **Decorator pattern** with these characteristics:
 
-1. **Separate Interfaces**: Modifiers and executors implement different interfaces
+1. **Separate Interfaces**: Decorators and executors implement different interfaces
 2. **Context Object**: Shared state container for modifications
 3. **Orchestrated Execution**: Player coordinates: modify → execute
-4. **No Wrapping**: Modifiers don't wrap executors; they're separate objects
+4. **No Wrapping**: Decorators don't wrap executors; they're separate objects
 
 ### Pattern Structure
 
 ```gdscript
 # In Player
 var mover: Mover                              # The executor
-var movement_modifiers: Array[MovementModifier]  # The modifiers
+var movement_decorators: Array[MovementDecorator]  # The decorators
 
 func _process_movement(delta):
     # 1. Create context
     var context = MovementContext.new(...)
 
-    # 2. Apply all modifiers
-    for modifier in movement_modifiers:
-        modifier.modify(context)
+    # 2. Apply all decorators
+    for decorator in movement_decorators:
+        decorator.modify(context)
 
     # 3. Execute with modified context
     velocity = mover.process_movement(input, delta, context)
@@ -191,7 +191,7 @@ func _process_movement(delta):
 ### MovementContext
 Acts as a data transfer object that:
 - Carries state from Player to Mover (velocity_y, is_on_floor, jump_pressed, jump_count)
-- Allows modifiers to set flags (jump_requested) and multipliers (speed_multiplier)
+- Allows decorators to set flags (jump_requested) and multipliers (speed_multiplier)
 - Returns updated state to Player (jump_count)
 
 ### ShootingContext
@@ -204,52 +204,52 @@ Acts as a data transfer object that:
 
 ### Movement System
 1. **Player** creates `MovementContext` with current state
-2. **Each MovementModifier** modifies the context:
-   - `DoubleJumpModifier`: May set `jump_requested = true`
-   - `PhastModifier`: Multiplies `speed_multiplier`
+2. **Each MovementDecorator** modifies the context:
+   - `DoubleJumpDecorator`: May set `jump_requested = true`
+   - `PhastDecorator`: Multiplies `speed_multiplier`
 3. **Mover** processes movement using modified context
 4. **Player** receives updated velocity and state
 
 ### Shooting System
 1. **Player** creates `ShootingContext` with position/direction
-2. **Each ShootingModifier** modifies the context:
-   - `TripleShotModifier`: Adds entries to `extra_shots`
-   - `FastBulletsModifier`: Multiplies `speed_multiplier`
-   - `RapidFireModifier`: Multiplies `delay_multiplier`
+2. **Each ShootingDecorator** modifies the context:
+   - `TripleShotDecorator`: Adds entries to `extra_shots`
+   - `FastBulletsDecorator`: Multiplies `speed_multiplier`
+   - `RapidFireDecorator`: Multiplies `delay_multiplier`
 3. **Shooter** spawns all bullets based on modified context
 4. **Player** sets cooldown using `shooter.shoot_delay * context.delay_multiplier`
 
 ## Order Independence
 
-Unlike the decorator pattern, modifier order is **mostly independent**:
+Unlike the decorator pattern, decorator order is **mostly independent**:
 
-### Movement Modifiers
-- Modifiers set independent context fields
+### Movement Decorators
+- Decorators set independent context fields
 - Multiple speed multipliers compound multiplicatively (commutative)
-- Jump modifiers set boolean flags (order doesn't matter)
+- Jump decorators set boolean flags (order doesn't matter)
 
-### Shooting Modifiers
+### Shooting Decorators
 - Each modifies orthogonal context fields
 - Speed multipliers compound multiplicatively (commutative)
 - Extra shots accumulate in array (order only affects array order, not behavior)
 - Delay multipliers compound multiplicatively (commutative)
 
-## Adding New Modifiers
+## Adding New Decorators
 
-### Create a Movement Modifier
+### Create a Movement Decorator
 ```gdscript
-class_name MyMovementModifier
-extends MovementModifier
+class_name MyMovementDecorator
+extends MovementDecorator
 
 func modify(context: MovementContext) -> void:
     # Modify context fields as needed
     context.speed_multiplier *= 2.0
 ```
 
-### Create a Shooting Modifier
+### Create a Shooting Decorator
 ```gdscript
-class_name MyShootingModifier
-extends ShootingModifier
+class_name MyShootingDecorator
+extends ShootingDecorator
 
 func modify(context: ShootingContext) -> void:
     # Modify context fields as needed
@@ -259,15 +259,15 @@ func modify(context: ShootingContext) -> void:
 ### Register in PowerUpRegistry
 ```gdscript
 var movement_powerups = {
-    "my_powerup": MyMovementModifier,
+    "my_powerup": MyMovementDecorator,
 }
 ```
 
 ## Benefits Over Decorator Pattern
 
-1. **Semantic Clarity**: Modifiers modify, executors execute - no ambiguity
+1. **Semantic Clarity**: Decorators modify, executors execute - no ambiguity
 2. **Simpler Construction**: No nested wrapping chains to manage
-3. **Easy to Inspect**: Array of modifiers is easier to debug than nested wrappers
-4. **Order Independence**: Most modifiers can be applied in any order
+3. **Easy to Inspect**: Array of decorators is easier to debug than nested wrappers
+4. **Order Independence**: Most decorators can be applied in any order
 5. **Single Responsibility**: Each component has one clear purpose
 6. **Explicit Flow**: Player orchestration makes the pipeline obvious

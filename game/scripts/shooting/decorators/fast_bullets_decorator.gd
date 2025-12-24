@@ -1,5 +1,5 @@
-class_name FastBulletsModifier
-extends ShootingModifier
+class_name FastBulletsDecorator
+extends ShootingDecorator
 
 var speed_multiplier: float = 2.0
 

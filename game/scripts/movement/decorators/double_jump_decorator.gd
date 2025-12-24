@@ -1,5 +1,5 @@
-class_name DoubleJumpModifier
-extends MovementModifier
+class_name DoubleJumpDecorator
+extends MovementDecorator
 
 var max_jumps: int = 2
 
