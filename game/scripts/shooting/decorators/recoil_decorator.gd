@@ -1,19 +1,20 @@
 class_name RecoilDecorator
 extends ShooterDecorator
 
-var player: CharacterBody3D
 var knockback_strength: float = 3.0
 
 
-func _init(shooter: ShooterInterface, player_ref: CharacterBody3D):
-	super(shooter)
-	player = player_ref
+func _init(shooter: ShooterInterface, decorator_config: ShooterDecoratorConfig = null):
+	super(shooter, decorator_config)
 
 
 func shoot(context: ShootingContext) -> void:
 	wrapped_shooter.shoot(context)
 
+	if not config or not config.player:
+		return
+
 	var knockback_direction = -context.direction
 	knockback_direction.y = 0
 
-	player.apply_impulse(knockback_direction.normalized() * knockback_strength)
+	config.player.apply_impulse(knockback_direction.normalized() * knockback_strength)

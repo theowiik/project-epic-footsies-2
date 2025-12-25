@@ -39,10 +39,10 @@ func write(text: String):
 
 func _cmd_apply(args: Array):
 	if args.size() < 1:
-		write("Usage: /apply <powerup_name>")
+		write("Usage: /apply <crystal_name>")
 		return
 
-	var powerup_name = args[0]
+	var crystal_name = args[0]
 	var players = _get_players()
 
 	if players.size() == 0:
@@ -51,27 +51,27 @@ func _cmd_apply(args: Array):
 
 	var success_count = 0
 	for player in players:
-		if player.apply_powerup(powerup_name):
+		if player.apply_crystal(crystal_name):
 			success_count += 1
 
 	if success_count > 0:
-		write("Applied '%s' to %d player(s)" % [powerup_name, success_count])
+		write("Applied '%s' to %d player(s)" % [crystal_name, success_count])
 	else:
-		write("Failed to apply '%s' (already active or invalid)" % powerup_name)
+		write("Failed to apply '%s' (already active or invalid)" % crystal_name)
 
 
 func _cmd_list(_args: Array):
-	var registry = PowerUpRegistry.new()
-	var powerups = registry.get_all_powerups()
-	write("Available powerups:")
-	for powerup in powerups:
-		write("  - " + powerup)
+	var registry = CrystalRegistry.new()
+	var crystals = registry.get_all_crystals()
+	write("Available crystals:")
+	for crystal in crystals:
+		write("  - " + crystal)
 
 
 func _cmd_help(_args: Array):
 	write("Available commands:")
-	write("  /apply <powerup_name> - Apply powerup to all players")
-	write("  /list - List all available powerups")
+	write("  /apply <crystal_name> - Apply crystal to all players")
+	write("  /list - List all available crystals")
 	write("  /help - Show this help message")
 
 

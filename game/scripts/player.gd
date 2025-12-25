@@ -82,16 +82,16 @@ func apply_impulse(impulse: Vector3) -> void:
 	external_velocity += impulse
 
 
-func apply_powerup(powerup_name: String) -> bool:
-	var registry = PowerUpRegistry.new()
+func apply_crystal(crystal_name: String) -> bool:
+	var registry = CrystalRegistry.new()
 
-	if registry.is_movement_powerup(powerup_name):
-		mover_decorator_names.append(powerup_name)
+	if registry.is_movement_crystal(crystal_name):
+		mover_decorator_names.append(crystal_name)
 		_rebuild_movement_chain()
 		return true
 
-	if registry.is_shooting_powerup(powerup_name):
-		shooter_decorator_names.append(powerup_name)
+	if registry.is_shooting_crystal(crystal_name):
+		shooter_decorator_names.append(crystal_name)
 		_rebuild_shooting_chain()
 		return true
 
@@ -99,14 +99,15 @@ func apply_powerup(powerup_name: String) -> bool:
 
 
 func _rebuild_movement_chain():
-	var registry = PowerUpRegistry.new()
+	var registry = CrystalRegistry.new()
 	mover = base_mover
-	for powerup_name in mover_decorator_names:
-		mover = registry.create_movement_decorator(powerup_name, mover)
+	for crystal_name in mover_decorator_names:
+		mover = registry.create_movement_decorator(crystal_name, mover)
 
 
 func _rebuild_shooting_chain():
-	var registry = PowerUpRegistry.new()
+	var registry = CrystalRegistry.new()
+	var config = ShooterDecoratorConfig.new(self)
 	shooter = base_shooter
-	for powerup_name in shooter_decorator_names:
-		shooter = registry.create_shooting_decorator(powerup_name, shooter, self)
+	for crystal_name in shooter_decorator_names:
+		shooter = registry.create_shooting_decorator(crystal_name, shooter, config)

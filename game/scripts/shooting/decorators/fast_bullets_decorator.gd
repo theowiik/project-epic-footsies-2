@@ -4,9 +4,8 @@ extends ShooterDecorator
 var speed_multiplier: float = 2.0
 
 
-func _init(shooter: ShooterInterface, multiplier: float = 2.0):
-	super(shooter)
-	speed_multiplier = multiplier
+func _init(shooter: ShooterInterface, decorator_config: ShooterDecoratorConfig = null):
+	super(shooter, decorator_config)
 
 
 func shoot(context: ShootingContext) -> void:

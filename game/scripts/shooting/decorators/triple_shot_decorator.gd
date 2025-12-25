@@ -2,8 +2,8 @@ class_name TripleShotDecorator
 extends ShooterDecorator
 
 
-func _init(shooter: ShooterInterface):
-	super(shooter)
+func _init(shooter: ShooterInterface, decorator_config: ShooterDecoratorConfig = null):
+	super(shooter, decorator_config)
 
 
 func shoot(context: ShootingContext) -> void:
