@@ -18,4 +18,4 @@ func process_movement(input_vector: Vector2, delta: float, context: MovementCont
 	):
 		context.jump_requested = true
 
-	return base_mover.process_movement(input_vector, delta, context)
+	return wrapped_mover.process_movement(input_vector, delta, context)

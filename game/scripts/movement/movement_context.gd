@@ -6,6 +6,7 @@ var is_on_floor: bool = false
 var jump_pressed: bool = false
 var jump_count: int = 0
 var jump_requested: bool = false
+var speed_multiplier: float = 1.0
 
 
 func _init(vel_y: float = 0.0, on_floor: bool = false, jump: bool = false, jumps: int = 0):

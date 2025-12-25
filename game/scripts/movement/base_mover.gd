@@ -1,4 +1,4 @@
-class_name DefaultMover
+class_name BaseMover
 extends MoverInterface
 
 const JUMP_VELOCITY = 10.0

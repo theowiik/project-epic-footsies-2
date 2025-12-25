@@ -23,3 +23,5 @@ mesh = SubResource("SphereMesh_3ndsa")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_3ndsa")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
