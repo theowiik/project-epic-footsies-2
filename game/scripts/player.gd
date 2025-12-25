@@ -54,7 +54,7 @@ func _process_shooting(delta: float) -> void:
 	if input.is_shoot_pressed() and shoot_cooldown <= 0:
 		var direction = (shoot_position.global_position - global_position).normalized()
 		var context = ShootingContext.new(
-			shoot_position.global_position, direction, TEAM_COLOR, get_parent()
+			shoot_position.global_position, direction, TEAM_COLOR, get_parent(), self
 		)
 
 		shooter.shoot(context)
@@ -107,7 +107,6 @@ func _rebuild_movement_chain():
 
 func _rebuild_shooting_chain():
 	var registry = CrystalRegistry.new()
-	var config = ShooterDecoratorConfig.new(self)
 	shooter = base_shooter
 	for crystal_name in shooter_decorator_names:
-		shooter = registry.create_shooting_decorator(crystal_name, shooter, config)
+		shooter = registry.create_shooting_decorator(crystal_name, shooter)

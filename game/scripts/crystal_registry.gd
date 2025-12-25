@@ -35,10 +35,8 @@ func create_movement_decorator(name: String, base: MoverInterface) -> MoverInter
 	return movement_crystals[name].new(base)
 
 
-func create_shooting_decorator(
-	name: String, base: ShooterInterface, config: ShooterDecoratorConfig = null
-) -> ShooterInterface:
+func create_shooting_decorator(name: String, base: ShooterInterface) -> ShooterInterface:
 	if not shooting_crystals.has(name):
 		return null
 
-	return shooting_crystals[name].new(base, config)
+	return shooting_crystals[name].new(base)
