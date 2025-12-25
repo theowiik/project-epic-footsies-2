@@ -12,6 +12,7 @@ var mover: Mover
 var base_mover: Mover
 var mover_decorator_names: Array[String] = []
 var jump_count: int = 0
+var external_velocity: Vector3 = Vector3.ZERO  # For knockback, recoil, etc.
 
 # Shooting
 var shooter: Shooter
@@ -68,22 +69,31 @@ func _process_movement(delta: float) -> void:
 
 	velocity = mover.process_movement(input.get_movement(), delta, context)
 	jump_count = context.jump_count
+	
+	# Apply and decay external velocity (knockback, recoil, etc.)
+	velocity += external_velocity
+	external_velocity = external_velocity.lerp(Vector3.ZERO, 10.0 * delta)
+	if external_velocity.length() < 0.1:
+		external_velocity = Vector3.ZERO
+	
 	move_and_slide()
+
+
+func apply_impulse(impulse: Vector3) -> void:
+	external_velocity += impulse
 
 
 func apply_powerup(powerup_name: String) -> bool:
 	var registry = PowerUpRegistry.new()
 
 	if registry.is_movement_powerup(powerup_name):
-		if not mover_decorator_names.has(powerup_name):
-			mover_decorator_names.append(powerup_name)
-			_rebuild_movement_chain()
-			return true
+		mover_decorator_names.append(powerup_name)
+		_rebuild_movement_chain()
+		return true
 	elif registry.is_shooting_powerup(powerup_name):
-		if not shooter_decorator_names.has(powerup_name):
-			shooter_decorator_names.append(powerup_name)
-			_rebuild_shooting_chain()
-			return true
+		shooter_decorator_names.append(powerup_name)
+		_rebuild_shooting_chain()
+		return true
 
 	return false
 

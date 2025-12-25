@@ -17,13 +17,12 @@ func shoot(context: ShootingContext) -> void:
 	if context.bullet_speed == 0:
 		context.bullet_speed = bullet_speed * context.speed_multiplier
 
-	spawn_bullet(
-		context.from_position, context.direction, context.team_color, context.parent, context
-	)
-
-	for extra in context.extra_shots:
-		var extra_dir = extra.get("direction", context.direction)
-		spawn_bullet(context.from_position, extra_dir, context.team_color, context.parent, context)
+	var total_bullets = 1 + context.extra_shots
+	
+	for i in range(total_bullets):
+		var spread_offset = randf_range(-context.spread, context.spread)
+		var shot_dir = context.direction.rotated(Vector3.FORWARD, deg_to_rad(spread_offset))
+		spawn_bullet(context.from_position, shot_dir, context.team_color, context.parent, context)
 
 
 func spawn_bullet(

@@ -9,7 +9,8 @@ var bullet_speed: float = 0.0
 var bullet_scene: PackedScene = null
 var speed_multiplier: float = 1.0
 var delay_multiplier: float = 1.0
-var extra_shots: Array[Dictionary] = []
+var spread: float = 15.0  # Spread angle in degrees
+var extra_shots: int = 0
 
 
 func _init(pos: Vector3, dir: Vector3, color: Color, p: Node):
