@@ -11,23 +11,23 @@ The primary semantic issue with decorator patterns is that decorators and concre
 
 | Component | Name | Role | Why This Name |
 |-----------|------|------|---------------|
-| **Base Interface** | `Mover` / `Shooter` | Abstract capability | Represents the capability itself |
-| **Concrete Implementation** | `PhysicsMover` / `BulletShooter` | Actually performs the action | Descriptive of what it does, not "Default" |
-| **Abstract Wrapper** | `MoverDecorator` / `ShooterDecorator` | Wraps another Mover/Shooter | Explicitly labeled as decorator |
+| **Interface** | `MoverInterface` / `ShooterInterface` | Abstract contract | Standard interface naming convention |
+| **Base Implementation** | `BaseMover` / `BaseShooter` | Core implementation | Standard base class naming convention |
+| **Abstract Decorator** | `MoverDecorator` / `ShooterDecorator` | Wraps another Mover/Shooter | Explicitly labeled as decorator |
 | **Concrete Decorators** | `PhastDecorator`, `TripleShotDecorator`, etc. | Wraps and enhances | Clear they're decorators |
 
-**Key principle:** No "Default" prefix. `PhysicsMover` and `BulletShooter` are not placeholders—they're the core implementations.
+**Key principle:** Standard technical naming. `BaseMover` and `BaseShooter` are the core implementations that decorators extend.
 
 ## Movement System
 
 ```mermaid
 classDiagram
-    class Mover {
-        <<abstract>>
+    class MoverInterface {
+        <<interface>>
         +process_movement(input_vector, delta, context) Vector3
     }
 
-    class PhysicsMover {
+    class BaseMover {
         -JUMP_VELOCITY: float
         -GRAVITY: float
         -speed: float
@@ -36,7 +36,7 @@ classDiagram
 
     class MoverDecorator {
         <<abstract>>
-        -wrapped_mover: Mover
+        -wrapped_mover: MoverInterface
         +process_movement(input_vector, delta, context) Vector3
     }
 
@@ -58,25 +58,25 @@ classDiagram
         +jump_requested: bool
     }
 
-    Mover <|-- PhysicsMover
-    Mover <|-- MoverDecorator
+    MoverInterface <|-- BaseMover
+    MoverInterface <|-- MoverDecorator
     MoverDecorator <|-- DoubleJumpDecorator
     MoverDecorator <|-- PhastDecorator
-    MoverDecorator o-- Mover : wraps
-    Mover ..> MovementContext : uses
+    MoverDecorator o-- MoverInterface : wraps
+    MoverInterface ..> MovementContext : uses
 ```
 
 ## Shooting System
 
 ```mermaid
 classDiagram
-    class Shooter {
-        <<abstract>>
+    class ShooterInterface {
+        <<interface>>
         +shoot(context) void
         +get_shoot_delay() float
     }
 
-    class BulletShooter {
+    class BaseShooter {
         -bullet_scene: PackedScene
         -bullet_speed: float
         -shoot_delay: float
@@ -87,7 +87,7 @@ classDiagram
 
     class ShooterDecorator {
         <<abstract>>
-        -wrapped_shooter: Shooter
+        -wrapped_shooter: ShooterInterface
         +shoot(context) void
         +get_shoot_delay() float
     }
@@ -118,13 +118,13 @@ classDiagram
         +extra_shots: Array~Dictionary~
     }
 
-    Shooter <|-- BulletShooter
-    Shooter <|-- ShooterDecorator
+    ShooterInterface <|-- BaseShooter
+    ShooterInterface <|-- ShooterDecorator
     ShooterDecorator <|-- FastBulletsDecorator
     ShooterDecorator <|-- RapidFireDecorator
     ShooterDecorator <|-- TripleShotDecorator
-    ShooterDecorator o-- Shooter : wraps
-    Shooter ..> ShootingContext : uses
+    ShooterDecorator o-- ShooterInterface : wraps
+    ShooterInterface ..> ShootingContext : uses
 ```
 
 ## The Decorator Pattern
@@ -132,18 +132,18 @@ classDiagram
 ### Classic Structure
 
 ```gdscript
-# Base interface
-class Mover:
+# Interface
+class MoverInterface:
     func process_movement(...) -> Vector3
 
-# Concrete implementation
-class PhysicsMover extends Mover:
+# Base implementation
+class BaseMover extends MoverInterface:
     func process_movement(...) -> Vector3:
         # Actually applies physics
 
 # Abstract decorator
-class MoverDecorator extends Mover:
-    var wrapped_mover: Mover
+class MoverDecorator extends MoverInterface:
+    var wrapped_mover: MoverInterface
     func process_movement(...) -> Vector3:
         return wrapped_mover.process_movement(...)
 
@@ -161,11 +161,11 @@ Decorators wrap each other in layers:
 
 ```gdscript
 # Build the chain
-var mover = PhysicsMover.new()
+var mover = BaseMover.new()
 mover = DoubleJumpDecorator.new(mover)
 mover = PhastDecorator.new(mover)
 
-# Results in: PhastDecorator -> DoubleJumpDecorator -> PhysicsMover
+# Results in: PhastDecorator -> DoubleJumpDecorator -> BaseMover
 # Call flows through all layers
 mover.process_movement(...)
 ```
@@ -180,7 +180,7 @@ func process_movement(input, delta, context) -> Vector3:
     context.jump_requested = true  # Modify context
     return wrapped_mover.process_movement(input, delta, context)  # Then delegate
 ```
-**Example:** `DoubleJumpDecorator` sets jump_requested before calling the wrapped mover.
+**Example:** `DoubleJumpDecorator` sets jump_requested before calling the wrapped mover (ultimately `BaseMover`).
 
 ### 2. Post-Processing (After Delegation)
 ```gdscript
@@ -261,10 +261,10 @@ The Player builds and manages decorator chains:
 
 ```gdscript
 # Initial setup
-base_mover = PhysicsMover.new()
+base_mover = BaseMover.new()
 mover = base_mover
 
-base_shooter = BulletShooter.new()
+base_shooter = BaseShooter.new()
 shooter = base_shooter
 
 # When powerup is applied
@@ -277,7 +277,7 @@ func _rebuild_movement_chain():
     mover = base_mover
     for name in mover_decorator_names:
         mover = registry.create_movement_decorator(name, mover)
-    # Result: mover = Decorator3(Decorator2(Decorator1(PhysicsMover)))
+    # Result: mover = Decorator3(Decorator2(Decorator1(BaseMover)))
 ```
 
 ### Usage
@@ -289,7 +289,7 @@ velocity = mover.process_movement(input, delta, context)
 # Which flows through:
 # PhastDecorator.process_movement()
 #   -> DoubleJumpDecorator.process_movement()
-#     -> PhysicsMover.process_movement()
+#     -> BaseMover.process_movement()
 #   <- returns velocity
 # <- multiplies velocity.x
 ```
@@ -300,13 +300,13 @@ Contexts are data transfer objects that pass state through the decorator chain.
 
 ### MovementContext
 - **Input state:** `velocity_y`, `is_on_floor`, `jump_pressed`, `jump_count`
-- **Decorator communication:** `jump_requested` (set by decorators, read by PhysicsMover)
+- **Decorator communication:** `jump_requested` (set by decorators, read by `BaseMover`)
 - **Output state:** `jump_count` (modified during processing, read by Player)
 
 ### ShootingContext
 - **Input state:** `from_position`, `direction`, `team_color`, `parent`
 - **Decorator communication:** `speed_multiplier`, `extra_shots` (accumulated by decorators)
-- **Configuration:** `bullet_scene`, `bullet_speed` (set by BulletShooter if needed)
+- **Configuration:** `bullet_scene`, `bullet_speed` (set by `BaseShooter` if needed)
 
 ## Design Patterns
 
@@ -330,9 +330,9 @@ This architecture combines:
 - Order less important for pre-processing context modifications
 
 ### 3. Semantic Clarity (Through Naming)
-- `PhysicsMover` - clearly does physics, not a "default"
-- `BulletShooter` - clearly shoots bullets
-- `MoverDecorator` - explicitly a wrapper
+- `MoverInterface` / `ShooterInterface` - standard interface naming
+- `BaseMover` / `BaseShooter` - standard base implementation naming
+- `MoverDecorator` / `ShooterDecorator` - explicitly wrappers
 - No ambiguity about roles
 
 ### 4. Extensibility
@@ -346,18 +346,18 @@ Decorator order matters for post-processing:
 
 ```gdscript
 # Order 1
-var m = PhysicsMover.new()  # speed = 5.0
-m = PhastDecorator.new(m)   # velocity.x *= 1.6 -> becomes 8.0
-m = PhastDecorator.new(m)   # velocity.x *= 1.6 -> becomes 12.8
+var m = BaseMover.new()      # speed = 5.0
+m = PhastDecorator.new(m)    # velocity.x *= 1.6 -> becomes 8.0
+m = PhastDecorator.new(m)    # velocity.x *= 1.6 -> becomes 12.8
 
 # Order 2
-var m = PhysicsMover.new()
+var m = BaseMover.new()
 m = PhastDecorator.new(m)
 m = PhastDecorator.new(m)
 # Same result! Multiplication is commutative
 
 # But for non-commutative operations:
-var m = PhysicsMover.new()
+var m = BaseMover.new()
 m = IceDecorator.new(m)      # Interpolates with previous velocity
 m = PhastDecorator.new(m)    # Multiplies speed
 # vs
@@ -442,16 +442,16 @@ We previously tried a simpler pattern where:
 ```
 scripts/
 ├── movement/
-│   ├── mover.gd                      # Abstract base class
-│   ├── physics_mover.gd              # Concrete implementation
+│   ├── mover_interface.gd            # Interface
+│   ├── base_mover.gd                 # Base implementation
 │   ├── movement_decorator.gd         # Abstract decorator
 │   ├── movement_context.gd           # Context object
 │   └── decorators/
 │       ├── double_jump_decorator.gd
 │       └── phast_decorator.gd
 └── shooting/
-    ├── shooter.gd                    # Abstract base class
-    ├── bullet_shooter.gd             # Concrete implementation
+    ├── shooter_interface.gd          # Interface
+    ├── base_shooter.gd               # Base implementation
     ├── shooter_decorator.gd          # Abstract decorator
     ├── shooting_context.gd           # Context object
     └── decorators/
@@ -463,9 +463,9 @@ scripts/
 ## Summary
 
 This architecture uses the classic Decorator pattern with:
-- **Clear naming** to eliminate semantic confusion
+- **Technical naming** (`*Interface`, `Base*`, `*Decorator`) for clear role identification
 - **Wrapping** to enable maximum flexibility
 - **Context objects** for communication through the chain
 - **Player orchestration** to build and manage decorator chains
 
-The naming convention (`PhysicsMover`, `BulletShooter` instead of `DefaultMover`, `DefaultShooter`) makes clear that these are not placeholders but the core implementations, addressing the semantic concerns while retaining the decorator pattern's power.
+The naming convention (`MoverInterface`, `BaseMover`, `ShooterInterface`, `BaseShooter`) follows standard technical conventions, making the component roles immediately clear while retaining the decorator pattern's power.

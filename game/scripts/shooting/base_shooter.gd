@@ -1,5 +1,5 @@
-class_name BulletShooter
-extends Shooter
+class_name BaseShooter
+extends ShooterInterface
 
 var bullet_scene: PackedScene = load("res://objects/bullet.tscn")
 var bullet_speed: float = 30.0
@@ -18,7 +18,7 @@ func shoot(context: ShootingContext) -> void:
 		context.bullet_speed = bullet_speed * context.speed_multiplier
 
 	var total_bullets = 1 + context.extra_shots
-	
+
 	for i in range(total_bullets):
 		var spread_offset = randf_range(-context.spread, context.spread)
 		var shot_dir = context.direction.rotated(Vector3.FORWARD, deg_to_rad(spread_offset))

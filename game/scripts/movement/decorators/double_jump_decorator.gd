@@ -4,7 +4,7 @@ extends MoverDecorator
 var max_jumps: int = 2
 
 
-func _init(mover: Mover, max_jump_count: int = 2):
+func _init(mover: MoverInterface, max_jump_count: int = 2):
 	super(mover)
 	max_jumps = max_jump_count
 

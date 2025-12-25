@@ -2,7 +2,7 @@ class_name TripleShotDecorator
 extends ShooterDecorator
 
 
-func _init(shooter: Shooter):
+func _init(shooter: ShooterInterface):
 	super(shooter)
 
 

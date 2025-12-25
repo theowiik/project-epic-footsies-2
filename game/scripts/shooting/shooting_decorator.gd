@@ -1,10 +1,10 @@
 class_name ShooterDecorator
-extends Shooter
+extends ShooterInterface
 
-var wrapped_shooter: Shooter
+var wrapped_shooter: ShooterInterface
 
 
-func _init(shooter: Shooter):
+func _init(shooter: ShooterInterface):
 	wrapped_shooter = shooter
 
 

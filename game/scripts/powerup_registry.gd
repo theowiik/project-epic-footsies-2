@@ -29,13 +29,15 @@ func is_shooting_powerup(name: String) -> bool:
 	return shooting_powerups.has(name)
 
 
-func create_movement_decorator(name: String, base: Mover) -> Mover:
+func create_movement_decorator(name: String, base: MoverInterface) -> MoverInterface:
 	if not movement_powerups.has(name):
 		return null
 	return movement_powerups[name].new(base)
 
 
-func create_shooting_decorator(name: String, base: Shooter, player: CharacterBody3D = null) -> Shooter:
+func create_shooting_decorator(
+	name: String, base: ShooterInterface, player: CharacterBody3D = null
+) -> ShooterInterface:
 	if not shooting_powerups.has(name):
 		return null
 

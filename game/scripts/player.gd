@@ -1,3 +1,4 @@
+class_name Player
 extends CharacterBody3D
 
 const TEAM_COLOR: Color = Color(1, 0.4, 0.2, 1)
@@ -8,15 +9,15 @@ const TEAM_COLOR: Color = Color(1, 0.4, 0.2, 1)
 var input: InputInterface
 
 # Movement
-var mover: Mover
-var base_mover: Mover
+var mover: MoverInterface
+var base_mover: MoverInterface
 var mover_decorator_names: Array[String] = []
 var jump_count: int = 0
-var external_velocity: Vector3 = Vector3.ZERO  # For knockback, recoil, etc.
+var external_velocity: Vector3 = Vector3.ZERO
 
 # Shooting
-var shooter: Shooter
-var base_shooter: Shooter
+var shooter: ShooterInterface
+var base_shooter: ShooterInterface
 var shooter_decorator_names: Array[String] = []
 var shoot_cooldown: float = 0.0
 
@@ -25,15 +26,13 @@ var shoot_cooldown: float = 0.0
 
 
 func _ready():
-	add_to_group(Constants.PLAYERS_GROUP)
-
 	# input = GamepadInput.new(device_id)
 	input = KeyboardMouseInput.new(self)
 
-	base_mover = PhysicsMover.new(5.0)
+	base_mover = BaseMover.new(5.0)
 	mover = base_mover
 
-	base_shooter = BulletShooter.new()
+	base_shooter = BaseShooter.new()
 	shooter = base_shooter
 
 
@@ -69,13 +68,13 @@ func _process_movement(delta: float) -> void:
 
 	velocity = mover.process_movement(input.get_movement(), delta, context)
 	jump_count = context.jump_count
-	
+
 	# Apply and decay external velocity (knockback, recoil, etc.)
 	velocity += external_velocity
 	external_velocity = external_velocity.lerp(Vector3.ZERO, 10.0 * delta)
 	if external_velocity.length() < 0.1:
 		external_velocity = Vector3.ZERO
-	
+
 	move_and_slide()
 
 

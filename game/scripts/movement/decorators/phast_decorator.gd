@@ -4,7 +4,7 @@ extends MoverDecorator
 var speed_multiplier: float = 1.6
 
 
-func _init(mover: Mover, multiplier: float = 1.6):
+func _init(mover: MoverInterface, multiplier: float = 1.6):
 	super(mover)
 	speed_multiplier = multiplier
 

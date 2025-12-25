@@ -1,10 +1,10 @@
 class_name MoverDecorator
-extends Mover
+extends MoverInterface
 
-var wrapped_mover: Mover
+var wrapped_mover: MoverInterface
 
 
-func _init(mover: Mover):
+func _init(mover: MoverInterface):
 	wrapped_mover = mover
 
 

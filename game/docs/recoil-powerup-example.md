@@ -181,11 +181,11 @@ The "modify-then-execute" pattern is simpler but fundamentally cannot handle pos
 player.apply_powerup("recoil")
 
 # This builds a decorator chain:
-# shooter = RecoilDecorator(BulletShooter())
+# shooter = RecoilDecorator(BaseShooter())
 
 # When player shoots:
 # 1. RecoilDecorator.shoot() is called
-# 2. It calls BulletShooter.shoot() - bullets spawn
+# 2. It calls BaseShooter.shoot() - bullets spawn
 # 3. Then it applies knockback to player
 ```
 
