@@ -89,7 +89,8 @@ func apply_powerup(powerup_name: String) -> bool:
 		mover_decorator_names.append(powerup_name)
 		_rebuild_movement_chain()
 		return true
-	elif registry.is_shooting_powerup(powerup_name):
+
+	if registry.is_shooting_powerup(powerup_name):
 		shooter_decorator_names.append(powerup_name)
 		_rebuild_shooting_chain()
 		return true
