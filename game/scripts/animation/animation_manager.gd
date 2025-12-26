@@ -1,7 +1,7 @@
 class_name AnimationManager
 extends RefCounted
 
-enum State { GROUNDED, INITIATE_JUMP, JUMP_UP, JUMP_DOWN, LANDING }
+enum State { GROUNDED, INITIATE_JUMP, JUMP_UP, JUMP_DOWN, LANDING, IDLE }
 
 const DEFAULT_BLEND: float = 0.1
 const LANDING_BLEND: float = 0.05
@@ -23,12 +23,11 @@ func update(velocity: Vector3, is_on_floor: bool) -> void:
 
 	var new_state = _determine_state(velocity.y, is_on_floor)
 
+	if abs(velocity.x) < 0.1 and is_on_floor:
+		new_state = State.IDLE
+
 	if new_state != current_state:
 		_transition_to(new_state)
-
-	var is_idle = abs(velocity.x) < 0.1 and is_on_floor
-	if current_state == State.GROUNDED:
-		animation_player.speed_scale = 0.0 if is_idle else 1.0
 
 	was_on_floor = is_on_floor
 
@@ -74,3 +73,5 @@ func _transition_to(new_state: State) -> void:
 			animation_player.play("jump_down", DEFAULT_BLEND)
 		State.LANDING:
 			animation_player.play("jump_land", LANDING_BLEND)
+		State.IDLE:
+			animation_player.play("idle_animation", DEFAULT_BLEND)
