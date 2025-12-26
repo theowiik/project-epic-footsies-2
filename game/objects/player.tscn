@@ -1088,7 +1088,7 @@ transform = Transform3D(0.65841347, 0, 0.75265646, 0, 0.99999976, 0, -0.75265604
 transform = Transform3D(-0.084994696, -0.022861838, 0.9961194, -0.0019436419, 0.9997386, 0.022779074, -0.9963794, 1.0477378e-09, -0.08501695, -0.015648961, -0.7733366, 0.08545542)
 
 [node name="LeftFoot" parent="Body" instance=ExtResource("7_i825w")]
-transform = Transform3D(-0.04335614, 0.36305597, 0.9307578, 0.0168934, 0.9317669, -0.36266273, -0.9989162, 7.450578e-09, -0.0465311, -0.48053372, -0.72694933, 0)
+transform = Transform3D(-0.043356135, 0.36305597, 0.9307578, 0.016893398, 0.9317669, -0.36266273, -0.99891615, 7.450578e-09, -0.0465311, -0.48053372, -0.72694933, 0)
 
 [node name="RightFoot" parent="Body" instance=ExtResource("8_3rfka")]
 transform = Transform3D(0.38144565, -0.46780634, 0.79728025, 0.20189689, 0.8838307, 0.42199564, -0.9020741, 1.4901158e-08, 0.43158168, 0.5934705, -0.58153754, 0.06384897)
@@ -1100,6 +1100,7 @@ libraries = {
 autoplay = "walk"
 
 [node name="AimPivot" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7618495, 0)
 
 [node name="ShootPosition" type="Marker3D" parent="AimPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.524, 0, 0)

@@ -60,7 +60,7 @@ func _compute_aim_direction() -> Vector2:
 	if camera == null or player_node == null:
 		return Vector2.ZERO
 
-	var player_screen_pos = camera.unproject_position(player_node.global_position)
+	var player_screen_pos = camera.unproject_position(player_node.aim_pivot.global_position)
 	var mouse_pos = player_node.get_viewport().get_mouse_position()
 	var direction = (mouse_pos - player_screen_pos).normalized()
 
