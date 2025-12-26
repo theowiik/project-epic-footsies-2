@@ -4,6 +4,7 @@ extends InputInterface
 var player_node: Node3D
 var current_target: Node3D = null
 var retarget_timer: float = 0.0
+var camera: Camera3D = null
 
 var _movement: Vector2 = Vector2.ZERO
 var _aim_direction: Vector2 = Vector2.ZERO
@@ -15,6 +16,7 @@ func _init(p_player_node: Node3D):
 
 
 func update() -> void:
+	_update_camera()
 	_update_target()
 
 	if current_target == null or not is_instance_valid(current_target):
@@ -28,12 +30,29 @@ func update() -> void:
 
 	if direction_2d.length() > 0.1:
 		_movement = direction_2d.normalized()
-		_aim_direction = Vector2(direction_2d.x, -direction_2d.y).normalized()
 	else:
 		_movement = Vector2.ZERO
-		_aim_direction = Vector2.RIGHT
 
+	_aim_direction = _compute_aim_direction()
 	_shoot_pressed = true
+
+
+func _update_camera() -> void:
+	if camera == null or not is_instance_valid(camera):
+		var viewport = player_node.get_viewport()
+		if viewport:
+			camera = viewport.get_camera_3d()
+
+
+func _compute_aim_direction() -> Vector2:
+	if camera == null or current_target == null:
+		return Vector2.RIGHT
+
+	var player_screen_pos = camera.unproject_position(player_node.global_position)
+	var target_screen_pos = camera.unproject_position(current_target.global_position)
+	var direction = (target_screen_pos - player_screen_pos).normalized()
+
+	return direction
 
 
 func _update_target() -> void:

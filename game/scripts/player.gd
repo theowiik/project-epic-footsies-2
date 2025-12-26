@@ -5,6 +5,7 @@ extends CharacterBody3D
 
 # Controller
 @export var device_id: int = 0
+@export var use_bot_input: bool = false
 
 var input: InputInterface
 
@@ -29,7 +30,10 @@ var animation_manager: AnimationManager
 
 
 func _ready():
-	input = KeyboardMouseInput.new(self)
+	if use_bot_input:
+		input = NaiveBotInput.new(self)
+	else:
+		input = KeyboardMouseInput.new(self)
 
 	base_mover = BaseMover.new(5.0)
 	mover = base_mover
