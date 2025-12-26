@@ -11,9 +11,19 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
+      # Python environment with gdtoolkit for validation
+      pythonWithGdtoolkit = pkgs.python3.withPackages (ps: [
+        ps.lark
+        ps.docopt
+        ps.pyyaml
+        ps.setuptools
+      ]);
+
       formatScript = pkgs.writeShellScriptBin "format" ''
         set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat .
+        ${pkgs.ruff}/bin/ruff format .
+        ${pkgs.ruff}/bin/ruff check --select I --fix .
         ${pkgs.nixfmt-rfc-style}/bin/nixfmt .
       '';
 
@@ -21,6 +31,9 @@
         set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat . --check
         ${pkgs.gdtoolkit_4}/bin/gdlint .
+        ${pkgs.ruff}/bin/ruff format --check .
+        ${pkgs.ruff}/bin/ruff check --select I .
+        PYTHONPATH=${pkgs.gdtoolkit_4}/${pkgs.python3.sitePackages} ${pythonWithGdtoolkit}/bin/python3 validate_gdscript.py
         ${pkgs.nixfmt-rfc-style}/bin/nixfmt . --check
       '';
 
@@ -55,6 +68,8 @@
           pkgs.gdtoolkit_4
           pkgs.gnumake
           pkgs.nixfmt-rfc-style
+          pkgs.python3
+          pkgs.ruff
         ];
 
         XDG_DATA_HOME = "${pkgs.godot-export-templates-bin}/share";
