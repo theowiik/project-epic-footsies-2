@@ -1,10 +1,16 @@
 class_name NaiveBotInput
 extends InputInterface
 
+const WANDER_CHANCE: float = 0.02
+const WANDER_DURATION: float = 0.5
+
 var player_node: Node3D
 var current_target: Node3D = null
 var retarget_timer: float = 0.0
 var camera: Camera3D = null
+
+var wander_timer: float = 0.0
+var wander_direction: Vector2 = Vector2.ZERO
 
 var _movement: Vector2 = Vector2.ZERO
 var _aim_direction: Vector2 = Vector2.ZERO
@@ -25,16 +31,32 @@ func update() -> void:
 		_shoot_pressed = false
 		return
 
+	_movement = _compute_movement()
+	_aim_direction = _compute_aim_direction()
+	_shoot_pressed = true
+
+
+func _compute_movement() -> Vector2:
+	var delta = player_node.get_physics_process_delta_time()
+	wander_timer -= delta
+
+	# Randomly start wandering
+	if wander_timer <= 0 and randf() < WANDER_CHANCE:
+		wander_timer = WANDER_DURATION
+		wander_direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+
+	# If wandering, go that direction
+	if wander_timer > 0:
+		return wander_direction
+
+	# Otherwise chase target
 	var direction_3d = current_target.global_position - player_node.global_position
 	var direction_2d = Vector2(direction_3d.x, direction_3d.z)
 
 	if direction_2d.length() > 0.1:
-		_movement = direction_2d.normalized()
-	else:
-		_movement = Vector2.ZERO
+		return direction_2d.normalized()
 
-	_aim_direction = _compute_aim_direction()
-	_shoot_pressed = true
+	return Vector2.ZERO
 
 
 func _update_camera() -> void:

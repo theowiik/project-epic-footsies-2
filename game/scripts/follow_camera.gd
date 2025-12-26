@@ -3,7 +3,7 @@ extends Camera3D
 
 @export var smoothing_speed: float = 5.0
 var follow: Array[Node3D] = []
-var offset: Vector3 = Vector3(4, 8, 25)
+var offset: Vector3 = Vector3(0, 0, 25)
 
 
 func _ready() -> void:
