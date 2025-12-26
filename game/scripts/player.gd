@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody3D
 
-const TEAM_COLOR: Color = Color(1, 0.4, 0.2, 1)
+@export var team_color: Color = Color(1, 0.4, 0.2, 1)
 
 # Controller
 @export var device_id: int = 0
@@ -39,6 +39,8 @@ func _ready():
 
 	animation_manager = AnimationManager.new(animation_player, body)
 
+	_apply_team_color()
+
 
 func _physics_process(delta):
 	input.update()
@@ -58,7 +60,7 @@ func _process_shooting(delta: float) -> void:
 	if input.is_shoot_pressed() and shoot_cooldown <= 0:
 		var direction = (shoot_position.global_position - global_position).normalized()
 		var context = ShootingContext.new(
-			shoot_position.global_position, direction, TEAM_COLOR, get_parent(), self
+			shoot_position.global_position, direction, team_color, get_parent(), self
 		)
 
 		shooter.shoot(context)
@@ -115,3 +117,14 @@ func _rebuild_shooting_chain():
 	shooter = base_shooter
 	for crystal_name in shooter_decorator_names:
 		shooter = registry.create_shooting_decorator(crystal_name, shooter)
+
+
+func _apply_team_color() -> void:
+	for child in body.get_children():
+		for mesh_instance in child.get_children():
+			if mesh_instance is MeshInstance3D:
+				var material = mesh_instance.get_active_material(0)
+				if material:
+					material = material.duplicate()
+					material.albedo_color = team_color
+					mesh_instance.set_surface_override_material(0, material)

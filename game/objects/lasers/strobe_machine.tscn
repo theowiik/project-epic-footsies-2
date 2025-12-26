@@ -14,6 +14,7 @@ mesh = SubResource("BoxMesh_ifcws")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.62783355)
+visible = false
 light_energy = 130.27
 light_indirect_energy = 8.534
 light_volumetric_fog_energy = 8.892

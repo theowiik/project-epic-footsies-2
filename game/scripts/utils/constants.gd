@@ -2,6 +2,7 @@ class_name Constants
 extends Node
 
 const ROUND_DURATION: float = 3.0
+const BOT_RETARGET_INTERVAL: float = 0.25
 
 const BULLETS_GROUP: String = "bullets"
 const PLAYERS_GROUP: String = "players"
