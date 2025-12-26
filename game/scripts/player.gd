@@ -34,7 +34,7 @@ func _ready():
 	if use_bot_input:
 		input = NaiveBotInput.new(self)
 	else:
-		input = KeyboardMouseInput.new(self)
+		input = DevInput.new(self)
 
 	base_mover = BaseMover.new(5.0)
 	mover = base_mover
