@@ -13,7 +13,7 @@ func _ready() -> void:
 		follow.append(player as Node3D)
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if follow.is_empty():
 		return
 
