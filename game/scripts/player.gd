@@ -25,6 +25,7 @@ var animation_manager: AnimationManager
 
 @onready var aim_pivot: Node3D = $AimPivot
 @onready var shoot_position: Node3D = $AimPivot/ShootPosition
+@onready var flashlight: Flashlight = $Flashlight
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var body: Node3D = $Body
 
@@ -42,6 +43,8 @@ func _ready():
 	shooter = base_shooter
 
 	animation_manager = AnimationManager.new(animation_player, body)
+
+	flashlight.target = shoot_position
 
 	_apply_team_color()
 
@@ -62,9 +65,9 @@ func _process_shooting(delta: float) -> void:
 		aim_pivot.rotation.z = angle
 
 	if input.is_shoot_pressed() and shoot_cooldown <= 0:
-		var direction = (shoot_position.global_position - global_position).normalized()
+		var direction = (flashlight.global_position - global_position).normalized()
 		var context = ShootingContext.new(
-			shoot_position.global_position, direction, team_color, get_parent(), self
+			flashlight.global_position, direction, team_color, get_parent(), self
 		)
 
 		shooter.shoot(context)

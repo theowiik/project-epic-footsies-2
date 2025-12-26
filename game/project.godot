@@ -20,3 +20,9 @@ config/icon="res://assets/icon.svg"
 players=""
 bullets=""
 bulbs=""
+
+[layer_names]
+
+3d_physics/layer_1="platforms"
+3d_physics/layer_2="players"
+3d_physics/layer_3="flashlights"
