@@ -24,6 +24,7 @@ var shoot_cooldown: float = 0.0
 @onready var aim_pivot: Node3D = $AimPivot
 @onready var shoot_position: Node3D = $AimPivot/ShootPosition
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var body: Node3D = $Body
 
 var animation_manager: AnimationManager
 
@@ -37,7 +38,7 @@ func _ready():
 	base_shooter = BaseShooter.new()
 	shooter = base_shooter
 
-	animation_manager = AnimationManager.new(animation_player)
+	animation_manager = AnimationManager.new(animation_player, body)
 
 
 func _physics_process(delta):
@@ -80,7 +81,7 @@ func _process_movement(delta: float) -> void:
 		external_velocity = Vector3.ZERO
 
 	move_and_slide()
-	animation_manager.update(velocity.y, is_on_floor())
+	animation_manager.update(velocity, is_on_floor())
 
 
 func apply_impulse(impulse: Vector3) -> void:
