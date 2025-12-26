@@ -5,6 +5,7 @@ var console: Console
 @onready var score_label: Label = $ScoreLabel
 @onready var console_input: LineEdit = $ConsoleLineEdit
 @onready var console_output: RichTextLabel = $ConsoleLabel
+@onready var time_label: Label = $TimeLabel
 
 
 func _ready() -> void:
@@ -39,3 +40,7 @@ func recalculate_scores(_color: Color = Color.WHITE) -> void:
 func _on_console_line_edit_text_submitted(new_text: String) -> void:
 	console_input.clear()
 	console.execute(new_text)
+
+
+func update_time(time_remaining: float) -> void:
+	time_label.text = str(int(time_remaining)) + "s"
