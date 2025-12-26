@@ -2,10 +2,11 @@ class_name Main
 extends Node3D
 
 var crystal_picker_scene: PackedScene = load("res://scenes/crystal_picker/crystal_picker.tscn")
+var crystal_picker_node: CrystalPicker = null
+
 @onready var hud: HUD = $HUD
 @onready var round_manager: RoundManager = $RoundManager
 
-var crystal_picker_node: CrystalPicker = null
 
 func _ready() -> void:
 	round_manager.time_updated.connect(hud.update_time)

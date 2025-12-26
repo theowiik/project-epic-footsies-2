@@ -3,6 +3,7 @@ extends Control
 
 signal crystal_picked(crystal_name: String)
 
+
 func _ready() -> void:
 	var button = $Buttons/CrystalButton
 
