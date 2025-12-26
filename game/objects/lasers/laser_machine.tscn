@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://bioo4dk8jqu1w"]
+
+[ext_resource type="Script" uid="uid://de1uoo4j8dv5v" path="res://scripts/lasers/laser_machine.gd" id="1_ilcci"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ilcci"]
+
+[node name="LaserMachine" type="Node3D"]
+script = ExtResource("1_ilcci")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.6070701)
+mesh = SubResource("BoxMesh_ilcci")
