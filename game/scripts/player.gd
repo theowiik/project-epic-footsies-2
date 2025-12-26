@@ -135,3 +135,5 @@ func _apply_team_color() -> void:
 					material = material.duplicate()
 					material.albedo_color = team_color
 					mesh_instance.set_surface_override_material(0, material)
+
+	flashlight.set_color(team_color)
