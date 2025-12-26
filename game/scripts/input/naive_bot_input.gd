@@ -3,10 +3,11 @@ extends InputInterface
 
 const WANDER_CHANCE: float = 0.02
 const WANDER_DURATION: float = 0.5
+const RETARGET_INTERVAL: float = 0.25
 
 var player_node: Node3D
 var current_target: Node3D = null
-var retarget_timer: float = 0.0
+var retarget_timer: float = 0.25
 var camera: Camera3D = null
 
 var wander_timer: float = 0.0
@@ -82,7 +83,7 @@ func _update_target() -> void:
 	if retarget_timer > 0 and current_target != null and is_instance_valid(current_target):
 		return
 
-	retarget_timer = Constants.BOT_RETARGET_INTERVAL
+	retarget_timer = RETARGET_INTERVAL
 	current_target = _find_closest_enemy()
 
 
