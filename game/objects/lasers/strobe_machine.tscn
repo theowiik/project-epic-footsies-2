@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ymkakny8f3x5"]
 
-[ext_resource type="Script" uid="uid://cponosi4dkp68" path="res://scripts/lasers/strobe_machine.gd" id="1_2g1cq"]
+[ext_resource type="Script" uid="uid://cgrxqenn8n4xe" path="res://scripts/lasers/strobe_machine.gd" id="1_2g1cq"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ifcws"]
 

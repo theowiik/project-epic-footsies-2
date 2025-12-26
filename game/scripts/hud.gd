@@ -1,3 +1,4 @@
+class_name HUD
 extends Control
 
 var console: Console
@@ -44,3 +45,7 @@ func _on_console_line_edit_text_submitted(new_text: String) -> void:
 
 func update_time(time_remaining: float) -> void:
 	time_label.text = str(int(time_remaining)) + "s"
+
+
+func add_log(text: String) -> void:
+	console_output.text += text + "\n"
