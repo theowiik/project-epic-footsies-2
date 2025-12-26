@@ -1,14 +1,15 @@
 class_name Main
 extends Node3D
 
-var round: Round
-
 @onready var hud: Control = $HUD
+@onready var round_manager: RoundManager = $RoundManager
+
 
 func _ready() -> void:
-	round = Round.new()
-	round.time_updated.connect(hud.update_time)
-	round.start()
+	round_manager.time_updated.connect(hud.update_time)
+	round_manager.round_finished.connect(on_round_finished)
+	round_manager.start()
 
-func _process(delta: float) -> void:
-	round.update(delta)
+
+func on_round_finished(winner: Color) -> void:
+	print("Round finished! Winner: ", winner)
