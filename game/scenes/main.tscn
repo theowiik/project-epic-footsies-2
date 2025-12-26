@@ -36,7 +36,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.142035, -0.9567063, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9574709, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5713768, 30.053001)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.650961, 13.587667, 30.053001)
 fov = 22.5
 size = 10.69
 script = ExtResource("2_0wfyh")
@@ -57,7 +57,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7318554, 0, 0)
 
 [node name="Player2" parent="." instance=ExtResource("1_o5qli")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.7508955, 1.7889354, 0)
+team_color = Color(0.97749525, 0.2690932, 0.83872867, 1)
 device_id = 1
+use_bot_input = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_tbgi4")
@@ -66,4 +68,7 @@ environment = SubResource("Environment_tbgi4")
 transform = Transform3D(-0.8063999, 0.15222512, -0.57144254, -0.25300708, 0.78459245, 0.5660405, 0.534515, 0.6010341, -0.5941812, -6.775606, 4.786051, -9.15583)
 
 [node name="LaserMachine" parent="." instance=ExtResource("8_tipki")]
-transform = Transform3D(-0.9164256, 0, 0.40020514, 0, 1, 0, -0.40020514, 0, -0.9164256, 13.597982, 0, -8.517785)
+transform = Transform3D(-0.9164256, 0, 0.40020514, -0.39931086, 0.066813804, -0.9143778, -0.026739227, -0.9977655, -0.06122988, 13.597982, 0, -8.517785)
+
+[node name="LaserMachine2" parent="." instance=ExtResource("8_tipki")]
+transform = Transform3D(-0.95310295, 0.043918222, -0.2994429, 0.3014629, 0.050351508, -0.9521475, -0.026739225, -0.9977655, -0.061229877, -4.491232, 0, -8.517785)
