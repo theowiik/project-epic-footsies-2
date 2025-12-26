@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4d1mff5ya0g4"]
+
+[ext_resource type="Script" uid="uid://b8hhrmdvyycj4" path="res://scripts/crystal_picker/crystal_picker.gd" id="1_mswqd"]
+[ext_resource type="PackedScene" uid="uid://c43ctoschg12q" path="res://scenes/crystal_picker/crystal_button.tscn" id="2_rpxrj"]
+
+[node name="CrystalPicker" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mswqd")
+
+[node name="Buttons" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CrystalButton" parent="Buttons" instance=ExtResource("2_rpxrj")]
+layout_mode = 2
