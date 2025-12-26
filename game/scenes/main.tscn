@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ovaec6nc7m42"]
+[gd_scene load_steps=11 format=3 uid="uid://ovaec6nc7m42"]
 
 [ext_resource type="PackedScene" uid="uid://wilclsh64myp" path="res://objects/player.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://cbldusqpmy3gb" path="res://scripts/main.gd" id="1_tefeu"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c6ooswcottct1" path="res://objects/bulb.tscn" id="4_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://dacw2gn4smkwj" path="res://scenes/hud.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://bioo4dk8jqu1w" path="res://objects/lasers/laser_machine.tscn" id="8_tipki"]
+[ext_resource type="PackedScene" uid="uid://ymkakny8f3x5" path="res://objects/lasers/strobe_machine.tscn" id="9_85g3d"]
 
 [sub_resource type="Environment" id="Environment_tbgi4"]
 background_mode = 1
@@ -65,4 +66,7 @@ device_id = 1
 environment = SubResource("Environment_tbgi4")
 
 [node name="LaserMachine" parent="." instance=ExtResource("8_tipki")]
-transform = Transform3D(-0.91501594, 0.103623, -0.3898821, -2.245567e-08, 0.96644783, 0.2568629, 0.40341762, 0.23503368, -0.8843152, -4.949948, 2.7940834, -6.5102196)
+transform = Transform3D(-0.8690637, -0.12707023, 0.47810224, -2.2455676e-08, 0.96644807, 0.25686297, -0.49470043, 0.22323018, -0.8399046, 8.855472, 5.6706514, -11.386623)
+
+[node name="Node3D" parent="." instance=ExtResource("9_85g3d")]
+transform = Transform3D(-0.11966309, 0.34412286, -0.931268, 0.092853956, 0.93777555, 0.33459648, 0.9884628, -0.046433136, -0.14417034, -12.689479, 4.401717, -0.20795119)
