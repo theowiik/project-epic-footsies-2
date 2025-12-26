@@ -1,11 +1,11 @@
 extends Node3D
 
-@onready var ray: RayCast3D = $RayCast3D
-
 var mesh: ImmediateMesh
 var instance: MeshInstance3D
 var material: StandardMaterial3D
 var color: Color = Color.RED
+
+@onready var ray: RayCast3D = $RayCast3D
 
 
 func _ready() -> void:

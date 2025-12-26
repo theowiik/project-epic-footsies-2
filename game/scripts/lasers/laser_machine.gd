@@ -1,12 +1,11 @@
 extends Node3D
 
-var laser_scene: PackedScene = load("res://objects/lasers/laser.tscn")
-
 const LASER_COUNT: int = 3
 const SPREAD: float = 60.0
 const WAVE_SPEED: float = 2.0
 const WAVE_AMOUNT: float = 30.0
 
+var laser_scene: PackedScene = load("res://objects/lasers/laser.tscn")
 var lasers: Array[Node3D] = []
 
 
@@ -19,7 +18,7 @@ func _ready() -> void:
 		lasers.append(laser)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var time = Time.get_ticks_msec() / 1000.0
 
 	for i in lasers.size():
