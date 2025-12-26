@@ -20,13 +20,12 @@ var shooter: ShooterInterface
 var base_shooter: ShooterInterface
 var shooter_decorator_names: Array[String] = []
 var shoot_cooldown: float = 0.0
+var animation_manager: AnimationManager
 
 @onready var aim_pivot: Node3D = $AimPivot
 @onready var shoot_position: Node3D = $AimPivot/ShootPosition
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var body: Node3D = $Body
-
-var animation_manager: AnimationManager
 
 
 func _ready():

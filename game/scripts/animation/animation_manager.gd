@@ -54,14 +54,9 @@ func _determine_state(velocity_y: float, is_on_floor: bool) -> State:
 		return State.INITIATE_JUMP
 
 	if current_state == State.INITIATE_JUMP:
-		if animation_player.is_playing():
-			return State.INITIATE_JUMP
-		return State.JUMP_UP
+		return State.JUMP_UP if not animation_player.is_playing() else State.INITIATE_JUMP
 
-	if velocity_y > 0:
-		return State.JUMP_UP
-
-	return State.JUMP_DOWN
+	return State.JUMP_UP if velocity_y > 0 else State.JUMP_DOWN
 
 
 func _transition_to(new_state: State) -> void:
