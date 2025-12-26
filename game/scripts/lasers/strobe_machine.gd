@@ -1,7 +1,7 @@
 class_name StrobeMachine
 extends Node3D
 
-var on: bool = true
+var on: bool = false
 var strobe_speed: float = 10.0
 
 @onready var light: SpotLight3D = $SpotLight3D
