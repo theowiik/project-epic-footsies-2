@@ -19,6 +19,7 @@ shape = SubResource("BoxShape3D_dqtkv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0954229)
 
 [node name="Visuals" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0928963, 0, 0)
 
 [node name="FlashlightOnly" parent="Visuals" instance=ExtResource("3_wcc41")]
 
