@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://ovaec6nc7m42"]
 
-[ext_resource type="PackedScene" uid="uid://wilclsh64myp" path="res://objects/player.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://wilclsh64myp" path="res://objects/player/player.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://cbldusqpmy3gb" path="res://scripts/main.gd" id="1_tefeu"]
 [ext_resource type="Script" uid="uid://d0f1w2mq5h6r7" path="res://scripts/follow_camera.gd" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bk4k7em2j8d1p" path="res://scenes/round_manager.tscn" id="2_o6xl0"]
@@ -68,7 +68,7 @@ environment = SubResource("Environment_tbgi4")
 transform = Transform3D(-0.8063999, 0.15222512, -0.57144254, -0.25300708, 0.78459245, 0.5660405, 0.534515, 0.6010341, -0.5941812, -6.775606, 4.786051, -9.15583)
 
 [node name="LaserMachine" parent="." instance=ExtResource("8_tipki")]
-transform = Transform3D(-0.9164256, 0, 0.40020514, -0.39931086, 0.066813804, -0.9143778, -0.026739227, -0.9977655, -0.06122988, 13.597982, 0, -8.517785)
+transform = Transform3D(0.7811263, 0.050136328, -0.6223569, -0.27161983, -0.8702229, -0.41101682, -0.562196, 0.49010044, -0.6661359, 13.597982, 0, -8.517785)
 
 [node name="LaserMachine2" parent="." instance=ExtResource("8_tipki")]
-transform = Transform3D(-0.95310295, 0.043918222, -0.2994429, 0.3014629, 0.050351508, -0.9521475, -0.026739225, -0.9977655, -0.061229877, -4.491232, 0, -8.517785)
+transform = Transform3D(0.32995367, -0.56313944, 0.757631, -0.16601464, -0.8246847, -0.54067916, 0.92928445, 0.052621394, -0.36559725, -4.491232, 0, -8.517785)
