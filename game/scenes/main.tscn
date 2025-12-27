@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ovaec6nc7m42"]
+[gd_scene load_steps=14 format=3 uid="uid://ovaec6nc7m42"]
 
 [ext_resource type="PackedScene" uid="uid://wilclsh64myp" path="res://objects/player/player.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://cbldusqpmy3gb" path="res://scripts/main.gd" id="1_tefeu"]
@@ -9,6 +9,17 @@
 [ext_resource type="PackedScene" uid="uid://dacw2gn4smkwj" path="res://scenes/hud.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://bioo4dk8jqu1w" path="res://objects/lasers/laser_machine.tscn" id="8_tipki"]
 [ext_resource type="PackedScene" uid="uid://ymkakny8f3x5" path="res://objects/lasers/strobe_machine.tscn" id="9_85g3d"]
+[ext_resource type="Shader" uid="uid://ctts3bccsyucr" path="res://shaders/pixelate.gdshader" id="10_choun"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ya4ey"]
+render_priority = 0
+shader = ExtResource("10_choun")
+shader_parameter/pixel_size = 2.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_85g3d"]
+material = SubResource("ShaderMaterial_ya4ey")
+flip_faces = true
+size = Vector2(2, 2)
 
 [sub_resource type="Environment" id="Environment_tbgi4"]
 background_mode = 1
@@ -40,6 +51,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.650961, 13.587667, 30.05300
 fov = 22.5
 size = 10.69
 script = ExtResource("2_0wfyh")
+
+[node name="ScreenShader" type="MeshInstance3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+mesh = SubResource("QuadMesh_85g3d")
+skeleton = NodePath("../..")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="."]
 transform = Transform3D(0.7745472, -0.6064626, 0.17966545, 0, 0.28404883, 0.9588098, -0.6325161, -0.7426435, 0.22000922, 1.946548, 3.4297528, 1.2746582)
