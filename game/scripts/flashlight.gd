@@ -1,13 +1,12 @@
 class_name Flashlight
 extends RigidBody3D
 
-@export var target: Node3D
-@export var spring_force: float = 50.0
-@export var damping: float = 10.0
-@export var rotation_speed: float = 35.0
+var target: Node3D = null
+const SPRING_FORCE: float = 300.0
+const DAMPING: float = 10.0
+const ROTATION_SPEED: float = 90.0
 
 var facing_right: bool = true
-
 @onready var flashlight_model: Node3D = $FlashlightOnly
 @onready var hand_model: Node3D = $HandOnly
 
@@ -34,8 +33,8 @@ func _physics_process(delta: float) -> void:
 	var current_pos = global_position
 	var displacement = target_pos - current_pos
 
-	var spring = displacement * spring_force
-	var damp = linear_velocity * damping
+	var spring = displacement * SPRING_FORCE
+	var damp = linear_velocity * DAMPING
 	var force = spring - damp
 
 	apply_central_force(force)
@@ -46,7 +45,7 @@ func _physics_process(delta: float) -> void:
 	_update_facing(aim_direction.x)
 
 	var target_basis = Basis.looking_at(aim_direction, Vector3.UP)
-	global_transform.basis = global_transform.basis.slerp(target_basis, rotation_speed * delta)
+	global_transform.basis = global_transform.basis.slerp(target_basis, ROTATION_SPEED * delta)
 
 
 func _update_facing(aim_x: float) -> void:
