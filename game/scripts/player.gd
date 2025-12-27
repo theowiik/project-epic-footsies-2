@@ -43,6 +43,7 @@ func _ready():
 
 	animation_manager = AnimationManager.new(animation_player, body)
 	flashlight.target_position = $AimPivot/DesiredFlashlightPosition
+	flashlight.aim_origin = aim_pivot
 
 	_apply_team_color()
 
@@ -63,10 +64,9 @@ func _process_shooting(delta: float) -> void:
 		aim_pivot.rotation.z = angle
 
 	if input.is_shoot_pressed() and shoot_cooldown <= 0:
-		var direction = (flashlight.global_position - global_position).normalized()
-		var context = ShootingContext.new(
-			flashlight.global_position, direction, team_color, get_parent(), self
-		)
+		var shoot_pos = flashlight.shoot_position.global_position
+		var direction = -flashlight.global_transform.basis.z
+		var context = ShootingContext.new(shoot_pos, direction, team_color, get_parent(), self)
 
 		shooter.shoot(context)
 		shoot_cooldown = shooter.get_shoot_delay()
