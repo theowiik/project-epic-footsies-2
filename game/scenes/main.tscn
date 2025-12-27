@@ -14,7 +14,12 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ya4ey"]
 render_priority = 0
 shader = ExtResource("10_choun")
-shader_parameter/pixel_size = 2.0
+shader_parameter/pixel_size = 3.0
+shader_parameter/color_levels = 16.0
+shader_parameter/edge_strength = 0.0
+shader_parameter/edge_softness = 0.46999998949456
+shader_parameter/edge_color = Color(1, 0.34509805, 1, 1)
+shader_parameter/ramp_influence = 1.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_85g3d"]
 material = SubResource("ShaderMaterial_ya4ey")
