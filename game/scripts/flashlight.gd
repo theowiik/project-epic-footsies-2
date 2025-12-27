@@ -6,10 +6,10 @@ extends RigidBody3D
 @export var damping: float = 10.0
 @export var rotation_speed: float = 35.0
 
+var facing_right: bool = true
+
 @onready var flashlight_model: Node3D = $FlashlightOnly
 @onready var hand_model: Node3D = $HandOnly
-
-var facing_right: bool = true
 
 
 func _ready() -> void:
