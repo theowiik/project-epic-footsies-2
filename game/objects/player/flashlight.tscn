@@ -11,17 +11,19 @@ size = Vector3(0.5827637, 0.5626068, 1.252243)
 collision_layer = 4
 script = ExtResource("1_h1fso")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.821754)
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.010620117, 0.045021057, -0.2022171)
 shape = SubResource("BoxShape3D_dqtkv")
 
-[node name="FlashlightOnly" parent="." instance=ExtResource("3_wcc41")]
-
-[node name="HandOnly" parent="." instance=ExtResource("4_r5ew8")]
-transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 0, 0)
-
 [node name="ShootPosition" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0954229)
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="FlashlightOnly" parent="Visuals" instance=ExtResource("3_wcc41")]
+
+[node name="HandOnly" parent="Visuals" instance=ExtResource("4_r5ew8")]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.821754)
