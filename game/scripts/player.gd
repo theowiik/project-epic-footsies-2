@@ -24,7 +24,6 @@ var shoot_cooldown: float = 0.0
 var animation_manager: AnimationManager
 
 @onready var aim_pivot: Node3D = $AimPivot
-@onready var shoot_position: Node3D = $AimPivot/ShootPosition
 @onready var flashlight: Flashlight = $Flashlight
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var body: Node3D = $Body
@@ -43,8 +42,7 @@ func _ready():
 	shooter = base_shooter
 
 	animation_manager = AnimationManager.new(animation_player, body)
-
-	flashlight.target = shoot_position
+	flashlight.target_position = $AimPivot/DesiredFlashlightPosition
 
 	_apply_team_color()
 

@@ -1245,7 +1245,7 @@ transform = Transform3D(-0.084994696, -0.022861838, 0.9961194, -0.0019436419, 0.
 visible = false
 
 [node name="LeftFoot" parent="Body" instance=ExtResource("7_i825w")]
-transform = Transform3D(-0.04335613, 0.36305597, 0.93075764, 0.016893396, 0.9317669, -0.36266267, -0.99891603, 7.450578e-09, -0.046531092, -0.48053372, -0.72694933, 0)
+transform = Transform3D(-0.043356128, 0.36305597, 0.93075764, 0.016893394, 0.9317669, -0.36266264, -0.998916, 7.450578e-09, -0.04653109, -0.48053372, -0.72694933, 0)
 
 [node name="RightFoot" parent="Body" instance=ExtResource("8_3rfka")]
 transform = Transform3D(0.38144568, -0.46780634, 0.79728025, 0.2018969, 0.8838307, 0.42199564, -0.9020742, 1.4901158e-08, 0.43158168, 0.5934705, -0.58153754, 0.06384897)
@@ -1259,10 +1259,10 @@ autoplay = "walk"
 [node name="AimPivot" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7618495, 0)
 
-[node name="ShootPosition" type="Marker3D" parent="AimPivot"]
+[node name="DesiredFlashlightPosition" type="Marker3D" parent="AimPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8746121, 0, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="AimPivot/ShootPosition"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="AimPivot/DesiredFlashlightPosition"]
 mesh = SubResource("SphereMesh_i8sra")
 
 [node name="Flashlight" parent="." instance=ExtResource("9_i8sra")]

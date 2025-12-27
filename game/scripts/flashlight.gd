@@ -1,12 +1,13 @@
 class_name Flashlight
 extends RigidBody3D
 
-var target: Node3D = null
 const SPRING_FORCE: float = 300.0
 const DAMPING: float = 10.0
 const ROTATION_SPEED: float = 90.0
 
+var target_position: Node3D = null
 var facing_right: bool = true
+
 @onready var flashlight_model: Node3D = $FlashlightOnly
 @onready var hand_model: Node3D = $HandOnly
 
@@ -26,10 +27,10 @@ func set_color(color: Color) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if target == null:
+	if target_position == null:
 		return
 
-	var target_pos = target.global_position
+	var target_pos = target_position.global_position
 	var current_pos = global_position
 	var displacement = target_pos - current_pos
 
@@ -39,8 +40,8 @@ func _physics_process(delta: float) -> void:
 
 	apply_central_force(force)
 
-	var aim_origin = target.get_parent().global_position
-	var aim_direction = (target.global_position - aim_origin).normalized()
+	var aim_origin = target_position.get_parent().global_position
+	var aim_direction = (target_position.global_position - aim_origin).normalized()
 
 	_update_facing(aim_direction.x)
 
