@@ -1,47 +1,27 @@
-[gd_scene load_steps=8 format=3 uid="uid://v38g5whwnt52"]
+[gd_scene load_steps=5 format=3 uid="uid://v38g5whwnt52"]
 
 [ext_resource type="Script" uid="uid://bpme3thc2gylf" path="res://scripts/flashlight.gd" id="1_h1fso"]
-[ext_resource type="Material" uid="uid://b1gx6182iwfew" path="res://materials/dark_material.tres" id="2_rti1r"]
 [ext_resource type="PackedScene" uid="uid://c7tevucxnacfx" path="res://objects/player/flashlight_only.tscn" id="3_wcc41"]
 [ext_resource type="PackedScene" uid="uid://blc5ishx88q0k" path="res://objects/player/hand_only.tscn" id="4_r5ew8"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_o47a2"]
-material = ExtResource("2_rti1r")
-top_radius = 0.1
-bottom_radius = 0.1
-height = 0.7
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_dqtkv"]
-material = ExtResource("2_rti1r")
-top_radius = 0.2
-bottom_radius = 0.1
-height = 0.2
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_dqtkv"]
-size = Vector3(0.5827637, 0.5626068, 0.98846436)
+size = Vector3(0.5827637, 0.5626068, 1.252243)
 
 [node name="Flashlight" type="RigidBody3D"]
 collision_layer = 4
 script = ExtResource("1_h1fso")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-visible = false
-mesh = SubResource("CylinderMesh_o47a2")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.4334725)
-visible = false
-mesh = SubResource("CylinderMesh_dqtkv")
-
 [node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5192648)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.821754)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.010620117, 0.045021057, -0.10714722)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.010620117, 0.045021057, -0.2022171)
 shape = SubResource("BoxShape3D_dqtkv")
 
 [node name="FlashlightOnly" parent="." instance=ExtResource("3_wcc41")]
 
 [node name="HandOnly" parent="." instance=ExtResource("4_r5ew8")]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="ShootPosition" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0954229)

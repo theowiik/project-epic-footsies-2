@@ -6,10 +6,12 @@ const DAMPING: float = 10.0
 const ROTATION_SPEED: float = 90.0
 
 var target_position: Node3D = null
+var aim_origin: Node3D = null
 var facing_right: bool = true
 
 @onready var flashlight_model: Node3D = $FlashlightOnly
 @onready var hand_model: Node3D = $HandOnly
+@onready var shoot_position: Node3D = $ShootPosition
 
 
 func _ready() -> void:
@@ -27,7 +29,7 @@ func set_color(color: Color) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if target_position == null:
+	if target_position == null or aim_origin == null:
 		return
 
 	var target_pos = target_position.global_position
@@ -40,8 +42,7 @@ func _physics_process(delta: float) -> void:
 
 	apply_central_force(force)
 
-	var aim_origin = target_position.get_parent().global_position
-	var aim_direction = (target_position.global_position - aim_origin).normalized()
+	var aim_direction = (target_position.global_position - aim_origin.global_position).normalized()
 
 	_update_facing(aim_direction.x)
 
