@@ -24,6 +24,7 @@ func on_round_finished(winner: Player, loser: Player) -> void:
 	crystal_picker.crystal_picked.connect(on_crystal_picked)
 	add_child(crystal_picker)
 	crystal_picker.show_result(winner, loser)
+	process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func on_crystal_picked(crystal_name: String) -> void:
@@ -36,3 +37,4 @@ func on_crystal_picked(crystal_name: String) -> void:
 	crystal_picker_node.queue_free()
 	crystal_picker_node = null
 	current_loser = null
+	process_mode = Node.PROCESS_MODE_INHERIT
