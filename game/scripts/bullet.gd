@@ -8,6 +8,7 @@ var team_color: Color = Color.WHITE
 
 @onready var mesh_instance: MeshInstance3D = $MeshInstance3D
 @onready var light: OmniLight3D = $OmniLight3D
+var bulb_scene: PackedScene = load("res://objects/bulb.tscn")
 
 
 func _ready():
@@ -16,7 +17,7 @@ func _ready():
 	queue_free()
 
 
-func _process(delta):
+func _physics_process(delta):
 	position += velocity * speed * delta
 	velocity.y -= gravity * delta
 
@@ -36,3 +37,11 @@ func _apply_team_color() -> void:
 
 	if light:
 		light.light_color = team_color
+
+
+func _on_body_entered(_body: Node3D) -> void:
+	var bulb = bulb_scene.instantiate()
+	bulb.set_team_color(team_color)
+	bulb.global_position = global_position
+	get_tree().current_scene.add_child(bulb)
+	queue_free()
