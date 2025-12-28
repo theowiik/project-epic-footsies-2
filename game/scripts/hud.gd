@@ -3,7 +3,7 @@ extends Control
 
 var console: Console
 
-@onready var score_label: Label = $ScoreLabel
+@onready var score_label: RichTextLabel = $ScoreLabel
 @onready var console_input: LineEdit = $ConsoleLineEdit
 @onready var console_output: RichTextLabel = $ConsoleLabel
 @onready var time_label: Label = $TimeLabel
@@ -12,30 +12,32 @@ var console: Console
 func _ready() -> void:
 	console = Console.new(console_output, get_tree())
 
-	for bulb in get_tree().get_nodes_in_group(Constants.BULBS_GROUP):
-		bulb.bulb_hit.connect(recalculate_scores)
-	get_tree().node_added.connect(_on_node_added)
-	recalculate_scores()
 
+func update_scores(scores: Dictionary) -> void:
+	const BAR_LENGTH: int = 20
+	const BAR_CHAR: String = "█"
 
-func _on_node_added(node: Node) -> void:
-	if node.is_in_group(Constants.BULBS_GROUP):
-		node.bulb_hit.connect(recalculate_scores)
-		recalculate_scores()
+	var total: int = 0
+	for count in scores.values():
+		total += count
 
+	if total == 0:
+		score_label.text = ""
+		return
 
-func recalculate_scores(_color: Color = Color.WHITE) -> void:
-	var counts: Dictionary = {}
+	# Build proportional bar with colored segments
+	var bbcode: String = ""
+	var colors_sorted = scores.keys()
 
-	for bulb in get_tree().get_nodes_in_group(Constants.BULBS_GROUP):
-		var color: Color = bulb.get_color()
-		counts[color] = counts.get(color, 0) + 1
+	for color in colors_sorted:
+		var count: int = scores[color]
+		var segment_length: int = roundi(float(count) / total * BAR_LENGTH)
+		if segment_length > 0:
+			var hex: String = color.to_html(false)
+			bbcode += "[color=#%s]%s[/color]" % [hex, BAR_CHAR.repeat(segment_length)]
 
-	var texts: Array[String] = []
-	for color in counts.keys():
-		texts.append("%s: %d" % [color.to_html(false), counts[color]])
-
-	score_label.text = " | ".join(texts)
+	score_label.bbcode_enabled = true
+	score_label.text = bbcode
 
 
 func _on_console_line_edit_text_submitted(new_text: String) -> void:

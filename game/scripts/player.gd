@@ -24,7 +24,7 @@ var shoot_cooldown: float = 0.0
 var animation_manager: AnimationManager
 
 @onready var aim_pivot: Node3D = $AimPivot
-@onready var shoot_position: Node3D = $AimPivot/ShootPosition
+@onready var flashlight: Flashlight = $Flashlight
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var body: Node3D = $Body
 
@@ -42,6 +42,8 @@ func _ready():
 	shooter = base_shooter
 
 	animation_manager = AnimationManager.new(animation_player, body)
+	flashlight.target_position = $AimPivot/DesiredFlashlightPosition
+	flashlight.aim_origin = aim_pivot
 
 	_apply_team_color()
 
@@ -62,10 +64,9 @@ func _process_shooting(delta: float) -> void:
 		aim_pivot.rotation.z = angle
 
 	if input.is_shoot_pressed() and shoot_cooldown <= 0:
-		var direction = (shoot_position.global_position - global_position).normalized()
-		var context = ShootingContext.new(
-			shoot_position.global_position, direction, team_color, get_parent(), self
-		)
+		var shoot_pos = flashlight.shoot_position.global_position
+		var direction = -flashlight.global_transform.basis.z
+		var context = ShootingContext.new(shoot_pos, direction, team_color, get_parent(), self)
 
 		shooter.shoot(context)
 		shoot_cooldown = shooter.get_shoot_delay()
@@ -132,3 +133,5 @@ func _apply_team_color() -> void:
 					material = material.duplicate()
 					material.albedo_color = team_color
 					mesh_instance.set_surface_override_material(0, material)
+
+	flashlight.set_color(team_color)
