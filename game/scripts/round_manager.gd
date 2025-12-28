@@ -64,23 +64,22 @@ func recalculate_scores() -> void:
 func _finish_round() -> void:
 	var players = get_tree().get_nodes_in_group(Constants.PLAYERS_GROUP)
 	if players.size() < 2:
-		round_finished.emit(null, null)
 		return
 
-	var winner: Player = null
-	var loser: Player = null
-	var highest_score: int = -1
-	var lowest_score: int = 999999
-
+	var player_scores: Array = []
 	for player in players:
 		var player_score: int = scores.get(player.team_color, 0)
+		player_scores.append({"player": player, "score": player_score})
 
-		if player_score > highest_score:
-			highest_score = player_score
-			winner = player
+	player_scores.sort_custom(func(a, b): return a.score > b.score)
 
-		if player_score < lowest_score:
-			lowest_score = player_score
-			loser = player
+	var winner: Player = player_scores[0].player
+	var loser: Player = player_scores[1].player
+
+	# If tied, pick random winner/loser
+	if player_scores[0].score == player_scores[1].score:
+		players.shuffle()
+		winner = players[0]
+		loser = players[1]
 
 	round_finished.emit(winner, loser)

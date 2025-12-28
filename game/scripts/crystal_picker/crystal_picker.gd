@@ -15,10 +15,6 @@ func _ready() -> void:
 func show_result(winner: Player, loser: Player) -> void:
 	result_label.bbcode_enabled = true
 
-	if not winner or not loser:
-		result_label.text = "Draw!"
-		return
-
 	var winner_hex: String = winner.team_color.to_html(false)
 	var loser_hex: String = loser.team_color.to_html(false)
 
