@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mswqd")
 
-[node name="Buttons" type="VBoxContainer" parent="."]
+[node name="Content" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,5 +20,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CrystalButton" parent="Buttons" instance=ExtResource("2_rpxrj")]
+[node name="ResultLabel" type="RichTextLabel" parent="Content"]
+layout_mode = 2
+text = "THIS TEAM WON! THIS PLAYER SHOULD PICK A CRYSTAL"
+horizontal_alignment = 1
+
+[node name="Buttons" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="CrystalButton" parent="Content/Buttons" instance=ExtResource("2_rpxrj")]
 layout_mode = 2

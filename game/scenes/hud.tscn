@@ -12,15 +12,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ahhtf")
 
-[node name="ScoreLabel" type="Label" parent="."]
-layout_mode = 0
-offset_left = 19.0
-offset_top = 10.0
-offset_right = 66.0
-offset_bottom = 33.0
-theme_override_fonts/font = ExtResource("2_oo0fn")
-text = "score"
-
 [node name="ConsoleLineEdit" type="LineEdit" parent="."]
 layout_mode = 0
 offset_left = 24.0
@@ -46,5 +37,13 @@ offset_top = 31.0
 offset_right = 59.0
 offset_bottom = 54.0
 text = "time"
+
+[node name="ScoreLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 109.0
+offset_right = 1116.0
+offset_bottom = 266.0
+text = "hello world"
 
 [connection signal="text_submitted" from="ConsoleLineEdit" to="." method="_on_console_line_edit_text_submitted"]

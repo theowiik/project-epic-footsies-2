@@ -11,6 +11,5 @@ func shoot(context: ShootingContext) -> void:
 		return
 
 	var knockback_direction = -context.direction
-	knockback_direction.y = 0
 
 	context.player.apply_impulse(knockback_direction.normalized() * knockback_strength)
