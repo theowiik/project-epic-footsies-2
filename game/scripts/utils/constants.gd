@@ -1,7 +1,7 @@
 class_name Constants
 extends Node
 
-const ROUND_DURATION: float = 3.0
+const ROUND_DURATION: float = 30.0
 
 const BULLETS_GROUP: String = "bullets"
 const PLAYERS_GROUP: String = "players"

@@ -2,16 +2,11 @@ class_name FollowCamera
 extends Camera3D
 
 @export var smoothing_speed: float = 5.0
-var follow: Array[Node3D] = []
-var offset: Vector3 = Vector3(0, 0, 25)
-
+var follow: Array[Player] = []
+var offset: Vector3 = Vector3(0, 0, 100)
 
 func _ready() -> void:
-	var players: Array[Node] = get_tree().get_nodes_in_group("players")
-
-	for player in players:
-		follow.append(player as Node3D)
-
+	follow = Groups.get_all_players()
 
 func _physics_process(delta: float) -> void:
 	if follow.is_empty():
