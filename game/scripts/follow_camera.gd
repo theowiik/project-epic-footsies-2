@@ -5,8 +5,10 @@ extends Camera3D
 var follow: Array[Player] = []
 var offset: Vector3 = Vector3(0, 0, 100)
 
+
 func _ready() -> void:
 	follow = Groups.get_all_players()
+
 
 func _physics_process(delta: float) -> void:
 	if follow.is_empty():

@@ -62,4 +62,3 @@ func is_shoot_pressed() -> bool:
 
 func is_jump_just_pressed() -> bool:
 	return _keyboard_input.is_jump_just_pressed() or _gamepad_input.is_jump_just_pressed()
-
