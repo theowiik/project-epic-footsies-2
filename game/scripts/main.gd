@@ -38,3 +38,8 @@ func on_crystal_picked(crystal_name: String) -> void:
 	crystal_picker_node = null
 	current_loser = null
 	process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func _on_ob_body_entered(body: Node3D) -> void:
+	if body.is_in_group(Constants.PLAYERS_GROUP):
+		body.global_position = Vector3(0, 0, 0)
