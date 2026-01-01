@@ -76,17 +76,24 @@ func _process_movement(delta: float) -> void:
 	var context = MovementContext.new(
 		velocity.y, is_on_floor(), input.is_jump_just_pressed(), jump_count
 	)
+	context.is_on_wall = is_on_wall()
+	if context.is_on_wall:
+		context.wall_normal = get_wall_normal()
 
 	velocity = mover.process_movement(input.get_movement(), delta, context)
 	jump_count = context.jump_count
 
-	# Apply and decay external velocity (knockback, recoil, etc.)
 	velocity += external_velocity
 	external_velocity = external_velocity.lerp(Vector3.ZERO, 10.0 * delta)
 	if external_velocity.length() < 0.1:
 		external_velocity = Vector3.ZERO
 
+	var locked_z = global_position.z
+	velocity.z = 0
 	move_and_slide()
+	global_position.z = locked_z
+	velocity.z = 0
+
 	animation_manager.update(velocity, is_on_floor())
 
 
