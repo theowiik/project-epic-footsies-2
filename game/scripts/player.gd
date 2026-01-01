@@ -94,7 +94,7 @@ func _process_movement(delta: float) -> void:
 	global_position.z = locked_z
 	velocity.z = 0
 
-	animation_manager.update(velocity, is_on_floor())
+	animation_manager.update(velocity, is_on_floor(), is_on_wall(), get_wall_normal())
 
 
 func apply_impulse(impulse: Vector3) -> void:
