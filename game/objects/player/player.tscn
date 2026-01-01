@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://wilclsh64myp"]
+[gd_scene load_steps=21 format=3 uid="uid://wilclsh64myp"]
 
 [ext_resource type="Texture2D" uid="uid://co5yey2y7yboh" path="res://assets/icon.svg" id="1_eqqp1"]
 [ext_resource type="Script" uid="uid://cphs6p6g4lci0" path="res://scripts/player.gd" id="2_ykyjo"]
@@ -1199,6 +1199,131 @@ tracks/11/keys = {
 "values": [Vector3(-0.022781039, 1.6559381, -0.0019441479), Vector3(0.09172745, 1.6581268, 0.008463496), Vector3(0.3228264, 1.662544, 0.029468019), Vector3(0.4352529, 1.6646929, 0.03968643), Vector3(0.4352529, 1.6646929, 0.03968643), Vector3(0.26221788, 1.6613855, 0.023959324), Vector3(-0.022781039, 1.6559381, -0.0019441479), Vector3(-0.16891697, 1.6606088, -0.01631004), Vector3(-0.31505287, 1.6652794, -0.030675929), Vector3(-0.45853174, 1.6698651, -0.04478062), Vector3(-0.6099816, 1.6747056, -0.0596689), Vector3(-0.6099816, 1.6747056, -0.0596689), Vector3(-0.45115936, 1.6696296, -0.04405588)]
 }
 
+[sub_resource type="Animation" id="Animation_xgwla"]
+resource_name = "wall_glide"
+length = 0.685
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body/LeftHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.1119466, 1.5312049, -0.58394724), Vector3(1.1119466, 1.5312049, -0.37266403)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Body/LeftHand:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.10255566, -0.10977419, 3.029477), Vector3(0.061930805, -0.10940572, 3.0113955)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Body/Torso:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.10877609, -0.7441906, 0), Vector3(0.10877609, -0.8442721, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Body/Torso:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.10320373, 0.74164754, 0.11198333), Vector3(-0.103203736, 0.7416476, 0.111983314)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Body/LeftFoot:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.33),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.39811355, -0.6605004, 0), Vector3(0.39811355, -0.7165611, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Body/LeftFoot:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.33),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.10686628, 0.0859665, 0.80270046), Vector3(-0.114650995, 0.07524928, 0.89958465)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Body/RightFoot:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.31),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.6298181, -0.65979236, 0.06384897), Vector3(0.6298181, -0.7263645, 0.06384897)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Body/RightFoot:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.31),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.004722119, 0.033196315, 1.1162331), Vector3(0.008845901, 0.03234291, 0.9905993)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Body/Head:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.14, 0.31000006, 0.44),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.21684313, -0.7854824, 0), Vector3(-0.21684313, -0.7854824, 0), Vector3(-0.21684313, -0.952285, 0), Vector3(-0.21684313, -0.952285, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Body/Head:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.14, 0.31000006, 0.44),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, -0.9522167, 0), Vector3(0, -0.9522167, 0), Vector3(0, -0.9522167, 0), Vector3(0, -0.9522167, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uxov2"]
 _data = {
 &"RESET": SubResource("Animation_uxov2"),
@@ -1208,7 +1333,8 @@ _data = {
 &"jump_down": SubResource("Animation_42cpl"),
 &"jump_land": SubResource("Animation_vqq2l"),
 &"jump_up": SubResource("Animation_3nfmf"),
-&"walk": SubResource("Animation_ykyjo")
+&"walk": SubResource("Animation_ykyjo"),
+&"wall_glide": SubResource("Animation_xgwla")
 }
 
 [node name="Player" type="CharacterBody3D" groups=["players"]]
@@ -1228,23 +1354,23 @@ texture = ExtResource("1_eqqp1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5293977, 0)
 
 [node name="Torso" parent="Body" instance=ExtResource("3_nmc1l")]
-transform = Transform3D(0.20044531, 0, 0.9797047, 0, 1, 0, -0.97970474, 0, 0.2004453, 0, -0.7441906, 0)
+transform = Transform3D(0.20044532, 0, 0.9797048, 0, 1, 0, -0.97970486, 0, 0.20044531, 0, -0.7441906, 0)
 
 [node name="LeftHand" parent="Body" instance=ExtResource("5_f46kd")]
-transform = Transform3D(0.40304, -0.062195987, 0.9130665, -0.03139401, 0.99616104, 0.08171395, -0.91464406, -0.06159879, 0.39954013, -0.14659125, -0.74512756, -0.07024312)
+transform = Transform3D(0.40304, -0.062195975, 0.9130664, -0.03139401, 0.99616086, 0.081713945, -0.91464406, -0.061598778, 0.3995401, -0.14659125, -0.74512756, -0.07024312)
 
 [node name="Head" parent="Body" instance=ExtResource("5_3rerk")]
-transform = Transform3D(0.65841347, 0, 0.75265646, 0, 0.99999976, 0, -0.75265604, 0, 0.6584138, 0, -0.7854824, 0)
+transform = Transform3D(0.65841347, 0, 0.75265646, 0, 0.99999976, 0, -0.7526561, 0, 0.6584138, 0, -0.7854824, 0)
 
 [node name="RightHand" parent="Body" instance=ExtResource("6_3rerk")]
 transform = Transform3D(-0.084994696, -0.022861838, 0.9961194, -0.0019436419, 0.9997386, 0.022779074, -0.9963794, 1.0477378e-09, -0.08501695, -0.015648961, -0.7733366, 0.08545542)
 visible = false
 
 [node name="LeftFoot" parent="Body" instance=ExtResource("7_i825w")]
-transform = Transform3D(-0.043356128, 0.36305597, 0.93075764, 0.016893394, 0.9317669, -0.36266264, -0.9989159, 7.450578e-09, -0.04653109, -0.48053372, -0.72694933, 0)
+transform = Transform3D(-0.043356128, 0.36305603, 0.93075776, 0.016893394, 0.9317671, -0.3626627, -0.9989159, 7.4505793e-09, -0.046531096, -0.48053372, -0.72694933, 0)
 
 [node name="RightFoot" parent="Body" instance=ExtResource("8_3rfka")]
-transform = Transform3D(0.38144568, -0.46780634, 0.79728025, 0.2018969, 0.8838307, 0.42199564, -0.9020742, 1.4901158e-08, 0.43158168, 0.5934705, -0.58153754, 0.06384897)
+transform = Transform3D(0.38144585, -0.46780637, 0.7972804, 0.20189701, 0.8838308, 0.42199567, -0.90207464, 1.49011585e-08, 0.43158174, 0.5934705, -0.58153754, 0.06384897)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
