@@ -21,3 +21,10 @@ func _physics_process(delta: float) -> void:
 
 	var target_position: Vector3 = avg_position + offset
 	global_position = global_position.lerp(target_position, 1.0 - exp(-smoothing_speed * delta))
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("dev_zoom_in"):
+		offset.z += 10
+	elif event.is_action_pressed("dev_zoom_out"):
+		offset.z -= 10

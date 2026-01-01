@@ -1,46 +1,51 @@
 extends Area3D
 
-signal bulb_hit(new_team_color: Color)
+signal bulb_hit(new_team: Team)
 
-var team_color: Color = Color.WHITE
+var team: Team = Team.white()
 var _color_initialized := false
+var _material: StandardMaterial3D
 
 @onready var light: OmniLight3D = $OmniLight3D
 @onready var mesh_instance: MeshInstance3D = $MeshInstance3D
 
 
 func _ready() -> void:
+	# Create a dedicated material for this bulb instance
+	_material = StandardMaterial3D.new()
+	_material.emission_enabled = true
+	_material.emission_energy_multiplier = 2.0
+	mesh_instance.material_override = _material
+
 	if _color_initialized:
-		_apply_color(team_color)
-		bulb_hit.emit(team_color)
+		_apply_team(team)
+		bulb_hit.emit(team)
 
 
-func set_team_color(color: Color) -> void:
-	team_color = color
+func set_team(new_team: Team) -> void:
+	team = new_team
 	_color_initialized = true
 
 
-func get_color() -> Color:
-	return team_color
+func get_team() -> Team:
+	return team
 
 
-func _apply_color(color: Color) -> void:
-	team_color = color
-	light.light_color = color
+func _apply_team(new_team: Team) -> void:
+	team = new_team
+	light.light_color = team.color
 
-	var material = mesh_instance.get_active_material(0)
-	if material:
-		material = material.duplicate()
-		material.albedo_color = color
-		mesh_instance.set_surface_override_material(0, material)
+	if _material:
+		_material.albedo_color = team.color
+		_material.emission = team.color
 
 
 func _on_area_entered(area: Area3D) -> void:
 	if area.is_in_group(Constants.BULLETS_GROUP):
-		var new_color = area.team_color
+		var new_team: Team = area.team
 
-		if team_color != new_color:
-			_apply_color(new_color)
-			bulb_hit.emit(new_color)
+		if team.color != new_team.color:
+			_apply_team(new_team)
+			bulb_hit.emit(new_team)
 
 		area.queue_free()

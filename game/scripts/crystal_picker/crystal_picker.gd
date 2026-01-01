@@ -15,12 +15,12 @@ func _ready() -> void:
 func show_result(winner: Player, loser: Player) -> void:
 	result_label.bbcode_enabled = true
 
-	var winner_hex: String = winner.team_color.to_html(false)
-	var loser_hex: String = loser.team_color.to_html(false)
+	var winner_hex: String = winner.team.get_hex()
+	var loser_hex: String = loser.team.get_hex()
 
 	var text: String = (
 		"[color=#%s]%s[/color] wins!\n[color=#%s]%s[/color] picks a crystal"
-		% [winner_hex, winner_hex.to_upper(), loser_hex, loser_hex.to_upper()]
+		% [winner_hex, winner.team.name, loser_hex, loser.team.name]
 	)
 	result_label.text = text
 

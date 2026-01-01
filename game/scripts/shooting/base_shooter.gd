@@ -22,13 +22,13 @@ func shoot(context: ShootingContext) -> void:
 	for i in range(total_bullets):
 		var spread_offset = randf_range(-context.spread, context.spread)
 		var shot_dir = context.direction.rotated(Vector3.FORWARD, deg_to_rad(spread_offset))
-		spawn_bullet(context.from_position, shot_dir, context.team_color, context.parent, context)
+		spawn_bullet(context.from_position, shot_dir, context.team, context.parent, context)
 
 
 func spawn_bullet(
 	from_position: Vector3,
 	direction: Vector3,
-	team_color: Color,
+	team: Team,
 	parent: Node,
 	context: ShootingContext
 ) -> void:
@@ -36,5 +36,5 @@ func spawn_bullet(
 	bullet.position = from_position
 	bullet.speed = context.bullet_speed
 	bullet.set_direction(direction)
-	bullet.team_color = team_color
+	bullet.team = team
 	parent.add_child(bullet)

@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody3D
 
-@export var team_color: Color = Color(1, 0.4, 0.2, 1)
+@export var team: Team = Team.orange()
 
 # Controller
 @export var device_id: int = 0
@@ -66,7 +66,7 @@ func _process_shooting(delta: float) -> void:
 	if input.is_shoot_pressed() and shoot_cooldown <= 0:
 		var shoot_pos = flashlight.shoot_position.global_position
 		var direction = -flashlight.global_transform.basis.z
-		var context = ShootingContext.new(shoot_pos, direction, team_color, get_parent(), self)
+		var context = ShootingContext.new(shoot_pos, direction, team, get_parent(), self)
 
 		shooter.shoot(context)
 		shoot_cooldown = shooter.get_shoot_delay()
@@ -138,7 +138,7 @@ func _apply_team_color() -> void:
 				var material = mesh_instance.get_active_material(0)
 				if material:
 					material = material.duplicate()
-					material.albedo_color = team_color
+					material.albedo_color = team.color
 					mesh_instance.set_surface_override_material(0, material)
 
-	flashlight.set_color(team_color)
+	flashlight.set_color(team.color)
