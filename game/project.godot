@@ -25,8 +25,22 @@ players=""
 bullets=""
 bulbs=""
 
+[input]
+
+dev_zoom_in={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":8,"position":Vector2(133, 13),"global_position":Vector2(142, 61),"factor":1.0,"button_index":4,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
+dev_zoom_out={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":16,"position":Vector2(155, 13),"global_position":Vector2(164, 61),"factor":1.0,"button_index":5,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
+
 [layer_names]
 
 3d_physics/layer_1="platforms"
 3d_physics/layer_2="players"
 3d_physics/layer_3="flashlights"
+3d_physics/layer_4="bullets"
