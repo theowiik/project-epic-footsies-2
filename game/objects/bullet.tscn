@@ -11,6 +11,7 @@ height = 0.2
 radius = 0.10501297
 
 [node name="Bullet" type="Area3D" groups=["bullets"]]
+collision_layer = 8
 script = ExtResource("1_script")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
@@ -25,3 +26,5 @@ mesh = SubResource("SphereMesh_3ndsa")
 shape = SubResource("SphereShape3D_3ndsa")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

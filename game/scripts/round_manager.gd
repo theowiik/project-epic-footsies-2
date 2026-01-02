@@ -47,7 +47,7 @@ func _on_node_added(node: Node) -> void:
 		recalculate_scores()
 
 
-func _on_bulb_hit(_color: Color) -> void:
+func _on_bulb_hit(_team: Team) -> void:
 	recalculate_scores()
 
 
@@ -55,8 +55,8 @@ func recalculate_scores() -> void:
 	scores.clear()
 
 	for bulb in get_tree().get_nodes_in_group(Constants.BULBS_GROUP):
-		var color: Color = bulb.get_color()
-		scores[color] = scores.get(color, 0) + 1
+		var team_color: Color = bulb.get_team().color
+		scores[team_color] = scores.get(team_color, 0) + 1
 
 	scores_updated.emit(scores)
 
@@ -68,7 +68,7 @@ func _finish_round() -> void:
 
 	var player_scores: Array = []
 	for player in players:
-		var player_score: int = scores.get(player.team_color, 0)
+		var player_score: int = scores.get(player.team.color, 0)
 		player_scores.append({"player": player, "score": player_score})
 
 	player_scores.sort_custom(func(a, b): return a.score > b.score)

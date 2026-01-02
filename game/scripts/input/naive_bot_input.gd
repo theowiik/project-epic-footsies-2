@@ -91,12 +91,12 @@ func _find_closest_enemy() -> Node3D:
 	var players = player_node.get_tree().get_nodes_in_group(Constants.PLAYERS_GROUP)
 	var closest: Node3D = null
 	var closest_distance: float = INF
-	var my_color: Color = player_node.team_color
+	var my_team: Team = player_node.team
 
 	for player in players:
 		if player == player_node:
 			continue
-		if player.team_color == my_color:
+		if player.team.color == my_team.color:
 			continue
 
 		var distance = player_node.global_position.distance_to(player.global_position)
