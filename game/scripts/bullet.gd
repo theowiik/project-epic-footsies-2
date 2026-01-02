@@ -12,6 +12,7 @@ var _hit: bool = false
 
 @onready var mesh_instance: MeshInstance3D = $MeshInstance3D
 @onready var light: OmniLight3D = $OmniLight3D
+@onready var _ray_query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.new()
 
 
 func _ready():
@@ -20,15 +21,31 @@ func _ready():
 	_material.emission_energy_multiplier = 2.0
 	mesh_instance.material_override = _material
 
+	_ray_query.collision_mask = collision_mask
+	_ray_query.collide_with_areas = false
+	_ray_query.collide_with_bodies = true
+
 	_apply_team_color()
 	await get_tree().create_timer(lifetime).timeout
 	if is_inside_tree():
 		queue_free()
 
 
-func _physics_process(delta):
-	position += velocity * speed * delta
+func _physics_process(delta: float) -> void:
 	velocity.y -= _gravity * delta
+	var movement: Vector3 = velocity * speed * delta
+
+	_ray_query.from = global_position
+	_ray_query.to = global_position + movement
+
+	var space_state := get_world_3d().direct_space_state
+	var result := space_state.intersect_ray(_ray_query)
+
+	if result:
+		global_position = result.position
+		_handle_hit(result.collider)
+	else:
+		position += movement
 
 
 func set_direction(direction: Vector3):
@@ -45,6 +62,10 @@ func _apply_team_color() -> void:
 
 
 func _on_body_entered(_body: Node3D) -> void:
+	_handle_hit(_body)
+
+
+func _handle_hit(_body: Node3D) -> void:
 	if _hit or not is_inside_tree():
 		return
 	_hit = true
