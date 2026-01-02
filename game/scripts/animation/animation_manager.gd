@@ -1,7 +1,7 @@
 class_name AnimationManager
 extends RefCounted
 
-enum State { GROUNDED, INITIATE_JUMP, JUMP_UP, JUMP_DOWN, LANDING, IDLE, WALL_GLIDE, WALL_GLIDE_JUMP }
+enum State {GROUNDED, INITIATE_JUMP, JUMP_UP, JUMP_DOWN, LANDING, IDLE, WALL_GLIDE, WALL_GLIDE_JUMP}
 
 const DEFAULT_BLEND: float = 0.1
 const LANDING_BLEND: float = 0.05
@@ -52,31 +52,32 @@ func _update_facing(velocity_x: float) -> void:
 
 
 func _determine_state(velocity_y: float, is_on_floor: bool, is_on_wall: bool) -> State:
+	var result: State
+
 	if is_on_floor:
 		if current_state in [State.JUMP_DOWN, State.WALL_GLIDE, State.WALL_GLIDE_JUMP]:
-			return State.LANDING
-		if current_state == State.LANDING and animation_player.is_playing():
-			return State.LANDING
-		return State.GROUNDED
-
-	if is_on_wall:
-		return State.WALL_GLIDE
-
-	if current_state == State.WALL_GLIDE:
-		return State.WALL_GLIDE_JUMP
-
-	if current_state == State.WALL_GLIDE_JUMP:
+			result = State.LANDING
+		elif current_state == State.LANDING and animation_player.is_playing():
+			result = State.LANDING
+		else:
+			result = State.GROUNDED
+	elif is_on_wall:
+		result = State.WALL_GLIDE
+	elif current_state == State.WALL_GLIDE:
+		result = State.WALL_GLIDE_JUMP
+	elif current_state == State.WALL_GLIDE_JUMP:
 		if animation_player.is_playing():
-			return State.WALL_GLIDE_JUMP
-		return State.JUMP_UP if velocity_y > 0 else State.JUMP_DOWN
+			result = State.WALL_GLIDE_JUMP
+		else:
+			result = State.JUMP_UP if velocity_y > 0 else State.JUMP_DOWN
+	elif current_state == State.GROUNDED and velocity_y > 0:
+		result = State.INITIATE_JUMP
+	elif current_state == State.INITIATE_JUMP:
+		result = State.JUMP_UP if not animation_player.is_playing() else State.INITIATE_JUMP
+	else:
+		result = State.JUMP_UP if velocity_y > 0 else State.JUMP_DOWN
 
-	if current_state == State.GROUNDED and velocity_y > 0:
-		return State.INITIATE_JUMP
-
-	if current_state == State.INITIATE_JUMP:
-		return State.JUMP_UP if not animation_player.is_playing() else State.INITIATE_JUMP
-
-	return State.JUMP_UP if velocity_y > 0 else State.JUMP_DOWN
+	return result
 
 
 func _transition_to(new_state: State) -> void:
