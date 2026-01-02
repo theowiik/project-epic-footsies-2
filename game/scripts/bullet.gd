@@ -6,6 +6,7 @@ var team: Team = Team.white()
 var velocity: Vector3 = Vector3.ZERO
 var speed: float = 10.0
 var lifetime: float = 3.0
+var damage: float = 10.0
 var _gravity: float = 3
 var _material: StandardMaterial3D
 var _hit: bool = false
@@ -65,15 +66,19 @@ func _on_body_entered(_body: Node3D) -> void:
 	_handle_hit(_body)
 
 
-func _handle_hit(_body: Node3D) -> void:
+func _handle_hit(body: Node3D) -> void:
 	if _hit or not is_inside_tree():
 		return
 	_hit = true
 	set_deferred("monitoring", false)
 
-	var spawn_pos := global_position
-	var bulb = BULB_SCENE.instantiate()
-	bulb.set_team(team)
-	get_tree().current_scene.add_child(bulb)
-	bulb.global_position = spawn_pos
+	if body is Player:
+		body.take_damage(damage)
+	else:
+		var spawn_pos := global_position
+		var bulb = BULB_SCENE.instantiate()
+		bulb.set_team(team)
+		get_tree().current_scene.add_child(bulb)
+		bulb.global_position = spawn_pos
+
 	queue_free()

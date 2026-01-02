@@ -12,6 +12,7 @@ radius = 0.10501297
 
 [node name="Bullet" type="Area3D" groups=["bullets"]]
 collision_layer = 8
+collision_mask = 3
 script = ExtResource("1_script")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]

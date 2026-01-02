@@ -10,6 +10,7 @@ var team_presets: Array[Callable] = [
 ]
 var team: Team
 var input: InputInterface
+var health: float = 100.0
 
 # Movement
 var mover: MoverInterface
@@ -29,6 +30,8 @@ var animation_manager: AnimationManager
 @onready var flashlight: Flashlight = $Flashlight
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var body: Node3D = $Body
+@onready var health_label: Label3D = $HealthLabel
+@onready var hurt_player: AudioStreamPlayer3D = $HurtPlayer
 
 
 func _ready():
@@ -103,6 +106,12 @@ func _process_movement(delta: float) -> void:
 
 func apply_impulse(impulse: Vector3) -> void:
 	external_velocity += impulse
+
+
+func take_damage(amount: float) -> void:
+	hurt_player.play()
+	health -= amount
+	health_label.text = str(health)
 
 
 func apply_crystal(crystal_name: String) -> bool:
