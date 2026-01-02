@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://wilclsh64myp"]
+[gd_scene load_steps=23 format=3 uid="uid://wilclsh64myp"]
 
 [ext_resource type="Texture2D" uid="uid://co5yey2y7yboh" path="res://assets/icon.svg" id="1_eqqp1"]
 [ext_resource type="Script" uid="uid://cphs6p6g4lci0" path="res://scripts/player.gd" id="2_ykyjo"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c8gkbvg1c7564" path="res://assets/player/left_foot.fbx" id="7_i825w"]
 [ext_resource type="PackedScene" uid="uid://vfquhx8cjla5" path="res://assets/player/right_foot.fbx" id="8_3rfka"]
 [ext_resource type="PackedScene" uid="uid://v38g5whwnt52" path="res://objects/player/flashlight.tscn" id="9_i8sra"]
+[ext_resource type="AudioStream" uid="uid://cj4ksnx6aerhl" path="res://assets/sfx/player/hurt.wav" id="10_bi5m7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ykyjo"]
 
@@ -1517,3 +1518,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9536114, 0)
 billboard = 1
 text = "hello world"
 font_size = 172
+
+[node name="HurtPlayer" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("10_bi5m7")

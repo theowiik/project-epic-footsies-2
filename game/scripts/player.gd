@@ -31,6 +31,7 @@ var animation_manager: AnimationManager
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var body: Node3D = $Body
 @onready var health_label: Label3D = $HealthLabel
+@onready var hurt_player: AudioStreamPlayer3D = $HurtPlayer
 
 
 func _ready():
@@ -108,6 +109,7 @@ func apply_impulse(impulse: Vector3) -> void:
 
 
 func take_damage(amount: float) -> void:
+	hurt_player.play()
 	health -= amount
 	health_label.text = str(health)
 
