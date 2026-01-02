@@ -53,6 +53,6 @@ func _on_body_entered(_body: Node3D) -> void:
 	var spawn_pos := global_position
 	var bulb = BULB_SCENE.instantiate()
 	bulb.set_team(team)
-	bulb.global_position = spawn_pos
 	get_tree().current_scene.add_child(bulb)
+	bulb.global_position = spawn_pos
 	queue_free()
