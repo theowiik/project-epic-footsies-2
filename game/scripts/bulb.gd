@@ -11,7 +11,6 @@ var _material: StandardMaterial3D
 
 
 func _ready() -> void:
-	# Create a dedicated material for this bulb instance
 	_material = StandardMaterial3D.new()
 	_material.emission_enabled = true
 	_material.emission_energy_multiplier = 2.0

@@ -14,7 +14,6 @@ var _material: StandardMaterial3D
 
 
 func _ready():
-	# Create a dedicated material for this bullet instance
 	_material = StandardMaterial3D.new()
 	_material.emission_enabled = true
 	_material.emission_energy_multiplier = 2.0
