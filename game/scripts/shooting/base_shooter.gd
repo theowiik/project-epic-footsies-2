@@ -26,11 +26,7 @@ func shoot(context: ShootingContext) -> void:
 
 
 func spawn_bullet(
-	from_position: Vector3,
-	direction: Vector3,
-	team: Team,
-	parent: Node,
-	context: ShootingContext
+	from_position: Vector3, direction: Vector3, team: Team, parent: Node, context: ShootingContext
 ) -> void:
 	var bullet = context.bullet_scene.instantiate()
 	bullet.position = from_position

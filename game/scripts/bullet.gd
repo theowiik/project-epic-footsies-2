@@ -1,16 +1,16 @@
 extends Area3D
 
+const BULB_SCENE: PackedScene = preload("res://objects/bulb.tscn")
+
+var team: Team = Team.white()
 var velocity: Vector3 = Vector3.ZERO
 var speed: float = 10.0
 var lifetime: float = 3.0
-var gravity: float = 3
-var team: Team = Team.white()
-
+var _gravity: float = 3
 var _material: StandardMaterial3D
 
 @onready var mesh_instance: MeshInstance3D = $MeshInstance3D
 @onready var light: OmniLight3D = $OmniLight3D
-var bulb_scene: PackedScene = load("res://objects/bulb.tscn")
 
 
 func _ready():
@@ -27,7 +27,7 @@ func _ready():
 
 func _physics_process(delta):
 	position += velocity * speed * delta
-	velocity.y -= gravity * delta
+	velocity.y -= _gravity * delta
 
 
 func set_direction(direction: Vector3):
@@ -44,7 +44,7 @@ func _apply_team_color() -> void:
 
 
 func _on_body_entered(_body: Node3D) -> void:
-	var bulb = bulb_scene.instantiate()
+	var bulb = BULB_SCENE.instantiate()
 	bulb.set_team(team)
 	bulb.global_position = global_position
 	get_tree().current_scene.add_child(bulb)

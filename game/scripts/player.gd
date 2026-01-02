@@ -1,12 +1,14 @@
 class_name Player
 extends CharacterBody3D
 
-@export var team: Team = Team.orange()
-
 # Controller
 @export var device_id: int = 0
 @export var use_bot_input: bool = false
 
+var team_presets: Array[Callable] = [
+	Team.red, Team.blue, Team.green, Team.orange, Team.purple, Team.cyan, Team.yellow, Team.pink
+]
+var team: Team
 var input: InputInterface
 
 # Movement
@@ -30,6 +32,8 @@ var animation_manager: AnimationManager
 
 
 func _ready():
+	team = team_presets.pick_random().call()
+
 	if use_bot_input:
 		input = NaiveBotInput.new(self)
 	else:
