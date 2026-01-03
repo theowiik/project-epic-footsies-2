@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ovaec6nc7m42"]
+[gd_scene load_steps=11 format=3 uid="uid://ovaec6nc7m42"]
 
 [ext_resource type="PackedScene" uid="uid://wilclsh64myp" path="res://objects/player/player.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://cbldusqpmy3gb" path="res://scripts/main.gd" id="1_tefeu"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://dacw2gn4smkwj" path="res://scenes/hud.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://bioo4dk8jqu1w" path="res://objects/lasers/laser_machine.tscn" id="8_tipki"]
 [ext_resource type="PackedScene" uid="uid://ymkakny8f3x5" path="res://objects/lasers/strobe_machine.tscn" id="9_85g3d"]
-[ext_resource type="AudioStream" uid="uid://ds2yr6beh24q8" path="res://assets/music/paint_makers.wav" id="9_choun"]
 [ext_resource type="PackedScene" uid="uid://chrmkwix0kv7c" path="res://assets/maps/tank_mayham/tank_mayham.glb" id="10_choun"]
 
 [sub_resource type="Environment" id="Environment_tbgi4"]
@@ -74,9 +73,5 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="OB"]
 shape = SubResource("BoxShape3D_85g3d")
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("9_choun")
-autoplay = true
 
 [connection signal="body_entered" from="OB" to="." method="_on_ob_body_entered"]
