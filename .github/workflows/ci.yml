@@ -2,28 +2,24 @@ name: CI
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
+  push:
+    branches: [main]
 
 jobs:
-  game-lint:
+  check:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: game
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
 
-      - name: Check formatting
-        run: nix run .#check
+      - name: Check
+        run: make check
 
-  game-build:
+  build-game:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: game
     steps:
       - uses: actions/checkout@v4
 
@@ -31,15 +27,4 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@main
 
       - name: Build
-        run: nix run .#build
-
-  markdown-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-
-      - name: Check Markdown formatting
-        run: make check
+        run: make build
