@@ -4,6 +4,6 @@ extends ShooterDecorator
 var speed_multiplier: float = 2.0
 
 
-func shoot(context: ShootingContext) -> void:
+func shoot(context: ShootingContext) -> Array[Bullet]:
 	context.speed_multiplier *= speed_multiplier
-	wrapped_shooter.shoot(context)
+	return wrapped_shooter.shoot(context)

@@ -2,6 +2,6 @@ class_name TripleShotDecorator
 extends ShooterDecorator
 
 
-func shoot(context: ShootingContext) -> void:
+func shoot(context: ShootingContext) -> Array[Bullet]:
 	context.extra_shots += 2
-	wrapped_shooter.shoot(context)
+	return wrapped_shooter.shoot(context)

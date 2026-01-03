@@ -2,8 +2,9 @@ class_name ShooterInterface
 extends RefCounted
 
 
-func shoot(_context: ShootingContext) -> void:
+func shoot(_context: ShootingContext) -> Array[Bullet]:
 	push_error("ShooterInterface.shoot() not implemented")
+	return []
 
 
 func get_shoot_delay() -> float:
