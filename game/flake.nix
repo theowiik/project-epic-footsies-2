@@ -1,74 +1,34 @@
 {
-  description = "Project Epic Footsies 2 - Godot game build environment";
+  description = "Project Epic Footsies 2";
 
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  };
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   outputs =
-    { self, nixpkgs }:
+    { nixpkgs, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
-      pythonWithGdtoolkit = pkgs.python3.withPackages (ps: [
+      pythonEnv = pkgs.python3.withPackages (ps: [
         ps.lark
-        ps.docopt
-        ps.pyyaml
         ps.setuptools
       ]);
 
-      formatScript = pkgs.writeShellScriptBin "format" ''
+      format = pkgs.writeShellScriptBin "format" ''
         set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat .
-        ${pkgs.ruff}/bin/ruff format . ../ci.py
-        ${pkgs.ruff}/bin/ruff check --select I --fix . ../ci.py
         ${pkgs.nixfmt-rfc-style}/bin/nixfmt .
       '';
 
-      checkScript = pkgs.writeShellScriptBin "check" ''
+      check = pkgs.writeShellScriptBin "check" ''
         set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat . --check
         ${pkgs.gdtoolkit_4}/bin/gdlint .
-        ${pkgs.ruff}/bin/ruff format --check . ../ci.py
-        ${pkgs.ruff}/bin/ruff check --select I . ../ci.py
         ${pkgs.nixfmt-rfc-style}/bin/nixfmt . --check
+        PYTHONPATH=${pkgs.gdtoolkit_4}/${pkgs.python3.sitePackages} ${pythonEnv}/bin/python3 validate_gdscript.py
       '';
 
-      validateScript = pkgs.writeShellScriptBin "validate" ''
-        set -e
-        PYTHONPATH=${pkgs.gdtoolkit_4}/${pkgs.python3.sitePackages} ${pythonWithGdtoolkit}/bin/python3 validate_gdscript.py
-      '';
-
-      ciScript = pkgs.writeShellScriptBin "ci" ''
-        set -e
-        echo "=== Style Checks ==="
-        ${pkgs.gdtoolkit_4}/bin/gdformat . --check
-        ${pkgs.gdtoolkit_4}/bin/gdlint .
-        ${pkgs.ruff}/bin/ruff format --check . ../ci.py
-        ${pkgs.ruff}/bin/ruff check --select I . ../ci.py
-        ${pkgs.nixfmt-rfc-style}/bin/nixfmt . --check
-
-        echo ""
-        echo "=== Validation ==="
-        ${pythonWithGdtoolkit}/bin/python3 ../ci.py --path ..
-      '';
-
-      buildLinuxScript = pkgs.writeShellScriptBin "build-linux" ''
-        set -e
-        export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
-        mkdir -p build/linux
-        ${pkgs.godot}/bin/godot4 --headless --export-release "game-linux" ./build/linux/project-epic-footsies-2.x86_64
-      '';
-
-      buildWindowsScript = pkgs.writeShellScriptBin "build-windows" ''
-        set -e
-        export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
-        mkdir -p build/windows
-        ${pkgs.godot}/bin/godot4 --headless --export-release "game-windows" ./build/windows/project-epic-footsies-2.exe
-      '';
-
-      buildAllScript = pkgs.writeShellScriptBin "build" ''
+      build = pkgs.writeShellScriptBin "build" ''
         set -e
         export XDG_DATA_HOME="${pkgs.godot-export-templates-bin}/share"
         mkdir -p build/linux build/windows
@@ -88,39 +48,16 @@
           pkgs.python3
           pkgs.ruff
         ];
-
         XDG_DATA_HOME = "${pkgs.godot-export-templates-bin}/share";
       };
 
       apps.${system} = {
-        format = {
-          type = "app";
-          program = "${formatScript}/bin/format";
-        };
-        check = {
-          type = "app";
-          program = "${checkScript}/bin/check";
-        };
-        validate = {
-          type = "app";
-          program = "${validateScript}/bin/validate";
-        };
-        ci = {
-          type = "app";
-          program = "${ciScript}/bin/ci";
-        };
-        build-linux = {
-          type = "app";
-          program = "${buildLinuxScript}/bin/build-linux";
-        };
-        build-windows = {
-          type = "app";
-          program = "${buildWindowsScript}/bin/build-windows";
-        };
-        build = {
-          type = "app";
-          program = "${buildAllScript}/bin/build";
-        };
+        format.type = "app";
+        format.program = "${format}/bin/format";
+        check.type = "app";
+        check.program = "${check}/bin/check";
+        build.type = "app";
+        build.program = "${build}/bin/build";
       };
     };
 }
