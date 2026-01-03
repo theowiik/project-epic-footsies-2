@@ -47,4 +47,4 @@ static func pink() -> Team:
 
 
 static func white() -> Team:
-	return Team.new("Neutral", Color.WHITE)
+	return Team.new("White", Color.WHITE)
