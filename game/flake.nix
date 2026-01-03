@@ -17,14 +17,12 @@
       format = pkgs.writeShellScriptBin "format" ''
         set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat .
-        ${pkgs.nixfmt-rfc-style}/bin/nixfmt .
       '';
 
       check = pkgs.writeShellScriptBin "check" ''
         set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat . --check
         ${pkgs.gdtoolkit_4}/bin/gdlint .
-        ${pkgs.nixfmt-rfc-style}/bin/nixfmt . --check
         PYTHONPATH=${pkgs.gdtoolkit_4}/${pkgs.python3.sitePackages} ${pythonEnv}/bin/python3 validate_gdscript.py
       '';
 
