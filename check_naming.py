@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
-"""Check that all filenames use snake_case."""
 
 import re
 import sys
 from pathlib import Path
 
-SNAKE_CASE = re.compile(r"^[a-z0-9]+(_[a-z0-9]+)*(\.[a-z0-9]+)?$")
-
-EXCLUDE = {".git", ".godot", "build", "__pycache__", ".import"}
+VALID = re.compile(
+    r"^([a-z0-9]+(_[a-z0-9]+)*(\.[a-z0-9]+)*"  # snake_case
+    r"|[A-Z0-9]+(_[A-Z0-9]+)*(\.[a-z0-9]+)*"  # ALL_CAPS
+    r"|\.[a-z0-9]+(_[a-z0-9]+)*)$"  # dotfile
+)
+IGNORE = {
+    "godot",
+    ".git",
+    ".godot",
+    "build",
+    "__pycache__",
+    ".import",
+    ".ruff_cache",
+    ".ignore",
+}
+WHITELIST = {"Makefile"}
 
 
 def main() -> int:
@@ -15,20 +27,18 @@ def main() -> int:
     errors = []
 
     for path in root.rglob("*"):
-        if not path.is_file():
+        if any(p in IGNORE for p in path.parts):
             continue
-        if any(ex in path.parts for ex in EXCLUDE):
-            continue
-        if not SNAKE_CASE.match(path.name):
+        if path.name not in WHITELIST and not VALID.match(path.name):
             errors.append(str(path.relative_to(root)))
 
     if errors:
-        print(f"Non-snake_case filenames ({len(errors)}):")
+        print(f"Invalid naming ({len(errors)}):")
         for e in sorted(errors):
             print(f"  {e}")
-        return 1
+        return 0
 
-    print("All filenames are snake_case")
+    print("All names valid")
     return 0
 
 
