@@ -10,7 +10,7 @@ func get_shoot_delay() -> float:
 	return shoot_delay
 
 
-func shoot(context: ShootingContext) -> void:
+func shoot(context: ShootingContext) -> Array[Bullet]:
 	if context.bullet_scene == null:
 		context.bullet_scene = bullet_scene
 
@@ -18,19 +18,26 @@ func shoot(context: ShootingContext) -> void:
 		context.bullet_speed = bullet_speed * context.speed_multiplier
 
 	var total_bullets = 1 + context.extra_shots
+	var bullets: Array[Bullet] = []
 
 	for i in range(total_bullets):
 		var spread_offset = randf_range(-context.spread, context.spread)
 		var shot_dir = context.direction.rotated(Vector3.FORWARD, deg_to_rad(spread_offset))
-		spawn_bullet(context.from_position, shot_dir, context.team, context.parent, context)
+		var bullet = spawn_bullet(
+			context.from_position, shot_dir, context.team, context.parent, context
+		)
+		bullets.append(bullet)
+
+	return bullets
 
 
 func spawn_bullet(
 	from_position: Vector3, direction: Vector3, team: Team, parent: Node, context: ShootingContext
-) -> void:
-	var bullet = context.bullet_scene.instantiate()
+) -> Bullet:
+	var bullet: Bullet = context.bullet_scene.instantiate()
 	bullet.position = from_position
 	bullet.speed = context.bullet_speed
 	bullet.set_direction(direction)
 	bullet.team = team
 	parent.add_child(bullet)
+	return bullet

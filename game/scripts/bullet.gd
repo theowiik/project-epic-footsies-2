@@ -1,3 +1,4 @@
+class_name Bullet
 extends Area3D
 
 const BULB_SCENE: PackedScene = preload("res://objects/bulb.tscn")
@@ -77,4 +78,8 @@ func _handle_hit(body: Node3D) -> void:
 		get_tree().current_scene.add_child(bulb)
 		bulb.global_position = spawn_pos
 
+	queue_free()
+
+
+func _on_life_timer_timeout() -> void:
 	queue_free()

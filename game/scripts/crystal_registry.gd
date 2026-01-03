@@ -11,6 +11,7 @@ static var shooting_crystals = {
 	"triple_shot": TripleShotDecorator,
 	"fast_bullets": FastBulletsDecorator,
 	"recoil": RecoilDecorator,
+	"wobbly": WobblyBulletsDecorator,
 }
 
 
