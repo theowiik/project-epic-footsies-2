@@ -11,7 +11,6 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
 
-      # Python environment with gdtoolkit for validation
       pythonWithGdtoolkit = pkgs.python3.withPackages (ps: [
         ps.lark
         ps.docopt
@@ -22,8 +21,8 @@
       formatScript = pkgs.writeShellScriptBin "format" ''
         set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat .
-        ${pkgs.ruff}/bin/ruff format .
-        ${pkgs.ruff}/bin/ruff check --select I --fix .
+        ${pkgs.ruff}/bin/ruff format . ../ci.py
+        ${pkgs.ruff}/bin/ruff check --select I --fix . ../ci.py
         ${pkgs.nixfmt-rfc-style}/bin/nixfmt .
       '';
 
@@ -31,10 +30,28 @@
         set -e
         ${pkgs.gdtoolkit_4}/bin/gdformat . --check
         ${pkgs.gdtoolkit_4}/bin/gdlint .
-        ${pkgs.ruff}/bin/ruff format --check .
-        ${pkgs.ruff}/bin/ruff check --select I .
-        PYTHONPATH=${pkgs.gdtoolkit_4}/${pkgs.python3.sitePackages} ${pythonWithGdtoolkit}/bin/python3 validate_gdscript.py
+        ${pkgs.ruff}/bin/ruff format --check . ../ci.py
+        ${pkgs.ruff}/bin/ruff check --select I . ../ci.py
         ${pkgs.nixfmt-rfc-style}/bin/nixfmt . --check
+      '';
+
+      validateScript = pkgs.writeShellScriptBin "validate" ''
+        set -e
+        PYTHONPATH=${pkgs.gdtoolkit_4}/${pkgs.python3.sitePackages} ${pythonWithGdtoolkit}/bin/python3 validate_gdscript.py
+      '';
+
+      ciScript = pkgs.writeShellScriptBin "ci" ''
+        set -e
+        echo "=== Style Checks ==="
+        ${pkgs.gdtoolkit_4}/bin/gdformat . --check
+        ${pkgs.gdtoolkit_4}/bin/gdlint .
+        ${pkgs.ruff}/bin/ruff format --check . ../ci.py
+        ${pkgs.ruff}/bin/ruff check --select I . ../ci.py
+        ${pkgs.nixfmt-rfc-style}/bin/nixfmt . --check
+
+        echo ""
+        echo "=== Validation ==="
+        ${pythonWithGdtoolkit}/bin/python3 ../ci.py --path ..
       '';
 
       buildLinuxScript = pkgs.writeShellScriptBin "build-linux" ''
@@ -83,6 +100,14 @@
         check = {
           type = "app";
           program = "${checkScript}/bin/check";
+        };
+        validate = {
+          type = "app";
+          program = "${validateScript}/bin/validate";
+        };
+        ci = {
+          type = "app";
+          program = "${ciScript}/bin/ci";
         };
         build-linux = {
           type = "app";

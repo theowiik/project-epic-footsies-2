@@ -1,12 +1,13 @@
-.PHONY: format check build build-linux build-windows build-clean dev help
+.PHONY: format check ci build build-linux build-windows build-clean dev help
 
 NIX := nix --extra-experimental-features 'nix-command flakes'
 
 help:
 	@echo "Available targets:"
 	@echo "  dev           - Enter development shell"
-	@echo "  format        - Format all gdscript files"
-	@echo "  check         - Check formatting of all gdscript files"
+	@echo "  format        - Format all code"
+	@echo "  check         - Check code style"
+	@echo "  ci            - Run full CI (style + validation)"
 	@echo "  build         - Build game for all platforms"
 	@echo "  build-linux   - Build game for Linux"
 	@echo "  build-windows - Build game for Windows"
@@ -20,6 +21,9 @@ format:
 
 check:
 	$(NIX) run .#check
+
+ci:
+	$(NIX) run .#ci
 
 build:
 	$(NIX) run .#build
