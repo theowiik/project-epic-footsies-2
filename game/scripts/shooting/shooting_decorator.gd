@@ -12,5 +12,5 @@ func get_shoot_delay() -> float:
 	return wrapped_shooter.get_shoot_delay()
 
 
-func shoot(context: ShootingContext) -> void:
-	wrapped_shooter.shoot(context)
+func shoot(context: ShootingContext) -> Array[Bullet]:
+	return wrapped_shooter.shoot(context)
