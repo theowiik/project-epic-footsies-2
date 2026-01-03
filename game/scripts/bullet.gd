@@ -62,10 +62,6 @@ func _apply_team_color() -> void:
 		light.light_color = team.color
 
 
-func _on_body_entered(_body: Node3D) -> void:
-	_handle_hit(_body)
-
-
 func _handle_hit(body: Node3D) -> void:
 	if _hit or not is_inside_tree():
 		return

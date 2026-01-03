@@ -27,5 +27,3 @@ mesh = SubResource("SphereMesh_3ndsa")
 shape = SubResource("SphereShape3D_3ndsa")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
