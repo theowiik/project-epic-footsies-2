@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""GDScript validation for the game."""
 
 import sys
 from pathlib import Path
@@ -7,66 +6,76 @@ from pathlib import Path
 from gdtoolkit.parser import parser
 from lark import Tree
 
-EXCLUDE = {".godot", "build"}
 
-
-def check_duplicate_functions(tree: Tree) -> list[str]:
-    """Check for duplicate function definitions in a GDScript AST."""
+def check_duplicate_functions(tree):
     functions = {}
     errors = []
 
-    def walk(node):
+    def walk_tree(node, depth=0):
         if isinstance(node, Tree):
             if node.data == "func_def":
+                func_name = None
                 for child in node.children:
                     if isinstance(child, Tree) and child.data == "func_header":
-                        name = str(child.children[0])
-                        if name in functions:
-                            errors.append(f"Duplicate function: '{name}'")
-                        else:
-                            functions[name] = True
+                        func_name = str(child.children[0])
                         break
-            for child in node.children:
-                walk(child)
 
-    walk(tree)
+                if func_name:
+                    if func_name in functions:
+                        errors.append(f"Duplicate function definition: '{func_name}'")
+                    else:
+                        functions[func_name] = True
+
+            for child in node.children:
+                walk_tree(child, depth + 1)
+
+    walk_tree(tree)
     return errors
 
 
-def validate_file(filepath: Path) -> list[str]:
-    """Validate a single GDScript file."""
+def validate_file(filepath):
     try:
-        content = filepath.read_text()
+        with open(filepath, "r") as f:
+            content = f.read()
+
         tree = parser.parse(content)
-        return check_duplicate_functions(tree)
+        errors = check_duplicate_functions(tree)
+
+        return errors
     except Exception as e:
-        return [f"Parse error: {e}"]
+        return [f"Parse error: {str(e)}"]
 
 
-def main() -> int:
-    root = Path(".")
-    scripts = [
-        f for f in root.rglob("*.gd") if not any(ex in f.parts for ex in EXCLUDE)
+def main():
+    script_files = list(Path(".").rglob("*.gd"))
+    script_files = [
+        f
+        for f in script_files
+        if ".godot" not in str(f) and "validate_scripts.gd" not in str(f)
     ]
 
-    checked = 0
-    failed = 0
+    total_checked = 0
+    total_failed = 0
 
     print("Validating GDScript files...")
-    for filepath in sorted(scripts):
-        checked += 1
-        errors = validate_file(filepath)
-        if errors:
-            failed += 1
-            print(f"  ✗ {filepath}")
-            for error in errors:
-                print(f"      {error}")
 
-    if failed:
-        print(f"  ✗ {failed}/{checked} file(s) failed")
+    for filepath in sorted(script_files):
+        total_checked += 1
+        errors = validate_file(filepath)
+
+        if errors:
+            total_failed += 1
+            print(f"❌ {filepath}")
+            for error in errors:
+                print(f"   {error}")
+
+    print(f"\nChecked {total_checked} files")
+
+    if total_failed > 0:
+        print(f"❌ {total_failed} file(s) failed validation")
         return 1
     else:
-        print(f"  ✓ {checked} file(s) passed")
+        print("✅ All files passed validation")
         return 0
 
 
