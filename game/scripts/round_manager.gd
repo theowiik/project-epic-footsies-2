@@ -55,8 +55,8 @@ func recalculate_scores() -> void:
 	scores.clear()
 
 	for bulb in get_tree().get_nodes_in_group(Constants.BULBS_GROUP):
-		var team_color: Color = bulb.get_team().color
-		scores[team_color] = scores.get(team_color, 0) + 1
+		var team_hex: String = bulb.get_team().get_hex()
+		scores[team_hex] = scores.get(team_hex, 0) + 1
 
 	scores_updated.emit(scores)
 
@@ -68,7 +68,7 @@ func _finish_round() -> void:
 
 	var player_scores: Array = []
 	for player in players:
-		var player_score: int = scores.get(player.team.color, 0)
+		var player_score: int = scores.get(player.team.get_hex(), 0)
 		player_scores.append({"player": player, "score": player_score})
 
 	player_scores.sort_custom(func(a, b): return a.score > b.score)
