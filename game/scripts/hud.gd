@@ -29,11 +29,10 @@ func update_scores(scores: Dictionary) -> void:
 	var bbcode: String = ""
 	var colors_sorted = scores.keys()
 
-	for color in colors_sorted:
-		var count: int = scores[color]
+	for hex in colors_sorted:
+		var count: int = scores[hex]
 		var segment_length: int = roundi(float(count) / total * BAR_LENGTH)
 		if segment_length > 0:
-			var hex: String = color.to_html(false)
 			bbcode += "[color=#%s]%s[/color]" % [hex, BAR_CHAR.repeat(segment_length)]
 
 	score_label.bbcode_enabled = true

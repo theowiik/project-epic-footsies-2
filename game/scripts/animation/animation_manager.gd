@@ -88,7 +88,7 @@ func _transition_to(new_state: State) -> void:
 		State.GROUNDED:
 			animation_player.play("walk", DEFAULT_BLEND)
 		State.INITIATE_JUMP:
-			animation_player.play("initate_jump", DEFAULT_BLEND)
+			animation_player.play("initiate_jump", DEFAULT_BLEND)
 		State.JUMP_UP:
 			animation_player.play("jump_up", DEFAULT_BLEND)
 		State.JUMP_DOWN:

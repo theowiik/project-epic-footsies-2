@@ -115,14 +115,12 @@ func take_damage(amount: float) -> void:
 
 
 func apply_crystal(crystal_name: String) -> bool:
-	var registry = CrystalRegistry.new()
-
-	if registry.is_movement_crystal(crystal_name):
+	if CrystalRegistry.is_movement_crystal(crystal_name):
 		mover_decorator_names.append(crystal_name)
 		_rebuild_movement_chain()
 		return true
 
-	if registry.is_shooting_crystal(crystal_name):
+	if CrystalRegistry.is_shooting_crystal(crystal_name):
 		shooter_decorator_names.append(crystal_name)
 		_rebuild_shooting_chain()
 		return true
@@ -131,17 +129,15 @@ func apply_crystal(crystal_name: String) -> bool:
 
 
 func _rebuild_movement_chain():
-	var registry = CrystalRegistry.new()
 	mover = base_mover
 	for crystal_name in mover_decorator_names:
-		mover = registry.create_movement_decorator(crystal_name, mover)
+		mover = CrystalRegistry.create_movement_decorator(crystal_name, mover)
 
 
 func _rebuild_shooting_chain():
-	var registry = CrystalRegistry.new()
 	shooter = base_shooter
 	for crystal_name in shooter_decorator_names:
-		shooter = registry.create_shooting_decorator(crystal_name, shooter)
+		shooter = CrystalRegistry.create_shooting_decorator(crystal_name, shooter)
 
 
 func _apply_team_color() -> void:
